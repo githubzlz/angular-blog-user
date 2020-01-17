@@ -1,0 +1,157 @@
+<div class="write">
+  <div style="line-height: 45px; margin-bottom: -4px; position: relative;">
+    <input #titleInput nz-input style="display:inline-block" [(ngModel)]="title" maxlength="50" id="title"
+      style="width: calc(100% - 210px); margin-right: 5px; height: 48px; font-size: 20px;">
+    <button nz-button nzType="link" nzType="primary" (click)="openPublishPage()"
+      style="width: 80px; float: right; height: 45px; font-size: 16px">发布</button>
+    <button nz-button nzType="primary" (click)="exportToLocal()"
+      style="margin-right: 5px;width: 110px; float: right; height: 45px; font-size: 16px;">导出到本地</button>
+    <div
+      style="font-size: 20px;margin-bottom: 10px; position:absolute;right: 220px; bottom: -5px; color: rgba(0, 0, 0, 0.5);">
+      {{canAddTitleNumber()}}/50
+    </div>
+  </div>
+  <div id="ed" appEditorMd [editorConfig]="conf" style="z-index: 20;"></div>
+  <nz-modal [(nzVisible)]="publishVisible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter"
+    (nzOnCancel)="publishCancel()">
+    <ng-template #modalTitle>
+      <div style="width: 400px;">
+        <span style="font-size: 18px; margin: 5px;">标题: </span>
+        <a style="font-size: 20px; font-weight: bolder; min-width: 200px;" *ngIf="!tableTitleVisible"
+          (click)="tableTitleClick()">{{title}}</a>
+        <span style="font-size: 20px; min-width: 200px; color: rgba(0, 0, 0, 0.6)" *ngIf="!title && !tableTitleVisible"
+          (click)="tableTitleClick()">点击输入标题</span>
+        <input #tableTitleInput nz-input style="display:inline-block" [(ngModel)]="title" style="width: 280px;"
+          maxlength="50" *ngIf="tableTitleVisible" (blur)="tableTitleClick()" (keydown.enter)="tableTitleClick()">
+      </div>
+      <div nz-row nzType="flex" nzAlign="middle" nzGutter="6" style="font-size: 16px;" *ngIf="tableTitleVisible">
+        <div nz-col nzXs="4" nzSm="4" nzPush="20">{{canAddTitleNumber()}}/50</div>
+      </div>
+    </ng-template>
+
+    <ng-template #modalContent>
+      <div style="width: 600px; height: 340px;">
+        <div nz-row nzType="flex" nzAlign="middle" nzGutter="6" style="margin-bottom: 10px;font-size: 16px;">
+          <div nz-col nzXs="4" nzSm="4">
+            添加分类:
+          </div>
+          <div nz-col nzXs="20" nzSm="20">
+            <nz-select [(ngModel)]="typeValue" nzSize="middle" nzMode="tags" nzPlaceHolder="请选择分类,至多可以选择两个分类..."
+              style="width: 260px;" nzMaxMultipleCount="2">
+              <nz-option *ngFor="let option of listOfType" [nzValue]="option" [nzLabel]="option"></nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <div nz-row nzType="flex" nzAlign="middle" nzGutter="6" style="margin-bottom: 10px;font-size: 16px;">
+          <div nz-col nzXs="4" nzSm="4">
+            添加出处:
+          </div>
+          <div nz-col nzXs="20" nzSm="20">
+            <nz-radio-group [(ngModel)]="acticleRadioValue" [nzButtonStyle]="'solid'">
+              <label nz-radio-button nzValue="0">原创</label>
+              <label nz-radio-button nzValue="1">转载</label>
+              <label nz-radio-button nzValue="2">翻译</label>
+            </nz-radio-group>
+          </div>
+        </div>
+        <div nz-row nzType="flex" nzAlign="middle" nzGutter="6" style="margin-bottom: 10px;font-size: 16px;">
+          <div nz-col nzXs="4" nzSm="4">
+            添加标签:
+          </div>
+          <div nz-col nzXs="20" nzSm="20" style="max-width: 400px;">
+            <nz-tag *ngFor="let tag of tags" [nzMode]="'closeable'" (nzOnClose)="handleClose(tag)">
+              {{ sliceTagName(tag) }}
+            </nz-tag>
+            <button nz-button nzType="link" nz-popover nzPopoverTitle="添加标签" [(nzVisible)]="innerTableVisible"
+              nzPopoverTrigger="click" [nzPopoverContent]="contentTemplate" nzPopoverPlacement="bottom"
+              *ngIf="tags.length<5">
+              添加标签<i nz-icon nzType="right" nzTheme="outline"></i>
+            </button>
+          </div>
+        </div>
+        <div nz-row nzType="flex" nzAlign="middle" nzGutter="6" style="margin-bottom: 10px;font-size: 16px;">
+          <div nz-col nzXs="3" nzSm="3" style="text-align: right;">
+            可见性:
+          </div>
+          <div nz-col nzXs="20" nzSm="20" nzPush="1">
+            <nz-radio-group [(ngModel)]="visiblePerson">
+              <label nz-radio nzValue="0">所有人</label>
+              <label nz-radio nzValue="1">我的粉丝</label>
+              <label nz-radio nzValue="2">付费查看</label>
+            </nz-radio-group>
+          </div>
+        </div>
+        <div nz-row nzType="flex" nzAlign="middle" nzGutter="6" style="margin-bottom: 10px;font-size: 16px;">
+          <div nz-col nzXs="3" nzSm="3" style="text-align: right;">
+            摘要:
+          </div>
+        </div>
+        <div nz-row nzType="flex" nzAlign="middle" nzGutter="6" style="margin-bottom: 10px;font-size: 16px;">
+          <div nz-col nzXs="23" nzSm="23" nzPush="1">
+            <textarea nz-input placeholder="不填写摘要时,系统会自动为您生成摘要" [(ngModel)]="summary" maxlength="200"
+              [nzAutosize]="{ minRows: 6, maxRows: 6 }" style="width: 420px;"></textarea>
+          </div>
+        </div>
+        <div nz-row nzType="flex" nzAlign="middle" nzGutter="6" style="font-size: 16px;">
+          <div nz-col nzXs="4" nzSm="4" nzPush="16">{{canAddSummaryNumber()}}/200</div>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template #modalFooter>
+      <button nz-button nzType="default" (click)="publishCancel()">取消</button>
+      <button nz-button nzType="primary" (click)="publish()" [nzLoading]="isPublishLoading">发布文章</button>
+    </ng-template>
+  </nz-modal>
+
+  <!-- 添加标签的table -->
+  <ng-template #contentTemplate>
+    <div style="width: 380px; height: 240px;font-size: 14px;">
+      <div style="margin-bottom: 10px;">
+        <nz-tag *ngFor="let tag of tags" [nzMode]="'closeable'" (nzOnClose)="handleClose(tag)">
+          {{ sliceTagName(tag) }}
+        </nz-tag>
+        <nz-tag *ngIf="tagAddVisible" class="editable-tag" nzNoAnimation (click)="showInput()">
+          <i nz-icon nzType="plus"></i> 自定义标签
+        </nz-tag>
+        <input #inputElement nz-input nzSize="small" *ngIf="inputVisible" type="text" [(ngModel)]="inputValue"
+          style="width: 78px;" (blur)="handleInputConfirm(null)" (keydown.enter)="handleInputConfirm(null)"
+          maxlength="7" />
+      </div>
+      <div style="font-size: 12px;margin-bottom: 10px; color: red">
+        还可以添加 "{{canAddTagNumber()}}" 个标签
+      </div>
+      <div>
+        <nz-radio-group [(ngModel)]="radioValue">
+          <label nz-radio-button [nzValue]="index" *ngFor="let type of perviousTagTypes,let index=index"
+            (click)="perviousTagsClick(type,index)">
+            {{ type.type }}
+          </label>
+        </nz-radio-group>
+        <hr>
+        <nz-tag *ngFor="let tag of perviousTag" (click)="handleInputConfirm(tag)" style="margin:5px 5">
+          {{ tag }}
+        </nz-tag>
+      </div>
+    </div>
+  </ng-template>
+  <div id="summary-back" (click)="backclick()"></div>
+  <div id="setSummary">
+    <div id="summary-titel">
+      添加摘要:
+    </div>
+    <div id="summary-close">
+      <span (click)="backclick()"
+        style="width: 20px; height: 6px; font-weight: bolder; font-size: 18px; cursor: pointer; overflow: hidden;">X</span>
+    </div>
+    <div class="line"></div>
+    <div id="summary-text">
+      <textarea name="" id="input_summary" maxlength="200" placeholder="请在此添加摘要,若没有添加摘要，系统会自动为您生成。"
+        [(ngModel)]="summary"></textarea>
+    </div>
+    <div style="font-size: 13px;margin-bottom: 10px; position:absolute;right: 5px; bottom: 40px;">
+      {{canAddSummaryNumber()}}/200
+    </div>
+    <button nz-button nzType="dashed" style="position:absolute;right: 10px; bottom: 15px; width: 380px;"
+      (click)="backclick()">确定</button>
+  </div>
+</div>

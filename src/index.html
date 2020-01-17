@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>BlogUser</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+
+<body>
+  <app-root></app-root>
+</body>
+
+</html>
+<script type="text/javascript">
+  var query = {};
+  var urlParams = window.location.search.split('?')[1];
+  if (urlParams != null) {
+    urlParams = urlParams.split("&");
+    for (var i = 0; i < urlParams.length; i++) {
+      var param = urlParams[i].split("=");
+      query[param[0]] = param[1];
+    }
+    var imageDialog = window.parent.document.getElementById(query['dialog_id']);
+    var iframe = imageDialog.children[2].children[0].children[2];
+    iframe.value = query['url'];
+    // console.log(imageDialog, query, iframe);
+  }
+
+</script>
