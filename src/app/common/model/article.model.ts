@@ -7,5 +7,6 @@ export class ArticleModel {
     public tags?: string[],
     public visibleStrategy?: number,
     public provenance?: number,
+    public html?: string,
   ) { }
 }

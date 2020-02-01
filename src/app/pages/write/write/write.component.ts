@@ -131,6 +131,7 @@ export class WriteComponent implements OnInit {
    */
   publish() {
     const md = JSON.stringify(EditorMdDirective.edit.getMarkdown()).trim();
+    const html = JSON.stringify(EditorMdDirective.edit.getHTML()).trim();
     const title = this.title.trim();
     const summary = this.summary.trim();
     const typeValue = this.typeValue;
@@ -160,9 +161,16 @@ export class WriteComponent implements OnInit {
       this.article.tags = tags;
       this.article.visibleStrategy = visiblePerson;
       this.article.provenance = acticleRadioValue;
+      this.article.html = html;
+
+      console.log(this.article);
 
       // 提交文章数据
       this.blogService.publicBlog(this.article).subscribe(data => {
+        this.message.success('文章发布成功', { nzDuration: 4000 });
+        this.isPublishLoading = false;
+      }, error => {
+        this.message.error('文章发布失败', { nzDuration: 4000 });
         this.isPublishLoading = false;
       });
     }
