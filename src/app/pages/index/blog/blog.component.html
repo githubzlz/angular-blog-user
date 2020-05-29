@@ -1,1 +1,117 @@
-<p>blog works!</p>
+<h1>文章列表</h1>
+<nz-table
+  style="min-width: 1450px;"
+  #basicTable
+  [nzData]="articles"
+  [nzFrontPagination]="false"
+  [nzScroll]="{ y: '550px' }"
+  [nzBordered]="true"
+  [nzLoadingDelay]="1000"
+  nzTableLayout="fixed"
+>
+  <thead>
+    <tr>
+      <th nzWidth="30px" nzAlign="center">
+        <div class="inner_table" style="width: 30px;">序号</div>
+      </th>
+      <th nzWidth="240px" style="width: 240px;">标题</th>
+      <th nzWidth="320px" nzAlign="left">
+        摘要
+      </th>
+      <th nzWidth="120px" nzAlign="center">点赞量</th>
+      <th nzWidth="120px" nzAlign="center">阅读量</th>
+      <th nzWidth="120px" nzAlign="center">评论量</th>
+      <th nzWidth="220px" nzAlign="center">创建时间</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let article of basicTable.data; index as index">
+      <td nzWidth="30px" nzAlign="center">
+        <div class="inner_table" style="width: 30px;">{{ index + 1 }}</div>
+      </td>
+      <td nzWidth="240px">
+        <ng-container *ngIf="!editCache[article.id].edit; else nameInputTpl">
+          <div class="inner_table" style="width: 200px;">
+            <nz-tag [nzColor]="'green'" *ngIf="article.provenance === 0">
+              原
+            </nz-tag>
+            <nz-tag [nzColor]="'red'" *ngIf="article.provenance === 1">
+              转
+            </nz-tag>
+            <nz-tag [nzColor]="'orange'" *ngIf="article.provenance === 2">
+              译
+            </nz-tag>
+            {{ article.title }}
+          </div>
+        </ng-container>
+        <ng-template #nameInputTpl>
+          <input
+            type="text"
+            nz-input
+            [(ngModel)]="editCache[article.id].data.title"
+          />
+        </ng-template>
+      </td>
+      <td nzWidth="20%" nzAlign="left">
+        <ng-container *ngIf="!editCache[article.id].edit; else nameInputTpl">
+          <div class="inner_table" style="width: 280px;">
+            {{ article.summary }}
+          </div>
+        </ng-container>
+        <ng-template #nameInputTpl>
+          <input
+            type="text"
+            nz-input
+            [(ngModel)]="editCache[article.id].data.summary"
+          />
+        </ng-template>
+      </td>
+      <td nzWidth="120px" nzAlign="center">
+        1000000000
+      </td>
+      <td nzWidth="120px" nzAlign="center">
+        {{ article.blogPublicInfos.readings }}
+      </td>
+      <td nzWidth="120px" nzAlign="center">
+        {{ article.blogPublicInfos.comments }}
+      </td>
+      <td nzWidth="220px" nzAlign="center">
+        {{ article.createdTime | date: "yyyy-MM-dd HH:mm:ss" }}
+      </td>
+      <td>
+        <a (click)="deletedArtcle(article.id)" *ngIf="!article.edit">
+          Delete
+        </a>
+        <nz-divider nzType="vertical"></nz-divider>
+        <ng-container *ngIf="!editCache[article.id].edit; else saveTpl">
+          <a (click)="editArtcle(index, article.id)">Edit</a>
+        </ng-container>
+        <ng-template #saveTpl>
+          <a (click)="saveEdit(index, article.id)">Save</a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <a
+            nz-popconfirm
+            nzTitle="Sure to cancel?"
+            (nzOnConfirm)="cancelEdit(index, article.id)"
+          >
+            Cancel
+          </a>
+        </ng-template>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+<div style="width: 100%; margin-top: 20px;">
+  <nz-pagination
+    style="float: right;"
+    [(nzPageIndex)]="pageInfo.pageNum"
+    [nzTotal]="pageInfo.totalSize"
+    [nzSize]="'small'"
+    nzShowSizeChanger
+    nzShowQuickJumper
+    (nzPageIndexChange)="nzPageIndexChange($event)"
+    (nzPageSizeChange)="nzPageSizeChange($event)"
+  >
+  </nz-pagination>
+</div>

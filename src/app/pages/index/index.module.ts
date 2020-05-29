@@ -7,17 +7,10 @@ import { UserComponent } from './user/user.component';
 import { BlogComponent } from './blog/blog.component';
 import { FormsModule } from '@angular/forms';
 
-
 @NgModule({
   declarations: [UserComponent, BlogComponent],
-  imports: [
-    CommonModule,
-    ShareModule,
-    FormsModule,
-    IndexRoutingModule,
-  ]
+  imports: [CommonModule, ShareModule, FormsModule, IndexRoutingModule],
 })
 export class IndexModule {
-  constructor() {
-  }
+  constructor() {}
 }

@@ -8,15 +8,16 @@ import { registerLocaleData } from '@angular/common';
 import zh from '@angular/common/locales/zh';
 import { LayoutModule } from './core/layout/layout.module';
 import { ShareModule } from './core/share/share.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LoginComponent } from './core/login/login.component';
+import { LoginService } from './common/util/login.service';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 registerLocaleData(zh);
 
 @NgModule({
-  declarations: [
-    AppComponent,
-  ],
+  declarations: [AppComponent, LoginComponent],
   imports: [
     ShareModule,
     LayoutModule,
@@ -25,7 +26,11 @@ registerLocaleData(zh);
     BrowserAnimationsModule,
     AppRoutingModule,
   ],
-  providers: [{ provide: NZ_I18N, useValue: zh_CN }],
-  bootstrap: [AppComponent]
+  providers: [
+    { provide: NZ_I18N, useValue: zh_CN },
+    { provide: HTTP_INTERCEPTORS, useClass: LoginService, multi: true },
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -5,6 +5,7 @@
 export const environment = {
   SERVER_URL: ``,
   BASE_DATA_SERVER_URL: `http://localhost:10800`,
+  OAUTH_LOGIN_URL: 'http://localhost:8080',
   MOCK_SERVER_URL: '',
   // environmentType: EnvironmentEnumModel.DEVELOPMENT,
   production: false,

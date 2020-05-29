@@ -6,13 +6,14 @@ import { Router } from '@angular/router';
 import { BlogService } from 'src/app/common/service/blog.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import * as $ from '../../../../assets/editor/jquery.min.js';
-import { ArticleModel } from 'src/app/common/model/article.model';
+import { ArticleModel } from 'src/app/common/model/article/article.model';
+import { BlogContentModel } from 'src/app/common/model/article/blogContent.model';
 declare var editormd: any;
 
 @Component({
   selector: 'app-write',
   templateUrl: './write.component.html',
-  styleUrls: ['./write.component.css']
+  styleUrls: ['./write.component.css'],
 })
 export class WriteComponent implements OnInit {
   conf = new EditorConfig();
@@ -20,31 +21,25 @@ export class WriteComponent implements OnInit {
   title: string;
   interval: any;
   tableTitleVisible = false;
-  listOfType: any[] = [
-    'JAVA', 'PATHON', 'C', 'C++', 'MYSQL'
-  ];
+  listOfType: any[] = ['JAVA', 'PATHON', 'C', 'C++', 'MYSQL'];
   perviousTagTypes: any[] = [
     {
       type: '大数据',
-      tags: [
-        'JAVA', 'PATHON', 'C', 'C++', 'MYSQL'
-      ]
-    }, {
+      tags: ['JAVA', 'PATHON', 'C', 'C++', 'MYSQL'],
+    },
+    {
       type: '语言',
-      tags: [
-        'JAVA', 'PATHON', 'C', 'C++'
-      ]
-    }, {
+      tags: ['JAVA', 'PATHON', 'C', 'C++'],
+    },
+    {
       type: '数据库',
-      tags: [
-        'PATHON', 'MYSQL'
-      ]
-    }
+      tags: ['PATHON', 'MYSQL'],
+    },
   ];
   perviousTag: string[] = this.perviousTagTypes[0].tags;
   acticleRadioValue: number;
   radioValue: any = 0;
-  typeValue: number[] = new Array<number>();
+  typeValue: string[] = new Array<string>();
   publishVisible = false;
   tags: string[] = new Array<string>();
   innerTableVisible = false;
@@ -61,9 +56,11 @@ export class WriteComponent implements OnInit {
   constructor(
     private router: Router,
     private blogService: BlogService,
-    private message: NzMessageService) { }
+    private message: NzMessageService
+  ) {}
 
   ngOnInit() {
+    this.article.blogContent = new BlogContentModel();
     this.dataOnInit();
     this.setMdConf();
     this.routeOut();
@@ -77,7 +74,8 @@ export class WriteComponent implements OnInit {
     this.summary = localStorage.getItem('blog-summary');
     this.md = localStorage.getItem('blog-md');
     if (this.title === null || this.title === '') {
-      this.titleInput.nativeElement.placeholder = '文章名称-ZLZBLOG(请输入文章名称)';
+      this.titleInput.nativeElement.placeholder =
+        '文章名称-ZLZBLOG(请输入文章名称)';
     } else {
       // document.getElementById('title').setAttribute('value', this.title);
     }
@@ -91,7 +89,7 @@ export class WriteComponent implements OnInit {
    * 离开当前路由
    */
   routeOut() {
-    this.router.events.subscribe(event => {
+    this.router.events.subscribe((event) => {
       clearInterval(this.interval);
     });
   }
@@ -117,11 +115,19 @@ export class WriteComponent implements OnInit {
    * 按钮事件:打开发布文章界面
    */
   openPublishPage() {
+    if (this.title === null || this.title.length === 0) {
+      this.message.warning('您没有填写文章标题,请检查您的标题', {
+        nzDuration: 2000,
+      });
+      this.title = '系统默认标题';
+    }
     this.publishVisible = true;
     if (this.summary == null || this.summary === '') {
       this.generateSummary();
       setTimeout(() => {
-        this.message.warning('您没有填写摘要，系统已为您自动生成摘要', { nzDuration: 2000 });
+        this.message.warning('您没有填写摘要，系统已为您自动生成摘要', {
+          nzDuration: 2000,
+        });
       }, 1000);
     }
   }
@@ -130,8 +136,8 @@ export class WriteComponent implements OnInit {
    * 按钮事件:发布文章
    */
   publish() {
-    const md = JSON.stringify(EditorMdDirective.edit.getMarkdown()).trim();
-    const html = JSON.stringify(EditorMdDirective.edit.getHTML()).trim();
+    const md = EditorMdDirective.edit.getMarkdown();
+    const html = EditorMdDirective.edit.getHTML();
     const title = this.title.trim();
     const summary = this.summary.trim();
     const typeValue = this.typeValue;
@@ -155,24 +161,26 @@ export class WriteComponent implements OnInit {
     } else {
       this.isPublishLoading = true;
       this.article.title = title;
-      this.article.md = md;
+      this.article.blogContent.contentMd = md;
       this.article.summary = summary;
       this.article.types = typeValue;
       this.article.tags = tags;
       this.article.visibleStrategy = visiblePerson;
       this.article.provenance = acticleRadioValue;
-      this.article.html = html;
-
+      this.article.blogContent.contentHtml = html;
       console.log(this.article);
 
       // 提交文章数据
-      this.blogService.publicBlog(this.article).subscribe(data => {
-        this.message.success('文章发布成功', { nzDuration: 4000 });
-        this.isPublishLoading = false;
-      }, error => {
-        this.message.error('文章发布失败', { nzDuration: 4000 });
-        this.isPublishLoading = false;
-      });
+      this.blogService.publicBlog(this.article).subscribe(
+        (data) => {
+          this.message.success('文章发布成功', { nzDuration: 4000 });
+          this.isPublishLoading = false;
+        },
+        (error) => {
+          this.message.error('文章发布失败', { nzDuration: 4000 });
+          this.isPublishLoading = false;
+        }
+      );
     }
   }
 
@@ -224,7 +232,6 @@ export class WriteComponent implements OnInit {
    * 按钮事件:添加标签
    */
   handleInputConfirm(tag: string) {
-
     if (tag) {
       this.inputValue = tag;
     }
@@ -304,9 +311,9 @@ export class WriteComponent implements OnInit {
    * 本地自动保存
    */
   outSaveLocal() {
-    this.interval = setInterval(event => {
+    this.interval = setInterval((event) => {
       this.saveLocal();
-    }, 30000);
+    }, 5000);
   }
 
   // getMarkdown() {
@@ -333,7 +340,6 @@ export class WriteComponent implements OnInit {
       myIcon2() {
         const title = $('#title').val();
         const summary = $('#input_summary').val();
-        console.log(summary);
         if (title) {
           localStorage.removeItem('blog-title');
           localStorage.setItem('blog-title', title);

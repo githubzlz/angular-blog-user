@@ -1,21 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuModule } from './menu.conf';
 import { Router } from '@angular/router';
+import { LoginService } from 'src/app/common/util/login.service';
+import { LoginUser } from 'src/app/common/model/userinfo/loginuser.model';
+import { ResultSetModel } from 'src/app/common/model/commonmodel/resultset.model';
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
-  styleUrls: ['./layout.component.css']
+  styleUrls: ['./layout.component.css'],
 })
 export class LayoutComponent implements OnInit {
   public menus: MenuModule[] = MenuModule.catalog;
   public data: any;
   isCollapsed = false;
-  constructor(
-    private router: Router
-  ) {
+  // 当前登陆人
+  loginUser: LoginUser = new LoginUser('', null, null, null);
+  constructor(private router: Router, private loginService: LoginService) {}
+  ngOnInit() {
+    this.loginService.getLoginUser().subscribe((data: ResultSetModel) => {
+      if (data.entity) {
+        this.loginUser = data.entity;
+      } else {
+        this.loginUser.name = '未登录';
+      }
+    });
   }
-  ngOnInit() {}
 
   // /**
   //  * 点击进行路由跳转，并将data数据传出

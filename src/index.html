@@ -1,32 +1,46 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>BlogUser</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <title>BlogUser</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-</head>
-
-<body>
-  <app-root></app-root>
-</body>
-
+  <body>
+    <app-root></app-root>
+  </body>
 </html>
 <script type="text/javascript">
   var query = {};
-  var urlParams = window.location.search.split('?')[1];
+  var urlParams = window.location.search.split("?")[1];
   if (urlParams != null) {
     urlParams = urlParams.split("&");
     for (var i = 0; i < urlParams.length; i++) {
       var param = urlParams[i].split("=");
       query[param[0]] = param[1];
     }
-    var imageDialog = window.parent.document.getElementById(query['dialog_id']);
+    var imageDialog = window.parent.document.getElementById(query["dialog_id"]);
     var iframe = imageDialog.children[2].children[0].children[2];
-    iframe.value = query['url'];
+    iframe.value = query["url"];
     // console.log(imageDialog, query, iframe);
   }
 
+  window.addEventListener(
+    "message",
+    function (e) {
+      if (e.data.constructor == String) {
+        const name = "token";
+        //过期时间 2小时
+        var exp = new Date();
+        exp.setTime(exp.getTime() + 2 * 60 * 60 * 1000);
+        document.cookie = name + "=" + e.data + ";expires=" + exp.toGMTString()+";path=/";
+        const div = document.getElementById("login_frame_div");
+        div.style.visibility = "hidden";
+        location.reload();
+      }
+    },
+    false
+  );
 </script>

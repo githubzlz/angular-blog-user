@@ -1,0 +1,12 @@
+<div id="login_frame_div">
+  <a (click)="onClick()" style="position: absolute; right: 5px; top: 5px;"
+    >关闭</a
+  >
+  <iframe
+    id="login_frame"
+    seamless
+    frameborder="1"
+    scrolling="no"
+    [src]="safeUrl"
+  ></iframe>
+</div>
