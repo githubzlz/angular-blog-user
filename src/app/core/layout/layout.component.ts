@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { LoginService } from 'src/app/common/util/login.service';
 import { LoginUser } from 'src/app/common/model/userinfo/loginuser.model';
 import { ResultSetModel } from 'src/app/common/model/commonmodel/resultset.model';
+import { NzMessageService } from 'ng-zorro-antd';
+import { error } from '@angular/compiler/src/util';
 
 @Component({
   selector: 'app-layout',
@@ -16,15 +18,40 @@ export class LayoutComponent implements OnInit {
   isCollapsed = false;
   // 当前登陆人
   loginUser: LoginUser = new LoginUser('', null, null, null);
-  constructor(private router: Router, private loginService: LoginService) {}
+  constructor(
+    private router: Router,
+    private loginService: LoginService,
+    private message: NzMessageService
+  ) {}
   ngOnInit() {
-    this.loginService.getLoginUser().subscribe((data: ResultSetModel) => {
-      if (data.entity) {
-        this.loginUser = data.entity;
-      } else {
-        this.loginUser.name = '未登录';
+    this.login();
+  }
+
+  /**
+   * 登陆
+   */
+  login() {
+    this.loginService.getLoginUser().subscribe(
+      (data: ResultSetModel) => {
+        if (data.entity) {
+          this.loginUser = data.entity;
+        } else {
+          this.loginUser.name = '';
+        }
+      },
+      () => {
+        this.loginUser.name = '';
       }
-    });
+    );
+  }
+
+  /**
+   * 登出
+   */
+  logout() {
+    this.loginService.logout();
+    this.message.create('success', `您已退出,欢迎下次使用`);
+    // location.reload();
   }
 
   // /**

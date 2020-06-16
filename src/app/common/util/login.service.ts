@@ -66,4 +66,33 @@ export class LoginService implements HttpInterceptor {
     const url = this.baseUrl + '/check/login_state';
     return this.http.post(url, null);
   }
+
+  /**
+   * 退出登陆
+   */
+  logout() {
+    const url = 'localhost:8080/token/logout';
+    this.http.get(url).subscribe((data) => {
+      const da = data;
+      console.log(da);
+    });
+    // let str = document.cookie;
+    // console.log(str);
+    // const name = str.split('=')[0];
+    // if (str !== undefined && name === 'JSESSIONID') {
+    //   const thisToken = str.split('=')[1];
+    //   const date = new Date();
+    //   date.setTime(date.getTime() - 10000);
+    //   document.cookie = 'JSESSIONID=; expires=' + date.toUTCString() + 'path=/';
+    // }
+    // str = document.cookie;
+    // console.log(str);
+    // if (str !== undefined && name === 'token') {
+    //   const thisToken = str.split('=')[1];
+    //   const date = new Date();
+    //   date.setTime(date.getTime() - 10000);
+    //   document.cookie =
+    //     'token=' + thisToken + '; expires=' + date.toUTCString() + 'path=/';
+    // }
+  }
 }

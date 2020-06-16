@@ -1,11 +1,25 @@
-<h1>文章列表</h1>
+<div>
+  <h1 style="text-align: center;">我的文章</h1>
+</div>
+<div style="width: 100%; height: 30px; margin-bottom: 10px;">
+  <nz-pagination
+    style="float: right; margin-bottom: 0px;"
+    [(nzPageIndex)]="pageInfo.pageNum"
+    [nzTotal]="pageInfo.totalSize"
+    [nzSize]="'small'"
+    nzShowSizeChanger
+    nzShowQuickJumper
+    (nzPageIndexChange)="nzPageIndexChange($event)"
+    (nzPageSizeChange)="nzPageSizeChange($event)"
+  >
+  </nz-pagination>
+</div>
 <nz-table
   style="min-width: 1450px;"
   #basicTable
   [nzData]="articles"
   [nzFrontPagination]="false"
-  [nzScroll]="{ y: '550px' }"
-  [nzBordered]="true"
+  [nzBordered]="false"
   [nzLoadingDelay]="1000"
   nzTableLayout="fixed"
 >
@@ -14,6 +28,7 @@
       <th nzWidth="30px" nzAlign="center">
         <div class="inner_table" style="width: 30px;">序号</div>
       </th>
+      <th nzWidth="120px" nzAlign="center">状态</th>
       <th nzWidth="240px" style="width: 240px;">标题</th>
       <th nzWidth="320px" nzAlign="left">
         摘要
@@ -22,7 +37,7 @@
       <th nzWidth="120px" nzAlign="center">阅读量</th>
       <th nzWidth="120px" nzAlign="center">评论量</th>
       <th nzWidth="220px" nzAlign="center">创建时间</th>
-      <th>操作</th>
+      <th nzWidth="180px">操作</th>
     </tr>
   </thead>
   <tbody>
@@ -30,9 +45,24 @@
       <td nzWidth="30px" nzAlign="center">
         <div class="inner_table" style="width: 30px;">{{ index + 1 }}</div>
       </td>
+      <td nzWidth="120px" nzAlign="center">
+        <div *ngIf="article.isDeleted !== 1 && article.isShow === 1">
+          正常
+        </div>
+        <div *ngIf="article.isDeleted === 1">删除</div>
+        <div *ngIf="article.isShow === 0 && article.isDeleted !== 1">
+          审核中
+        </div>
+      </td>
       <td nzWidth="240px">
         <ng-container *ngIf="!editCache[article.id].edit; else nameInputTpl">
-          <div class="inner_table" style="width: 200px;">
+          <div
+            class="inner_table"
+            style="width: 200px;"
+            nz-popover
+            [nzPopoverContent]="contentTemplate"
+            nzPopoverPlacement="top"
+          >
             <nz-tag [nzColor]="'green'" *ngIf="article.provenance === 0">
               原
             </nz-tag>
@@ -45,6 +75,9 @@
             {{ article.title }}
           </div>
         </ng-container>
+        <ng-template #contentTemplate>
+          <div>{{ article.title }}</div>
+        </ng-template>
         <ng-template #nameInputTpl>
           <input
             type="text"
@@ -53,12 +86,21 @@
           />
         </ng-template>
       </td>
-      <td nzWidth="20%" nzAlign="left">
+      <td nzWidth="320px" nzAlign="left">
         <ng-container *ngIf="!editCache[article.id].edit; else nameInputTpl">
-          <div class="inner_table" style="width: 280px;">
+          <div
+            class="inner_table"
+            style="width: 280px;"
+            nz-popover
+            [nzPopoverContent]="contentTemplate2"
+            nzPopoverPlacement="bottomLeft"
+          >
             {{ article.summary }}
           </div>
         </ng-container>
+        <ng-template #contentTemplate2>
+          <div style="max-width: 300px;">{{ article.summary }}</div>
+        </ng-template>
         <ng-template #nameInputTpl>
           <input
             type="text"
@@ -79,11 +121,17 @@
       <td nzWidth="220px" nzAlign="center">
         {{ article.createdTime | date: "yyyy-MM-dd HH:mm:ss" }}
       </td>
-      <td>
-        <a (click)="deletedArtcle(article.id)" *ngIf="!article.edit">
+      <td nzWidth="180px">
+        <a
+          (click)="deletedArtcle(article.id)"
+          *ngIf="!editCache[article.id].edit"
+        >
           Delete
         </a>
-        <nz-divider nzType="vertical"></nz-divider>
+        <nz-divider
+          nzType="vertical"
+          *ngIf="!editCache[article.id].edit"
+        ></nz-divider>
         <ng-container *ngIf="!editCache[article.id].edit; else saveTpl">
           <a (click)="editArtcle(index, article.id)">Edit</a>
         </ng-container>
@@ -102,16 +150,3 @@
     </tr>
   </tbody>
 </nz-table>
-<div style="width: 100%; margin-top: 20px;">
-  <nz-pagination
-    style="float: right;"
-    [(nzPageIndex)]="pageInfo.pageNum"
-    [nzTotal]="pageInfo.totalSize"
-    [nzSize]="'small'"
-    nzShowSizeChanger
-    nzShowQuickJumper
-    (nzPageIndexChange)="nzPageIndexChange($event)"
-    (nzPageSizeChange)="nzPageSizeChange($event)"
-  >
-  </nz-pagination>
-</div>

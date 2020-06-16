@@ -8,6 +8,8 @@ import { NzMessageService } from 'ng-zorro-antd';
 import * as $ from '../../../../assets/editor/jquery.min.js';
 import { ArticleModel } from 'src/app/common/model/article/article.model';
 import { BlogContentModel } from 'src/app/common/model/article/blogContent.model';
+import { FileService } from 'src/app/common/service/file.service';
+import { ResultSetModel } from 'src/app/common/model/commonmodel/resultset.model';
 declare var editormd: any;
 
 @Component({
@@ -56,6 +58,7 @@ export class WriteComponent implements OnInit {
   constructor(
     private router: Router,
     private blogService: BlogService,
+    private fileService: FileService,
     private message: NzMessageService
   ) {}
 
@@ -354,8 +357,46 @@ export class WriteComponent implements OnInit {
           localStorage.setItem('blog-md', md);
         }
       },
+      myIcon3() {
+        $('#file_upload').css('visibility', 'visible');
+        $('#file_background').css('visibility', 'visible');
+        $('#file_upload').css('top', '320px%');
+        $('#file_upload').css('width', '400px');
+        $('#file_upload').css('height', '200px');
+        $('#file_upload').css('right', '60%');
+      },
     };
   }
+
+  /**
+   * 文件上传
+   */
+  fileSubmit() {
+    const formdata = new FormData();
+    formdata.append('filename', $('#file_upload_image')[0].files[0]);
+    $.ajax({
+      // 请求方式
+      type: 'POST',
+      // 请求地址
+      url: 'https://www.zlztsb.com:80/blog-server/file/image/upload',
+      // 数据，json字符串
+      data: formdata,
+      contentType: false,
+      processData: false,
+      // 请求成功
+      success(result: ResultSetModel) {
+        const path = result.entity;
+        EditorMdDirective.edit.insertValue('![](' + path + ')');
+        $('#file_upload').css('visibility', 'hidden');
+        $('#file_background').css('visibility', 'hidden');
+      },
+      // 请求失败，包含具体的错误信息
+      error(e: any) {
+        console.log(e);
+      },
+    });
+  }
+
   backclick() {
     $('#summary-back').css('visibility', 'hidden');
     $('#setSummary').css('visibility', 'hidden');
@@ -365,5 +406,13 @@ export class WriteComponent implements OnInit {
     const summary = $('#input_summary').val();
     localStorage.removeItem('blog-summary');
     localStorage.setItem('blog-summary', summary);
+  }
+
+  fileBackgroundClick() {
+    $('#file_background').css('visibility', 'hidden');
+    $('#file_upload').css('visibility', 'hidden');
+    $('#file_upload').css('width', '0');
+    $('#file_upload').css('height', '0');
+    $('#file_upload').css('right', '20%');
   }
 }

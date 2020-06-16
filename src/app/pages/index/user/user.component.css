@@ -1,0 +1,25 @@
+.block {
+  display: inline-block;
+  cursor: pointer;
+  transition: ease-in;
+}
+.test {
+  display: inline-block;
+  border: 20px solid #3280fc;
+  border-left: 20px solid rgba(0, 0, 0, 0);
+  height: 20px;
+  width: 250px;
+  position: relative;
+}
+.inner {
+  display: inline-block;
+  border: 20px solid rgba(0, 0, 0, 0);
+  border-left: 20px solid #3280fc;
+  width: 20px;
+}
+.innertext {
+  font-size: 26px;
+  position: absolute;
+  top: -20px;
+  left: 30px;
+}

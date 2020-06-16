@@ -1,3 +1,43 @@
 <p>user works</p>
 <button nz-button (click)="click($event)">button</button>
-<div></div>
+<nz-card>
+  <div>
+    <div class="block">
+      <div
+        class="test"
+        style="
+          border-left: 20px solid rgba(50, 128, 252, 1);
+          border-top-left-radius: 10px;
+          border-bottom-left-radius: 10px;
+        "
+      >
+        <div class="innertext" style="left: 20px;">ⅠTest</div>
+      </div>
+      <div class="inner"></div>
+    </div>
+    <div class="block">
+      <div class="test" style="margin-left: -30px;">
+        <div class="innertext">ⅡTest</div>
+      </div>
+      <div class="inner"></div>
+    </div>
+    <div class="block">
+      <div class="test" style="margin-left: -30px;">
+        <div class="innertext">ⅢTest</div>
+      </div>
+      <div class="inner"></div>
+    </div>
+    <div class="block">
+      <div
+        class="test"
+        style="
+          border-top-right-radius: 10px;
+          border-bottom-right-radius: 10px;
+          margin-left: -30px;
+        "
+      >
+        <div class="innertext">ⅣTest</div>
+      </div>
+    </div>
+  </div>
+</nz-card>

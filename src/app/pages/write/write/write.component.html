@@ -361,4 +361,18 @@
       确定
     </button>
   </div>
+  <div id="file_upload">
+    <div>
+      <h3>上传图片</h3>
+    </div>
+    <div>
+      <form>
+        <input type="file" id="file_upload_image" />
+        <button type="button" id="file_submit" (click)="fileSubmit()">
+          上传
+        </button>
+      </form>
+    </div>
+  </div>
+  <div id="file_background" (click)="fileBackgroundClick()"></div>
 </div>

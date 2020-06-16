@@ -38,7 +38,7 @@ export class EditorConfig {
     'myIcon1',
     'link',
     'reference-link',
-    'image',
+    'myIcon3',
     'code',
     'preformatted-text',
     'code-block',
@@ -63,6 +63,8 @@ export class EditorConfig {
       '<button style=" background: none;border: none; background: none" id="md-summary">摘</button>',
     myIcon2:
       '<button style=" background: none;border: none; background: none">暂存</button>',
+    myIcon3:
+      '<button style=" background: none;border: none; background: none">图片</button>',
   };
   public toolbarHandlers: any;
   public autoFocus = false;
@@ -77,10 +79,6 @@ export class EditorConfig {
   public flowChart = true;
   public syncScrolling = true;
   public sequenceDiagram = true;
-  public imageUpload = true;
-  public imageFormats = ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'webp'];
-  public imageUploadURL =
-    environment.BASE_DATA_SERVER_URL + '/file/image/upload';
   public crossDomainUpload = true;
   public uploadCallbackURL = 'http://localhost:4200/write/write';
   public;

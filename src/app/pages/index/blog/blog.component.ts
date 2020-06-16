@@ -18,27 +18,61 @@ export class BlogComponent implements OnInit {
   pageInfo: PageInfoModel = new PageInfoModel();
   resultSet: ResultSetModel = new ResultSetModel();
   articles: Array<ArticleModel> = new Array();
-
+  deletedMap: Map<string, string> = new Map<string, string>();
+  // 查询未删除条件
+  deletedExclude: any = {
+    column: 'isDeleted',
+    value: '0',
+  };
+  // 审核条件
+  showExclude: any = {
+    column: 'isShow',
+    value: '1',
+  };
   // 编辑缓存
   editCache: { [key: string]: { edit: boolean; data: ArticleModel } } = {};
   ngOnInit() {
     this.listInit(1, 10);
   }
-
+  /**
+   * 初始化表格数据
+   * @param num num
+   * @param size size
+   */
   listInit(num: number, size: number) {
     this.pageInfo.pageNum = num;
     this.pageInfo.pageSize = size;
+    this.pageInfo.exclude.push(this.deletedExclude);
+    this.pageInfo.exclude.push(this.showExclude);
     this.selectList();
+    console.log(JSON.stringify(this.pageInfo));
   }
 
+  /**
+   * 开始编辑表格
+   * @param index index
+   * @param id id
+   */
   editArtcle(index: number, id: string) {
     this.editCache[id].edit = true;
   }
+
+  /**
+   * 保存编辑内容
+   * @param index index
+   * @param id id
+   */
   saveEdit(index: number, id: string) {
     Object.assign(this.articles[index], this.editCache[id].data);
     console.log(this.editCache[id]);
     this.editCache[id].edit = false;
   }
+
+  /**
+   * 放弃编辑
+   * @param index index
+   * @param id id
+   */
   cancelEdit(index: number, id: string) {
     this.editCache[id] = {
       data: { ...this.articles[index] },
@@ -64,6 +98,9 @@ export class BlogComponent implements OnInit {
     this.selectList();
   }
 
+  /**
+   * 更新表格编辑的缓存
+   */
   updateEditCache(): void {
     this.articles.forEach((item) => {
       this.editCache[item.id] = {
@@ -85,7 +122,7 @@ export class BlogComponent implements OnInit {
         this.updateEditCache();
       },
       (error) => {
-        this.message.error('查询列表失败,请重试', { nzDuration: 4000 });
+        // this.message.error('查询列表失败,请重试', { nzDuration: 4000 });
       }
     );
   }

@@ -29,11 +29,13 @@ export class PageInfoModel {
   /**
    * 筛选字段
    */
-  exclude?: Map<string, string>;
+  exclude?: Array<any>;
 
   /**
    * 封装查询到的信息
    */
   list?: Array<any>;
-  constructor() {}
+  constructor() {
+    this.exclude = new Array();
+  }
 }
