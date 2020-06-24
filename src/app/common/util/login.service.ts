@@ -16,11 +16,6 @@ export class LoginService implements HttpInterceptor {
   baseUrl = environment.BASE_DATA_SERVER_URL;
 
   /**
-   * 登陆地址
-   */
-  loginUrl = environment.OAUTH_LOGIN_URL;
-
-  /**
    * oauth请求头
    */
   authorization: string;

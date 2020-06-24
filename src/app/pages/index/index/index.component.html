@@ -1,0 +1,148 @@
+<nz-card class="index">
+  <div nz-row nzGutter="16">
+    <div nz-col nzSpan="19">
+      <div nz-row style="height: 40px; margin-bottom: 10px;">
+        <div class="line"></div>
+        <h2 style="display: inline-block; height: 30px; vertical-align: top;">
+          信息
+        </h2>
+        <div
+          style="
+            display: inline-block;
+            vertical-align: 10px;
+            margin-left: 10px;
+          "
+        >
+          <nz-radio-group>
+            <label nz-radio-button nzValue="large"><span>昨日</span></label>
+            <label nz-radio-button nzValue="default"><span>上周</span></label>
+          </nz-radio-group>
+        </div>
+      </div>
+      <div nz-row nzType="flex" nzGutter="16">
+        <div nz-col nzSpan="6">
+          <nz-card class="count_number_card">
+            <div nz-row nzAlign="middle" nzType="flex">
+              <i nz-icon nzType="edit" nzTheme="twotone" class="icon"></i>
+              <div style="margin-left: 20px;">
+                <span class="number">1029</span>
+                <h2 style="font-size: 15px; color: white;">文章数量</h2>
+              </div>
+            </div>
+            <div class="bottom_right">
+              <i class="icon_trend_down">down</i>
+              <span class="text_trend_down">35</span>
+            </div>
+          </nz-card>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-card
+            class="count_number_card"
+            style="
+              background-image: linear-gradient(to right, #9933ff, #cc66cc);
+            "
+          >
+            <div nz-row nzAlign="middle" nzType="flex">
+              <i
+                nz-icon
+                nzType="like"
+                nzTheme="twotone"
+                class="icon"
+                style="font-size: 40px;"
+              ></i>
+              <div style="margin-left: 20px;">
+                <span class="number">15684</span>
+                <h2 style="font-size: 15px; color: white;">点赞数量</h2>
+              </div>
+            </div>
+            <div class="bottom_right">
+              <i class="icon_trend_down">down</i>
+              <span class="text_trend_down">350</span>
+            </div>
+          </nz-card>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-card
+            class="count_number_card"
+            style="
+              background-image: linear-gradient(to right, #29a682, #5bf061);
+            "
+          >
+            <div nz-row nzAlign="middle" nzType="flex">
+              <i nz-icon nzType="heart" nzTheme="twotone" class="icon"></i>
+              <div style="margin-left: 20px;">
+                <span class="number">584</span>
+                <h2 style="font-size: 15px; color: white;">粉丝数量</h2>
+              </div>
+            </div>
+            <div class="bottom_right">
+              <i class="icon_trend_up">up</i>
+              <span class="text_trend_up" style="color: whitesmoke;">89</span>
+            </div>
+          </nz-card>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-card
+            class="count_number_card"
+            style="
+              background-image: linear-gradient(to right, #2fd7c7, #679df2);
+            "
+          >
+            <div nz-row nzAlign="middle" nzType="flex">
+              <i nz-icon nzType="star" nzTheme="twotone" class="icon"></i>
+              <div style="margin-left: 20px;">
+                <span class="number">3560</span>
+                <h2 style="font-size: 15px; color: white;">星星数量</h2>
+              </div>
+            </div>
+            <div class="bottom_right">
+              <i class="icon_trend_down">down</i>
+              <span class="text_trend_down">258</span>
+            </div>
+          </nz-card>
+        </div>
+      </div>
+      <div nz-row style="height: 145px; margin-top: 16px;">
+        <nz-card style="height: 125px; border-radius: 10px;">
+          <div nz-col nzSpan="10">
+            <h3 style="margin-bottom: 15px;">待办事项:</h3>
+            <span style="margin-left: 5px;">1.待办事项</span>
+            <span style="margin-left: 5px;">2.待办事项</span>
+            <span style="margin-left: 5px;">3.待办事项</span>
+            <span style="margin-left: 5px;">更多。。。</span>
+          </div>
+          <div nz-col nzSpan="10">
+            <h3 style="margin-bottom: 15px;">未读消息:</h3>
+            <span style="margin-left: 5px;">1.未读消息</span>
+            <span style="margin-left: 5px;">2.未读消息</span>
+            <span style="margin-left: 5px;">3.未读消息</span>
+            <span style="margin-left: 5px;">更多。。。</span>
+          </div>
+        </nz-card>
+      </div>
+    </div>
+    <div nz-col nzSpan="5">
+      <div class="line"></div>
+      <h2
+        style="
+          display: inline-block;
+          height: 30px;
+          vertical-align: top;
+          margin-bottom: 20px;
+        "
+      >
+        日历
+      </h2>
+      <div id="calendar">
+        <nz-calendar
+          [nzFullscreen]="false"
+          (nzSelectChange)="onValueChange($event)"
+          (nzPanelChange)="onPanelChange($event)"
+        ></nz-calendar>
+      </div>
+    </div>
+  </div>
+  <div nz-row>
+    <nz-card style="border-radius: 10px; margin-top: 20px;">123</nz-card>
+  </div>
+</nz-card>

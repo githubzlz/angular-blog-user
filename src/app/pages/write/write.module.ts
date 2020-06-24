@@ -6,10 +6,11 @@ import { WriteComponent } from './write/write.component';
 import { ShareModule } from 'src/app/core/share/share.module';
 import { EditorMdModule } from 'src/app/core/editormd/editor-md.module';
 import {FormsModule} from '@angular/forms';
+import { MoreComponent } from './more/more.component';
 
 
 @NgModule({
-  declarations: [WriteComponent],
+  declarations: [WriteComponent, MoreComponent],
   imports: [
     CommonModule,
     ShareModule,

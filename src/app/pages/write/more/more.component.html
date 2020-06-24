@@ -1,0 +1,200 @@
+<nz-card style="min-height: 100%; padding-left: 400px;">
+  <div
+    id="md2"
+    appEditorMd
+    [editorConfig]="conf"
+    style="visibility: hidden; height: 0;"
+  ></div>
+  <div class="left">
+    <nz-card style="margin-bottom: 10px;">
+      <div class="left_card" style="margin-top: 0px;">
+        <nz-skeleton [nzLoading]="loading">
+          <div
+            nz
+            nz-row
+            nzType="flex"
+            nzAlign="bottom"
+            nzJustify="start"
+            style="height: 90px;"
+          >
+            <div nz-col nzSpan="24">
+              <span class="line_title"></span>
+              <h2 class="inner_title">
+                基本信息
+              </h2>
+            </div>
+            <div nz-col nzSpan="4"><span class="inner_text">题目:</span></div>
+            <div nz-col nzSpan="20">{{ blog.title }}</div>
+            <div nz-col nzSpan="4"><span class="inner_text">作者:</span></div>
+            <div nz-col nzSpan="8">{{ blog.creator }}</div>
+            <div nz-col nzSpan="4"><span class="inner_text">来源:</span></div>
+            <div nz-col nzSpan="8">
+              <span *ngIf="blog.provenance === 0">
+                原创
+              </span>
+              <span *ngIf="blog.provenance === 1">
+                转发
+              </span>
+              <span *ngIf="blog.provenance === 2">
+                翻译
+              </span>
+            </div>
+            <div nz-col nzSpan="4"><span class="inner_text">可见:</span></div>
+            <div nz-col nzSpan="8">
+              <span *ngIf="blog.visibleStrategy === 0">
+                所有人
+              </span>
+              <span *ngIf="blog.visibleStrategy === 1">
+                粉丝
+              </span>
+              <span *ngIf="blog.visibleStrategy === 2">
+                付费
+              </span>
+            </div>
+            <div nz-col nzSpan="4"><span class="inner_text">状态:</span></div>
+            <div nz-col nzSpan="8" *ngIf="blog.isDeleted === 1">已删除</div>
+            <div
+              nz-col
+              nzSpan="8"
+              *ngIf="blog.isDeleted !== 1 && blog.isShow === 1"
+            >
+              已发布
+            </div>
+            <div
+              nz-col
+              nzSpan="8"
+              *ngIf="blog.isShow === 0 && blog.isDeleted !== 1"
+            >
+              审核中
+            </div>
+          </div>
+        </nz-skeleton>
+      </div>
+    </nz-card>
+    <nz-card style="margin-bottom: 10px;">
+      <div class="left_card">
+        <nz-skeleton [nzLoading]="loading">
+          <div
+            nz
+            nz-row
+            nzType="flex"
+            nzAlign="bottom"
+            nzJustify="start"
+            style="height: 120px;"
+          >
+            <div nz-col nzSpan="24">
+              <span
+                class="line_title"
+                style="border-left: 5px solid rgb(26, 122, 211);"
+              ></span>
+              <h2 class="inner_title">
+                信息统计
+              </h2>
+            </div>
+            <div nz-col nzSpan="4"><span class="inner_text">字数:</span></div>
+            <div nz-col nzSpan="8">未统计</div>
+            <div nz-col nzSpan="4"><span class="inner_text">评论:</span></div>
+            <div nz-col nzSpan="8">{{ blog.blogPublicInfos.comments }}</div>
+            <div nz-col nzSpan="4"><span class="inner_text">阅读:</span></div>
+            <div nz-col nzSpan="8">{{ blog.blogPublicInfos.readings }}</div>
+            <div nz-col nzSpan="4"><span class="inner_text">点赞:</span></div>
+            <div nz-col nzSpan="8">{{ blog.blogPublicInfos.goods }}</div>
+            <div nz-col nzSpan="4"><span class="inner_text">星星:</span></div>
+            <div nz-col nzSpan="8">{{ blog.blogPublicInfos.stars }}</div>
+            <div nz-col nzSpan="4"><span class="inner_text">收藏:</span></div>
+            <div nz-col nzSpan="8">{{ blog.blogPublicInfos.collect }}</div>
+            <div nz-col nzSpan="4"><span class="inner_text">收益:</span></div>
+            <div nz-col nzSpan="8">未统计</div>
+          </div>
+        </nz-skeleton>
+      </div>
+    </nz-card>
+    <nz-card style="margin-bottom: 10px;">
+      <div class="left_card" style="height: calc(34%);">
+        <nz-skeleton [nzLoading]="loading">
+          <div nz nz-row nzAlign="bottom">
+            <div nz-col nzSpan="24">
+              <span
+                class="line_title"
+                style="border-left: 5px solid rgb(103, 139, 17);"
+              ></span>
+              <h2 class="inner_title">
+                分类标签
+              </h2>
+            </div>
+            <div nz-row nzAlign="bottom" style="line-height: 2em;">
+              <div nz-col nzSpan="4">
+                <span class="inner_text">分类:</span>
+              </div>
+              <div nz-col nzSpan="8" *ngFor="let item of blog.types">
+                <nz-tag [nzColor]="'#2db7f5'" style="font-size: 18px;">{{
+                  item
+                }}</nz-tag>
+              </div>
+            </div>
+          </div>
+          <div nz nz-row>
+            <div nz-col nzSpan="4">
+              <span class="inner_text">标签:</span>
+            </div>
+            <div nz-col nzSpan="4" *ngFor="let tag of blog.tags">
+              <nz-tag
+                [nzColor]="'magenta'"
+                style="font-size: 15px; margin: 5px;"
+                >{{ tag }}</nz-tag
+              >
+            </div>
+          </div>
+        </nz-skeleton>
+      </div>
+    </nz-card>
+    <nz-card style="margin-bottom: 10px;">
+      <div class="left_card" style="height: calc(34%);">
+        <nz-skeleton [nzLoading]="loading">
+          <div nz nz-row nzJustify="center">
+            <span
+              class="line_title"
+              style="border-left: 5px solid rgb(214, 34, 190);"
+            ></span>
+            <h2 class="inner_title">
+              摘要描述
+            </h2>
+            <h4>
+              {{ blog.summary }}
+            </h4>
+          </div>
+        </nz-skeleton>
+      </div>
+    </nz-card>
+  </div>
+
+  <div class="right">
+    <nz-spin [nzDelay]="200" nzTip="loading..." [nzSpinning]="loading">
+      <nz-card *ngIf="loading" style="min-height: 100%;">
+        <nz-empty></nz-empty>
+      </nz-card>
+      <nz-card>
+        <div>
+          <span class="line_title"></span>
+          <h2 class="inner_title">正文</h2>
+          <button
+            nzShape="circle"
+            style="float: right; margin-right: 10px;"
+            nz-button
+            nz-popover
+            [nzPopoverContent]="contentTemplate2"
+            nzPopoverPlacement="topLeft"
+            (click)="backToList()"
+          >
+            <i nz-icon nzType="rollback" nzTheme="outline"></i>
+          </button>
+          <ng-template #contentTemplate2>
+            返回列表
+          </ng-template>
+        </div>
+        <nz-divider nzText="MarkDown To HTML"></nz-divider>
+        <div id="inner_html"></div>
+      </nz-card>
+    </nz-spin>
+  </div>
+</nz-card>

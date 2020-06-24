@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { PageInfoModel } from '../model/commonmodel/pageInfo.model';
+import { BlogPublicInfoModel } from '../model/article/BlogPublicInfo.model';
+import { ArticleModel } from '../model/article/article.model';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +28,7 @@ export class BlogService {
    * 查询文章列表
    * @param pageInfo pageInfo
    */
-  selectList(pageInfo: PageInfoModel) {
+  selectList(pageInfo: ArticleModel) {
     const url = this.baseUrl + '/blog/article/list';
     return this.http.post(url, pageInfo);
   }
@@ -37,6 +39,24 @@ export class BlogService {
    */
   deletedArtcle(id: string) {
     const url = this.baseUrl + '/blog/article/remove/' + id;
+    return this.http.get(url);
+  }
+
+  /**
+   * 修改文章标题和摘要
+   * @param blog blog
+   */
+  updateTitleOrSummary(blog: ArticleModel) {
+    const url = this.baseUrl + '/blog/article/titleorsummary';
+    return this.http.post(url, blog);
+  }
+
+  /**
+   * 查询文章正文
+   * @param id id
+   */
+  getBlogContent(id: string) {
+    const url = this.baseUrl + '/blog/article/queryarticle/' + id;
     return this.http.get(url);
   }
 }

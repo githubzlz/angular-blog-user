@@ -32,6 +32,12 @@
               "src/styles.css",
               "src/theme.less",
               "src/assets/editor/css/editormd.css"
+              // "src/assets/editor/lib/flowchart.min.js",
+              // "src/assets/editor/lib/jquery.flowchart.min.js",
+              // "src/assets/editor/lib/marked.min.js",
+              // "src/assets/editor/lib/prettify.min.js",
+              // "src/assets/editor/lib/raphael.min.js",
+              // "src/assets/editor/lib/underscore.min.js"
             ],
             "scripts": [
               "src/assets/editor/jquery.min.js",

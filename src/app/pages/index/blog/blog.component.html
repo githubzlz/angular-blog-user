@@ -1,152 +1,258 @@
-<div>
-  <h1 style="text-align: center;">我的文章</h1>
-</div>
-<div style="width: 100%; height: 30px; margin-bottom: 10px;">
-  <nz-pagination
-    style="float: right; margin-bottom: 0px;"
-    [(nzPageIndex)]="pageInfo.pageNum"
-    [nzTotal]="pageInfo.totalSize"
-    [nzSize]="'small'"
-    nzShowSizeChanger
-    nzShowQuickJumper
-    (nzPageIndexChange)="nzPageIndexChange($event)"
-    (nzPageSizeChange)="nzPageSizeChange($event)"
+<nz-card>
+  <div
+    style="
+      margin-bottom: 20px;
+      padding: 5px;
+      background-color: rgba(240, 229, 229, 0.2);
+      border-radius: 5px;
+    "
   >
-  </nz-pagination>
-</div>
-<nz-table
-  style="min-width: 1450px;"
-  #basicTable
-  [nzData]="articles"
-  [nzFrontPagination]="false"
-  [nzBordered]="false"
-  [nzLoadingDelay]="1000"
-  nzTableLayout="fixed"
->
-  <thead>
-    <tr>
-      <th nzWidth="30px" nzAlign="center">
-        <div class="inner_table" style="width: 30px;">序号</div>
-      </th>
-      <th nzWidth="120px" nzAlign="center">状态</th>
-      <th nzWidth="240px" style="width: 240px;">标题</th>
-      <th nzWidth="320px" nzAlign="left">
-        摘要
-      </th>
-      <th nzWidth="120px" nzAlign="center">点赞量</th>
-      <th nzWidth="120px" nzAlign="center">阅读量</th>
-      <th nzWidth="120px" nzAlign="center">评论量</th>
-      <th nzWidth="220px" nzAlign="center">创建时间</th>
-      <th nzWidth="180px">操作</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let article of basicTable.data; index as index">
-      <td nzWidth="30px" nzAlign="center">
-        <div class="inner_table" style="width: 30px;">{{ index + 1 }}</div>
-      </td>
-      <td nzWidth="120px" nzAlign="center">
-        <div *ngIf="article.isDeleted !== 1 && article.isShow === 1">
-          正常
-        </div>
-        <div *ngIf="article.isDeleted === 1">删除</div>
-        <div *ngIf="article.isShow === 0 && article.isDeleted !== 1">
-          审核中
-        </div>
-      </td>
-      <td nzWidth="240px">
-        <ng-container *ngIf="!editCache[article.id].edit; else nameInputTpl">
-          <div
-            class="inner_table"
-            style="width: 200px;"
-            nz-popover
-            [nzPopoverContent]="contentTemplate"
-            nzPopoverPlacement="top"
-          >
-            <nz-tag [nzColor]="'green'" *ngIf="article.provenance === 0">
-              原
-            </nz-tag>
-            <nz-tag [nzColor]="'red'" *ngIf="article.provenance === 1">
-              转
-            </nz-tag>
-            <nz-tag [nzColor]="'orange'" *ngIf="article.provenance === 2">
-              译
-            </nz-tag>
-            {{ article.title }}
-          </div>
-        </ng-container>
-        <ng-template #contentTemplate>
-          <div>{{ article.title }}</div>
-        </ng-template>
-        <ng-template #nameInputTpl>
-          <input
-            type="text"
-            nz-input
-            [(ngModel)]="editCache[article.id].data.title"
-          />
-        </ng-template>
-      </td>
-      <td nzWidth="320px" nzAlign="left">
-        <ng-container *ngIf="!editCache[article.id].edit; else nameInputTpl">
-          <div
-            class="inner_table"
-            style="width: 280px;"
-            nz-popover
-            [nzPopoverContent]="contentTemplate2"
-            nzPopoverPlacement="bottomLeft"
-          >
-            {{ article.summary }}
-          </div>
-        </ng-container>
-        <ng-template #contentTemplate2>
-          <div style="max-width: 300px;">{{ article.summary }}</div>
-        </ng-template>
-        <ng-template #nameInputTpl>
-          <input
-            type="text"
-            nz-input
-            [(ngModel)]="editCache[article.id].data.summary"
-          />
-        </ng-template>
-      </td>
-      <td nzWidth="120px" nzAlign="center">
-        1000000000
-      </td>
-      <td nzWidth="120px" nzAlign="center">
-        {{ article.blogPublicInfos.readings }}
-      </td>
-      <td nzWidth="120px" nzAlign="center">
-        {{ article.blogPublicInfos.comments }}
-      </td>
-      <td nzWidth="220px" nzAlign="center">
-        {{ article.createdTime | date: "yyyy-MM-dd HH:mm:ss" }}
-      </td>
-      <td nzWidth="180px">
-        <a
-          (click)="deletedArtcle(article.id)"
-          *ngIf="!editCache[article.id].edit"
+    <div nz-row class="search_row">
+      <div nz-col nzSpan="2"><span class="search_topic">分类搜索:</span></div>
+      <div nz-col nzSpan="22">
+        <button
+          *ngFor="let item of listButton; let i = index"
+          nz-button
+          [nzType]="item.state"
+          style="margin-right: 10px;"
+          (click)="addTerms(i)"
         >
-          Delete
-        </a>
-        <nz-divider
-          nzType="vertical"
-          *ngIf="!editCache[article.id].edit"
-        ></nz-divider>
-        <ng-container *ngIf="!editCache[article.id].edit; else saveTpl">
-          <a (click)="editArtcle(index, article.id)">Edit</a>
-        </ng-container>
-        <ng-template #saveTpl>
-          <a (click)="saveEdit(index, article.id)">Save</a>
-          <nz-divider nzType="vertical"></nz-divider>
+          {{ item.name }}
+        </button>
+      </div>
+    </div>
+    <div nz-row class="search_row">
+      <div nz-col nzSpan="2">
+        <span class="search_topic">标签搜索:</span>
+      </div>
+      <div nz-col nzSpan="13">
+        <nz-select
+          [(ngModel)]="blog.tags"
+          nzMode="tags"
+          [nzTokenSeparators]="[',']"
+          [nzMaxTagCount]="5"
+          nzPlaceHolder="选择或输入标签,回车保存"
+          style="width: 100%;"
+        >
+          <nz-option
+            *ngFor="let option of listOfType"
+            [nzLabel]="option"
+            [nzValue]="option"
+          ></nz-option>
+        </nz-select>
+      </div>
+    </div>
+    <div nz-row class="search_row">
+      <div nz-col nzSpan="2"><span class="search_topic">标题搜索:</span></div>
+      <div nz-col nzSpan="5">
+        <input
+          nz-input
+          placeholder="文章标题,摘要"
+          [(ngModel)]="blog.title"
+          (keypress)="$event.which === 13 ? selectList() : 0"
+        />
+      </div>
+      <div nz-col nzSpan="2" nzOffset="1">
+        <span class="search_topic">内容搜索:</span>
+      </div>
+      <div nz-col nzSpan="5">
+        <input
+          nz-input
+          placeholder="文章内容"
+          [(ngModel)]="blog.blogContent.contentMd"
+          (keypress)="$event.which === 13 ? selectList() : 0"
+        />
+      </div>
+      <div nz-col nzSpan="4" nzOffset="4">
+        <button nz-button nzType="primary" (click)="selectList()">
+          查询
+        </button>
+        <button
+          nz-button
+          nzType="primary"
+          style="margin-left: 10px;"
+          (click)="reSetTerms()"
+        >
+          重置
+        </button>
+      </div>
+    </div>
+  </div>
+  <nz-table
+    style="min-width: 1450px;"
+    #basicTable
+    [nzData]="articles"
+    [nzFrontPagination]="false"
+    [nzBordered]="false"
+    [nzLoadingDelay]="1000"
+    nzTableLayout="fixed"
+  >
+    <thead>
+      <tr>
+        <th nzWidth="30px" nzAlign="center">
+          <div class="inner_table" style="width: 30px;">序号</div>
+        </th>
+        <th
+          nzWidth="120px"
+          nzAlign="center"
+          [nzFilters]="statusFilters"
+          nzShowFilter
+          (nzFilterChange)="nzFilterChange($event)"
+          [nzFilterMultiple]="false"
+        >
+          状态
+        </th>
+        <th nzWidth="240px" style="width: 240px;">标题</th>
+        <th nzWidth="320px" nzAlign="left">
+          摘要
+        </th>
+        <th nzWidth="120px" nzAlign="center">点赞量</th>
+        <th nzWidth="120px" nzAlign="center">阅读量</th>
+        <th nzWidth="120px" nzAlign="center">评论量</th>
+        <th nzWidth="220px" nzAlign="center">发布时间</th>
+        <th nzWidth="180px" nzAlign="center">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let article of basicTable.data; index as index">
+        <td nzWidth="30px" nzAlign="center">
+          <div class="inner_table" style="width: 30px;">{{ index + 1 }}</div>
+        </td>
+        <td nzWidth="120px" nzAlign="center">
+          <div *ngIf="article.isDeleted !== 1 && article.isShow === 1">
+            正常
+          </div>
+          <div *ngIf="article.isDeleted === 1">删除</div>
+          <div *ngIf="article.isShow === 0 && article.isDeleted !== 1">
+            审核中
+          </div>
+        </td>
+        <td nzWidth="240px">
+          <ng-container
+            *ngIf="!editCache[article.id].edit; else nameInputTplTitle"
+          >
+            <div
+              class="inner_table"
+              style="width: 200px;"
+              nz-popover
+              [nzPopoverContent]="contentTemplate"
+              nzPopoverPlacement="top"
+            >
+              <nz-tag [nzColor]="'green'" *ngIf="article.provenance === 0">
+                原
+              </nz-tag>
+              <nz-tag [nzColor]="'red'" *ngIf="article.provenance === 1">
+                转
+              </nz-tag>
+              <nz-tag [nzColor]="'orange'" *ngIf="article.provenance === 2">
+                译
+              </nz-tag>
+              {{ article.title }}
+            </div>
+          </ng-container>
+          <ng-template #contentTemplate>
+            <div>{{ article.title }}</div>
+          </ng-template>
+          <ng-template #nameInputTplTitle>
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="editCache[article.id].data.title"
+            />
+          </ng-template>
+        </td>
+        <td nzWidth="320px" nzAlign="left">
+          <ng-container
+            *ngIf="!editCache[article.id].edit; else nameInputTplSum"
+          >
+            <div
+              class="inner_table"
+              style="width: 280px;"
+              nz-popover
+              [nzPopoverContent]="contentTemplate2"
+              nzPopoverPlacement="bottomLeft"
+            >
+              {{ article.summary }}
+            </div>
+          </ng-container>
+          <ng-template #contentTemplate2>
+            <div style="max-width: 300px;">{{ article.summary }}</div>
+          </ng-template>
+          <ng-template #nameInputTplSum>
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="editCache[article.id].data.summary"
+            />
+          </ng-template>
+        </td>
+        <td nzWidth="120px" nzAlign="center">
+          {{ article.blogPublicInfos.goods }}
+        </td>
+        <td nzWidth="120px" nzAlign="center">
+          {{ article.blogPublicInfos.readings }}
+        </td>
+        <td nzWidth="120px" nzAlign="center">
+          {{ article.blogPublicInfos.comments }}
+        </td>
+        <td nzWidth="220px" nzAlign="center">
+          {{ article.createdTime | date: "yyyy-MM-dd HH:mm:ss" }}
+        </td>
+        <td nzWidth="180px" nzAlign="center">
           <a
             nz-popconfirm
-            nzTitle="Sure to cancel?"
-            (nzOnConfirm)="cancelEdit(index, article.id)"
+            nzTitle="确定删除?"
+            (nzOnConfirm)="deletedArtcle(article.id)"
+            *ngIf="!editCache[article.id].edit"
           >
-            Cancel
+            删除
           </a>
-        </ng-template>
-      </td>
-    </tr>
-  </tbody>
-</nz-table>
+          <nz-divider
+            nzType="vertical"
+            *ngIf="!editCache[article.id].edit"
+          ></nz-divider>
+          <ng-container *ngIf="!editCache[article.id].edit; else saveTpl">
+            <a (click)="editArtcle(index, article.id)">编辑</a>
+          </ng-container>
+          <nz-divider
+            nzType="vertical"
+            *ngIf="!editCache[article.id].edit"
+          ></nz-divider>
+          <a
+            *ngIf="!editCache[article.id].edit"
+            (click)="moreInfomation(article.id)"
+          >
+            更多
+          </a>
+          <ng-template #saveTpl>
+            <a (click)="saveEdit(index, article.id)">保存</a>
+            <nz-divider nzType="vertical"></nz-divider>
+            <a
+              nz-popconfirm
+              nzTitle="撤销修改?"
+              (nzOnConfirm)="cancelEdit(index, article.id)"
+            >
+              取消
+            </a>
+          </ng-template>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <div style="height: 30px; margin: 20px;">
+    <nz-pagination
+      style="float: right; margin-bottom: 0px;"
+      [(nzPageIndex)]="pageInfo.pageNum"
+      [nzTotal]="pageInfo.totalSize"
+      [nzSize]="'small'"
+      nzShowSizeChanger
+      nzShowQuickJumper
+      (nzPageIndexChange)="nzPageIndexChange($event)"
+      (nzPageSizeChange)="nzPageSizeChange($event)"
+      [nzPageSizeOptions]="[10, 15, 20, 25, 30]"
+      [nzShowTotal]="totalTemplate"
+    >
+    </nz-pagination>
+    <ng-template #totalTemplate let-total> 共 {{ total }} 篇 </ng-template>
+  </div>
+</nz-card>

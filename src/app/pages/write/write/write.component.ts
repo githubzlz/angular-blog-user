@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { EditorConfig } from 'src/app/core/editormd/director/model/editor-config';
+import { EditorConfig1 } from 'src/app/core/editormd/director/model/editor-config1';
 import { EditorMdDirective } from 'src/app/core/editormd/director/editor-md.directive';
 import { MdModel } from './md.content';
 import { Router } from '@angular/router';
@@ -18,7 +18,7 @@ declare var editormd: any;
   styleUrls: ['./write.component.css'],
 })
 export class WriteComponent implements OnInit {
-  conf = new EditorConfig();
+  conf = new EditorConfig1();
   md: string;
   title: string;
   interval: any;
@@ -110,7 +110,12 @@ export class WriteComponent implements OnInit {
    * 按钮事件:导出到本地
    */
   exportToLocal() {
-    console.log(document.getElementById('setSummary').innerText);
+    let filename = 'blog.md';
+    if (this.title) {
+      filename = this.title + '.md';
+    }
+    const md = EditorMdDirective.edit.getMarkdown();
+    this.download(filename, md);
     // /alert('导出到本地');
   }
 
@@ -178,6 +183,9 @@ export class WriteComponent implements OnInit {
         (data) => {
           this.message.success('文章发布成功', { nzDuration: 4000 });
           this.isPublishLoading = false;
+          setTimeout(() => {
+            this.publishVisible = false;
+          }, 500);
         },
         (error) => {
           this.message.error('文章发布失败', { nzDuration: 4000 });
@@ -397,6 +405,9 @@ export class WriteComponent implements OnInit {
     });
   }
 
+  /**
+   * 背景点击
+   */
   backclick() {
     $('#summary-back').css('visibility', 'hidden');
     $('#setSummary').css('visibility', 'hidden');
@@ -408,11 +419,34 @@ export class WriteComponent implements OnInit {
     localStorage.setItem('blog-summary', summary);
   }
 
+  /**
+   * 背景点击
+   */
   fileBackgroundClick() {
     $('#file_background').css('visibility', 'hidden');
     $('#file_upload').css('visibility', 'hidden');
     $('#file_upload').css('width', '0');
     $('#file_upload').css('height', '0');
     $('#file_upload').css('right', '20%');
+  }
+
+  /**
+   * 本地下载
+   * @param filename filename
+   * @param text text
+   */
+  download(filename: string, text: string) {
+    const element = document.createElement('a');
+    element.setAttribute(
+      'href',
+      'data:text/plain;charset=utf-8,' + encodeURIComponent(text)
+    );
+    element.setAttribute('download', filename);
+    element.style.visibility = 'hidden';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
   }
 }

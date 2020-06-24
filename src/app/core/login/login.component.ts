@@ -8,14 +8,13 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
+  baseUrl: string = environment.BASE_DATA_SERVER_URL;
+  safeUrl: any;
   constructor(private login: LoginService, private sanitizer: DomSanitizer) {
     this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
       this.baseUrl + '/login'
     );
   }
-
-  baseUrl: string = environment.BASE_DATA_SERVER_URL;
-  safeUrl: any;
   ngOnInit() {}
 
   onClick() {

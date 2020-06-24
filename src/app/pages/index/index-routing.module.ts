@@ -2,24 +2,31 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { UserComponent } from './user/user.component';
 import { BlogComponent } from './blog/blog.component';
+import { IndexComponent } from './index/index.component';
 
 const routes: Routes = [
   {
-    path: '', redirectTo: 'user'
+    path: '',
+    redirectTo: 'index',
   },
   {
-    path: 'user', component: UserComponent
-  }, {
-    path: 'blog', component: BlogComponent
-  }
-
+    path: 'index',
+    component: IndexComponent,
+  },
+  {
+    path: 'user',
+    component: UserComponent,
+  },
+  {
+    path: 'blog',
+    component: BlogComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class IndexRoutingModule {
-  constructor() {
-  }
+  constructor() {}
 }

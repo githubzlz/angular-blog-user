@@ -78,9 +78,5 @@ nz-content {
   padding: 24px;
   background: #fff;
   min-height: 100%;
-}
-#header-span {
-  position: fixed;
-  float: right;
-  right: 50px;
+  overflow: hidden;
 }

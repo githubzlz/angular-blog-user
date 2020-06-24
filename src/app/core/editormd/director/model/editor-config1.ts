@@ -1,6 +1,4 @@
-import { environment } from '../../../../../environments/environment';
-
-export class EditorConfig {
+export class EditorConfig1 {
   constructor() {}
   public width = '100%';
   public height = '730';
@@ -80,9 +78,7 @@ export class EditorConfig {
   public syncScrolling = true;
   public sequenceDiagram = true;
   public crossDomainUpload = true;
-  public uploadCallbackURL = 'http://localhost:4200/write/write';
-  public;
-  placeholder = '欢迎使用editor.md编辑你的文章';
+  public placeholder = '欢迎使用editor.md编辑你的文章';
   // #### Default theme
 
   // - Editor.md theme : `default`

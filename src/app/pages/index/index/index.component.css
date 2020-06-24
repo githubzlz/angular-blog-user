@@ -1,0 +1,65 @@
+.index {
+  min-width: 1450px;
+}
+.count_number_card {
+  border-radius: 10px;
+  background-image: linear-gradient(to right, #ccff00, #ff9900);
+  height: 180px;
+  position: relative;
+}
+.number {
+  font-size: 40px;
+  font-weight: 800;
+  color: white;
+}
+.icon {
+  font-size: 45px;
+  height: 50px;
+  width: 50px;
+  font-weight: 500;
+  border-radius: 100%;
+  overflow: hidden;
+}
+.bottom_right {
+  position: absolute;
+  right: 25px;
+  bottom: 10px;
+}
+.icon_trend_down {
+  transform: scale(1.3);
+  color: white;
+  font-size: 20px;
+  margin-right: 10px;
+}
+.text_trend_down {
+  font-weight: 600;
+  color: wheat;
+  font-size: 30px;
+}
+.icon_trend_up {
+  transform: scale(1.3);
+  color: white;
+  font-size: 20px;
+  margin-right: 10px;
+}
+.text_trend_up {
+  font-weight: 600;
+  color: wheat;
+  font-size: 30px;
+}
+.line {
+  height: 30px;
+  width: 5px;
+  display: inline-block;
+  background-color: #32bd33;
+  margin-right: 10px;
+}
+#calendar {
+  border: 1px solid red;
+  border-radius: 5px;
+  width: 100%;
+  min-width: 280px;
+  height: 320px;
+  background-color: whitesmoke;
+  margin: 0px;
+}
