@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { IndexComponent } from './index/index.component';
+import { DetailBlogInfoComponent } from './blog-info-detail/detailBlogInfo.component';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'index',
+    redirectTo: 'blogdetailinfo',
   },
   {
-    path: 'index',
-    component: IndexComponent,
+    path: 'blogdetailinfo',
+    component: DetailBlogInfoComponent,
   },
 ];
 
@@ -17,6 +17,6 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class IndexRoutingModule {
+export class OtherRoutingModule {
   constructor() {}
 }

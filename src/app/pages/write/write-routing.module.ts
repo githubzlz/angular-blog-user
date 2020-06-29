@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { WriteComponent } from './write/write.component';
-import { MoreComponent } from './more/more.component';
+import { RecycleComponent } from './recycle/recycle.component';
 
 const routes: Routes = [
   {
@@ -13,8 +13,8 @@ const routes: Routes = [
     component: WriteComponent,
   },
   {
-    path: 'more',
-    component: MoreComponent,
+    path: 'recycle',
+    component: RecycleComponent,
   },
 ];
 

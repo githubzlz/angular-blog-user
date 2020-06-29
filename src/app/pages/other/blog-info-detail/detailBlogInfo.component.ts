@@ -8,10 +8,10 @@ import { ArticleModel } from 'src/app/common/model/article/article.model';
 declare var editormd: any;
 @Component({
   selector: 'app-more',
-  templateUrl: './more.component.html',
-  styleUrls: ['./more.component.css'],
+  templateUrl: './detailBlogInfo.component.html',
+  styleUrls: ['./detailBlogInfo.component.css'],
 })
-export class MoreComponent implements OnInit, AfterViewInit {
+export class DetailBlogInfoComponent implements OnInit, AfterViewInit {
   conf = new EditorConfig1();
   edit: any;
   id: string;

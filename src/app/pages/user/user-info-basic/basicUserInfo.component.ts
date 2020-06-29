@@ -4,17 +4,16 @@ import { LoginService } from 'src/app/common/util/login.service';
 
 @Component({
   selector: 'app-user',
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.css'],
+  templateUrl: './basicUserInfo.component.html',
+  styleUrls: ['./basicUserInfo.component.css'],
 })
-export class UserComponent implements OnInit {
+export class BasicUserInfoComponent implements OnInit {
   loginUrl = environment.BASE_DATA_SERVER_URL;
   safeUrl: any;
   token: any;
   constructor(private loginService: LoginService) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   click() {
     this.loginService.getLoginUser().subscribe((data) => {

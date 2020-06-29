@@ -9,10 +9,10 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-blog',
-  templateUrl: './blog.component.html',
-  styleUrls: ['./blog.component.css'],
+  templateUrl: './blogList.component.html',
+  styleUrls: ['./blogList.component.css'],
 })
-export class BlogComponent implements OnInit {
+export class BlogListComponent implements OnInit {
   constructor(
     private router: Router,
     private blogService: BlogService,
@@ -68,7 +68,7 @@ export class BlogComponent implements OnInit {
    * @param id id
    */
   moreInfomation(id: string) {
-    this.router.navigate(['/write/more'], {
+    this.router.navigate(['/other/blogdetailinfo'], {
       skipLocationChange: true,
       queryParams: {
         bid: id,

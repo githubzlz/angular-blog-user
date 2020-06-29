@@ -24,7 +24,7 @@ export class LayoutComponent implements OnInit {
     private message: NzMessageService
   ) {}
   ngOnInit() {
-    this.login();
+    // this.login();
   }
 
   /**

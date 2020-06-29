@@ -22,42 +22,68 @@ export class MenuModule {
     },
     {
       level: 1,
-      title: '写博客',
-      icon: 'home',
-      url: '/write/write',
-    },
-    {
-      level: 1,
       title: '用户信息',
-      icon: 'home',
+      icon: 'idcard',
       open: false,
       children: [
         {
           level: 2,
-          title: '用户信息',
-          icon: 'home',
-          url: '/index/user',
+          title: '个人中心',
+          icon: 'user',
+          url: '/user/basicuserinfo',
+        },
+        {
+          level: 2,
+          title: '安全信息',
+          icon: 'safety',
+          url: '/user/safetyuserinfo',
         },
       ],
     },
     {
       level: 1,
       title: '博客信息',
-      icon: 'home',
+      icon: 'book',
       children: [
         {
           level: 2,
-          title: '博客信息',
-          icon: 'home',
-          url: '/index/blog',
+          title: '博客列表',
+          icon: 'unordered-list',
+          url: '/blog/bloglist',
         },
         {
           level: 2,
-          title: '更多',
-          icon: 'home',
-          url: '/write/more',
+          title: '博客统计',
+          icon: 'line-chart',
+          url: '/blog/blogstatistic',
         },
       ],
+    },
+    {
+      level: 1,
+      title: '写博客',
+      icon: 'read',
+      open: false,
+      children: [
+        {
+          level: 2,
+          title: '写博客',
+          icon: 'edit',
+          url: '/write/write',
+        },
+        {
+          level: 2,
+          title: '回收站',
+          icon: 'rest',
+          url: '/write/recycle',
+        },
+      ],
+    },
+    {
+      level: 1,
+      title: '关于网站',
+      icon: 'info-circle',
+      url: '/webinfo',
     },
   ];
 }

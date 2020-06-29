@@ -4,33 +4,44 @@
       <div nz-row style="height: 40px; margin-bottom: 10px;">
         <div class="line"></div>
         <h2 style="display: inline-block; height: 30px; vertical-align: top;">
-          信息
+          基本信息
         </h2>
         <div
-          style="
-            display: inline-block;
-            vertical-align: 10px;
-            margin-left: 10px;
-          "
+          style="vertical-align: text-bottom; float: right; margin-right: 20px;"
         >
-          <nz-radio-group>
-            <label nz-radio-button nzValue="large"><span>昨日</span></label>
-            <label nz-radio-button nzValue="default"><span>上周</span></label>
-          </nz-radio-group>
+          <a
+            style="line-height: 40px; font-size: 16px;"
+            (click)="getMoreblogInfo()"
+            >更多...</a
+          >
         </div>
       </div>
       <div nz-row nzType="flex" nzGutter="16">
         <div nz-col nzSpan="6">
           <nz-card class="count_number_card">
             <div nz-row nzAlign="middle" nzType="flex">
-              <i nz-icon nzType="edit" nzTheme="twotone" class="icon"></i>
+              <i
+                nz-icon
+                nzType="edit"
+                nzTheme="twotone"
+                class="icon"
+                [nzTwotoneColor]="'#EFA929'"
+              ></i>
               <div style="margin-left: 20px;">
                 <span class="number">1029</span>
                 <h2 style="font-size: 15px; color: white;">文章数量</h2>
               </div>
             </div>
+            <div class="top_right">
+              <i
+                nz-icon
+                nzType="rise"
+                nzTheme="outline"
+                style="font-size: 25px;"
+              ></i>
+            </div>
             <div class="bottom_right">
-              <i class="icon_trend_down">down</i>
+              <i style="margin-right: 5px; color: white;">较昨日</i>
               <span class="text_trend_down">35</span>
             </div>
           </nz-card>
@@ -47,6 +58,7 @@
                 nz-icon
                 nzType="like"
                 nzTheme="twotone"
+                [nzTwotoneColor]="'#C475EC'"
                 class="icon"
                 style="font-size: 40px;"
               ></i>
@@ -55,8 +67,16 @@
                 <h2 style="font-size: 15px; color: white;">点赞数量</h2>
               </div>
             </div>
+            <div class="top_right">
+              <i
+                nz-icon
+                nzType="rise"
+                nzTheme="outline"
+                style="font-size: 25px;"
+              ></i>
+            </div>
             <div class="bottom_right">
-              <i class="icon_trend_down">down</i>
+              <i style="margin-right: 5px; color: white;">较昨日</i>
               <span class="text_trend_down">350</span>
             </div>
           </nz-card>
@@ -69,14 +89,28 @@
             "
           >
             <div nz-row nzAlign="middle" nzType="flex">
-              <i nz-icon nzType="heart" nzTheme="twotone" class="icon"></i>
+              <i
+                nz-icon
+                nzType="heart"
+                nzTheme="twotone"
+                class="icon"
+                [nzTwotoneColor]="'#30DA5D'"
+              ></i>
               <div style="margin-left: 20px;">
                 <span class="number">584</span>
                 <h2 style="font-size: 15px; color: white;">粉丝数量</h2>
               </div>
             </div>
+            <div class="top_right">
+              <i
+                nz-icon
+                nzType="fall"
+                nzTheme="outline"
+                style="font-size: 25px;"
+              ></i>
+            </div>
             <div class="bottom_right">
-              <i class="icon_trend_up">up</i>
+              <i style="margin-right: 5px; color: white;">较昨日</i>
               <span class="text_trend_up" style="color: whitesmoke;">89</span>
             </div>
           </nz-card>
@@ -89,14 +123,28 @@
             "
           >
             <div nz-row nzAlign="middle" nzType="flex">
-              <i nz-icon nzType="star" nzTheme="twotone" class="icon"></i>
+              <i
+                nz-icon
+                nzType="star"
+                nzTheme="twotone"
+                class="icon"
+                [nzTwotoneColor]="'#41B8E8'"
+              ></i>
               <div style="margin-left: 20px;">
                 <span class="number">3560</span>
                 <h2 style="font-size: 15px; color: white;">星星数量</h2>
               </div>
             </div>
+            <div class="top_right">
+              <i
+                nz-icon
+                nzType="rise"
+                nzTheme="outline"
+                style="font-size: 25px;"
+              ></i>
+            </div>
             <div class="bottom_right">
-              <i class="icon_trend_down">down</i>
+              <i style="margin-right: 5px; color: white;">较昨日</i>
               <span class="text_trend_down">258</span>
             </div>
           </nz-card>
@@ -143,6 +191,58 @@
     </div>
   </div>
   <div nz-row>
-    <nz-card style="border-radius: 10px; margin-top: 20px;">123</nz-card>
+    <div nz-row style="height: 40px; margin-bottom: -10px; margin-top: 20px;">
+      <div class="line" style="background-color: rgb(154, 89, 230);"></div>
+      <h2 style="display: inline-block; height: 30px; vertical-align: top;">
+        统计图表
+      </h2>
+      <div style="vertical-align: 10px; float: right;">
+        <nz-radio-group>
+          <label nz-radio-button nzValue="large"><span>一周</span></label>
+          <label nz-radio-button nzValue="default"><span>15日</span></label>
+          <label nz-radio-button nzValue="default1"><span>一月</span></label>
+        </nz-radio-group>
+      </div>
+    </div>
+    <div nz-row nzGutter="16">
+      <div nz-col nzSpan="12">
+        <nz-card style="border-radius: 10px; margin-top: 20px;">
+          <div
+            echarts
+            [options]="barStatisticsInfoModel.blogNumber"
+            class="demo-chart"
+          ></div>
+        </nz-card>
+      </div>
+      <div nz-col nzSpan="12">
+        <nz-card style="border-radius: 10px; margin-top: 20px;">
+          <div
+            echarts
+            [options]="lineStatisticsInfoModel.option"
+            class="demo-chart"
+          ></div>
+        </nz-card>
+      </div>
+    </div>
+    <div nz-row nzGutter="16">
+      <div nz-col nzSpan="12">
+        <nz-card style="border-radius: 10px; margin-top: 20px;">
+          <div
+            echarts
+            [options]="barStatisticsInfoModel.option"
+            class="demo-chart"
+          ></div>
+        </nz-card>
+      </div>
+      <div nz-col nzSpan="12">
+        <nz-card style="border-radius: 10px; margin-top: 20px;">
+          <div
+            echarts
+            [options]="pieStatisticsInfoModel.option"
+            class="demo-chart"
+          ></div>
+        </nz-card>
+      </div>
+    </div>
   </div>
 </nz-card>

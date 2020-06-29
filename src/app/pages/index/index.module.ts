@@ -3,14 +3,21 @@ import { CommonModule } from '@angular/common';
 
 import { IndexRoutingModule } from './index-routing.module';
 import { ShareModule } from 'src/app/core/share/share.module';
-import { UserComponent } from './user/user.component';
-import { BlogComponent } from './blog/blog.component';
 import { FormsModule } from '@angular/forms';
 import { IndexComponent } from './index/index.component';
-
+import { NgxEchartsModule } from 'ngx-echarts';
+import * as echarts from 'echarts';
 @NgModule({
-  declarations: [UserComponent, BlogComponent, IndexComponent],
-  imports: [CommonModule, ShareModule, FormsModule, IndexRoutingModule],
+  declarations: [IndexComponent],
+  imports: [
+    CommonModule,
+    ShareModule,
+    FormsModule,
+    IndexRoutingModule,
+    NgxEchartsModule.forRoot({
+      echarts,
+    }),
+  ],
 })
 export class IndexModule {
   constructor() {}

@@ -13,7 +13,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './core/login/login.component';
 import { LoginService } from './common/util/login.service';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
-
 registerLocaleData(zh);
 
 @NgModule({
