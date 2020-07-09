@@ -6,7 +6,7 @@ import { UserInfoSafetyComponent } from './user-info-safety/userInfoSafety.compo
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'user',
+    redirectTo: 'basicuserinfo',
   },
   {
     path: 'basicuserinfo',

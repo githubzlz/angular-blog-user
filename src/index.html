@@ -39,6 +39,7 @@
           name + "=" + e.data + ";expires=" + exp.toGMTString() + ";path=/";
         const div = document.getElementById("login_frame_div");
         div.style.visibility = "hidden";
+        div.style.zIndex = "-10";
         location.reload();
       }
     },

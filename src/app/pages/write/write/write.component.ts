@@ -10,6 +10,12 @@ import { ArticleModel } from 'src/app/common/model/article/article.model';
 import { BlogContentModel } from 'src/app/common/model/article/blogContent.model';
 import { FileService } from 'src/app/common/service/file.service';
 import { ResultSetModel } from 'src/app/common/model/commonmodel/resultset.model';
+import { BlogTypeService } from 'src/app/common/service/blogType.service';
+import { TreeMoel } from 'src/app/common/model/commonmodel/tree.model';
+import { BlogTagService } from 'src/app/common/service/blogTag.service';
+import { BlogTagType } from 'src/app/common/model/tag/blogTagType.model';
+import { BlogTagModel } from 'src/app/common/model/tag/blogTag.model';
+import { BlogTypeModel } from 'src/app/common/model/article/blogType.model';
 declare var editormd: any;
 
 @Component({
@@ -18,50 +24,47 @@ declare var editormd: any;
   styleUrls: ['./write.component.css'],
 })
 export class WriteComponent implements OnInit {
+  constructor(
+    private router: Router,
+    private blogService: BlogService,
+    private fileService: FileService,
+    private blogTypeService: BlogTypeService,
+    private message: NzMessageService,
+    private blogTag: BlogTagService
+  ) {}
   conf = new EditorConfig1();
   md: string;
   title: string;
   interval: any;
   tableTitleVisible = false;
   listOfType: any[] = ['JAVA', 'PATHON', 'C', 'C++', 'MYSQL'];
-  perviousTagTypes: any[] = [
-    {
-      type: '大数据',
-      tags: ['JAVA', 'PATHON', 'C', 'C++', 'MYSQL'],
-    },
-    {
-      type: '语言',
-      tags: ['JAVA', 'PATHON', 'C', 'C++'],
-    },
-    {
-      type: '数据库',
-      tags: ['PATHON', 'MYSQL'],
-    },
-  ];
-  perviousTag: string[] = this.perviousTagTypes[0].tags;
-  acticleRadioValue: number;
+  perviousTagTypes: BlogTagType[];
+  perviousTag: BlogTagModel[] = [];
+  acticleRadioValue = '0';
   radioValue: any = 0;
   typeValue: string[] = new Array<string>();
   publishVisible = false;
-  tags: string[] = new Array<string>();
+  tags: BlogTagModel[] = new Array<BlogTagModel>();
   innerTableVisible = false;
   inputVisible = false;
   tagAddVisible = true;
   isPublishLoading = false;
   summary: string;
   inputValue: string;
-  visiblePerson = 0;
+  visiblePerson = '0';
   article: ArticleModel = new ArticleModel();
   @ViewChild('titleInput', { static: true }) titleInput: ElementRef;
   @ViewChild('tableTitleInput', { static: false }) tableTitleInput: ElementRef;
   @ViewChild('inputElement', { static: false }) inputElement: ElementRef;
-  constructor(
-    private router: Router,
-    private blogService: BlogService,
-    private fileService: FileService,
-    private message: NzMessageService
-  ) {}
-
+  visibleTypeModal = false;
+  addTypeModalOkLoading = false;
+  blogTypes: Array<TreeMoel>;
+  blogTypeNodes: Array<any> = new Array();
+  typeValueNodeVisiable = true;
+  blogTypeChildren: Array<TreeMoel>;
+  currentBlogTypeNode: TreeMoel;
+  addTypeInputVisible1 = false;
+  addTypeInputVisible2 = false;
   ngOnInit() {
     this.article.blogContent = new BlogContentModel();
     this.dataOnInit();
@@ -86,6 +89,8 @@ export class WriteComponent implements OnInit {
       this.md = new MdModel().md;
     }
     this.conf.markdown = this.md;
+
+    this.queryTagTypes();
   }
 
   /**
@@ -138,6 +143,7 @@ export class WriteComponent implements OnInit {
         });
       }, 1000);
     }
+    this.queryTypeTree();
   }
 
   /**
@@ -171,8 +177,8 @@ export class WriteComponent implements OnInit {
       this.article.title = title;
       this.article.blogContent.contentMd = md;
       this.article.summary = summary;
-      this.article.types = typeValue;
-      this.article.tags = tags;
+      this.article.types = this.getTypeValue();
+      this.article.tags2 = tags;
       this.article.visibleStrategy = visiblePerson;
       this.article.provenance = acticleRadioValue;
       this.article.blogContent.contentHtml = html;
@@ -180,12 +186,17 @@ export class WriteComponent implements OnInit {
 
       // 提交文章数据
       this.blogService.publicBlog(this.article).subscribe(
-        (data) => {
-          this.message.success('文章发布成功', { nzDuration: 4000 });
-          this.isPublishLoading = false;
-          setTimeout(() => {
-            this.publishVisible = false;
-          }, 500);
+        (data: ResultSetModel) => {
+          if (data.code === 1) {
+            this.message.success('文章发布成功', { nzDuration: 4000 });
+            this.isPublishLoading = false;
+            setTimeout(() => {
+              this.publishVisible = false;
+            }, 500);
+          } else {
+            this.message.error('文章发布失败', { nzDuration: 4000 });
+            this.isPublishLoading = false;
+          }
         },
         (error) => {
           this.message.error('文章发布失败', { nzDuration: 4000 });
@@ -193,6 +204,23 @@ export class WriteComponent implements OnInit {
         }
       );
     }
+    // 刷新标签数据
+    this.queryTagTypes();
+  }
+
+  /**
+   * 获取文章分类
+   */
+  getTypeValue() {
+    const typeValue = [];
+    this.blogTypeNodes.forEach((node) => {
+      this.typeValue.forEach((value) => {
+        if (value === node.key) {
+          typeValue.push(node.title);
+        }
+      });
+    });
+    return typeValue;
   }
 
   /**
@@ -219,7 +247,7 @@ export class WriteComponent implements OnInit {
    */
   perviousTagsClick(type: any, index: number) {
     this.radioValue = index;
-    this.perviousTag = type.tags;
+    this.queryTags(type.id);
   }
   /**
    * 按钮事件:关闭添加tags页面
@@ -242,25 +270,49 @@ export class WriteComponent implements OnInit {
   /**
    * 按钮事件:添加标签
    */
-  handleInputConfirm(tag: string) {
-    if (tag) {
-      this.inputValue = tag;
+  handleClickConfirm(tag: BlogTagModel) {
+    // 检查是否有重复
+    let repeat = false;
+    this.tags.forEach((item) => {
+      if (item.name === tag.name) {
+        repeat = true;
+        return;
+      }
+    });
+    // 不重复则添加标签
+    if (!repeat) {
+      this.tags.push(tag);
     }
-    this.inputVisible = false;
-    if (this.inputValue && this.tags.indexOf(this.inputValue) === -1) {
-      this.tags = [...this.tags, this.inputValue];
-    }
-    if (this.tags.length < 5) {
+  }
+
+  handleInputConfirm() {
+    // 检查是否有重复
+    let repeat = false;
+    this.tags.forEach((item) => {
+      if (item.name === this.inputValue) {
+        repeat = true;
+        return;
+      }
+    });
+    // 不重复则添加标签
+    if (!repeat) {
+      const tag = new BlogTagModel();
+      tag.name = this.inputValue;
+      tag.typeId = '-1';
+      this.tags.push(tag);
+      this.inputValue = '';
+      this.inputVisible = false;
       this.tagAddVisible = true;
+    } else {
+      this.message.info('无法添加重复的标签');
     }
-    this.inputValue = '';
   }
 
   /**
    * 按钮事件:移除标签
    * @param tag 标签
    */
-  handleClose(tag: string) {
+  handleClose(tag: BlogTagModel) {
     const index: number = this.tags.indexOf(tag);
     if (index !== -1) {
       this.tags.splice(index, 1);
@@ -449,4 +501,183 @@ export class WriteComponent implements OnInit {
 
     document.body.removeChild(element);
   }
+
+  /**
+   * 查询文章分类树
+   */
+  queryTypeTree() {
+    this.blogTypeService.queryTypeTree().subscribe((data) => {
+      const blogData: ResultSetModel = data;
+      this.blogTypes = blogData.entity;
+      this.getNodeModel();
+      this.blogTypeChildren = this.blogTypes[0].children;
+    });
+  }
+
+  /**
+   * 创建树节点
+   */
+  getNodeModel() {
+    this.blogTypeNodes = new Array();
+    this.blogTypes.forEach((blogType) => {
+      const nodes = {
+        title: blogType.data.typeName,
+        key: blogType.data.id,
+        children: new Array(),
+      };
+      if (blogType.children) {
+        blogType.children.forEach((child) => {
+          const cnode = {
+            title: child.data.typeName,
+            key: child.data.id,
+            children: new Array(),
+            isLeaf: true,
+          };
+          nodes.children.push(cnode);
+        });
+      }
+      this.blogTypeNodes.push(nodes);
+    });
+  }
+
+  /**
+   * 选择文章分类时的处理
+   */
+  onTypeValueChange() {
+    if (this.typeValue.length > 2) {
+      this.typeValue.splice(2, 1);
+      this.typeValueNodeVisiable = false;
+      setTimeout(() => {
+        this.typeValueNodeVisiable = true;
+      }, 10);
+      this.message.warning('最多可以添加两个分类');
+    }
+  }
+  /**
+   * 二级分类设置
+   * @param node node
+   */
+  setChildrenList(node: TreeMoel) {
+    this.blogTypeChildren = node.children;
+    this.currentBlogTypeNode = node;
+  }
+
+  showAddTypeInput(type: number) {
+    if (type === 1) {
+      this.addTypeInputVisible1 = true;
+    } else {
+      this.addTypeInputVisible2 = true;
+    }
+    setTimeout(() => {
+      document.getElementById('addTypeInput' + type).focus();
+    }, 100);
+  }
+
+  handleTypesConfirm(type: number) {
+    if (type === 1) {
+      if (this.addTypeInputVisible1 === true) {
+        this.addTypeInputVisible1 = false;
+        this.createType(1);
+      }
+    }
+    if (type === 2) {
+      if (this.addTypeInputVisible2 === true) {
+        this.addTypeInputVisible2 = false;
+        this.createType(2);
+      }
+      return;
+    }
+  }
+
+  /**
+   * 创建文章类型
+   */
+  createType(level: number) {
+    let pId: string;
+    let name: string;
+    if (level === 1) {
+      pId = '-1';
+    } else {
+      pId = this.currentBlogTypeNode.id;
+    }
+    name = this.inputValue;
+
+    // 重复检查
+    let flag = false;
+    this.blogTypeNodes.forEach((node: any) => {
+      const children = node.children;
+      if (children) {
+        children.forEach((child: any) => {
+          if (child.title === this.inputValue) {
+            this.message.warning('重复的文章分类');
+            flag = true;
+          }
+        });
+      }
+      if (node.title === this.inputValue) {
+        this.message.warning('重复的文章分类');
+        flag = true;
+      }
+    });
+    if (!flag) {
+      this.blogTypeService.createType(pId, name).subscribe(
+        (data: ResultSetModel) => {
+          if (data.code === 1) {
+            this.queryTypeTree();
+            this.message.success('新增文章分类成功');
+          } else {
+            this.message.error('新增文章分类失败,请重试一次吧', {
+              nzDuration: 4000,
+            });
+          }
+        },
+        (error) => {
+          this.message.error('新增文章分类失败,请重试一次吧', {
+            nzDuration: 4000,
+          });
+          this.isPublishLoading = false;
+        }
+      );
+    }
+
+    this.inputValue = '';
+  }
+
+  /**
+   * 查询标签分类
+   */
+  queryTagTypes() {
+    this.blogTag.queryTagType().subscribe((data: ResultSetModel) => {
+      this.perviousTagTypes = data.entity;
+      this.queryTags(this.perviousTagTypes[0].id);
+    });
+  }
+
+  /**
+   * 查询标签
+   */
+  queryTags(typeId: string) {
+    this.blogTag.queryTag(typeId).subscribe((data: ResultSetModel) => {
+      this.perviousTag = [];
+      const tags: any[] = data.entity;
+      tags.forEach((item) => {
+        this.perviousTag.push(item);
+      });
+    });
+  }
+
+  // /**
+  //  * 处理列表数组
+  //  */
+  // collapse(index: number, item: TreeMoel, flag: boolean) {
+  //   const childern = item.children;
+  //   if (flag) {
+  //     childern.forEach((child) => {
+  //       index++;
+  //       this.blogTypes.splice(index, 0, child);
+  //     });
+  //   } else {
+  //     this.blogTypes.splice(index + 1, childern.length);
+  //   }
+  // }
 }

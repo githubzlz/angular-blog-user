@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { BlogListComponent } from './blog-list/blogList.component';
 import { BlogStatisticComponent } from './blog-statistic/blogStatistic.component';
+import { TypeManageComponent } from './typemanage/typemanage.component';
 
 const routes: Routes = [
   {
@@ -15,6 +16,10 @@ const routes: Routes = [
   {
     path: 'blogstatistic',
     component: BlogStatisticComponent,
+  },
+  {
+    path: 'typemanage',
+    component: TypeManageComponent,
   },
 ];
 

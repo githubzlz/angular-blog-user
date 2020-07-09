@@ -1,26 +1,9 @@
 #login_frame_div {
-  background-color: rgba(0, 0, 0, 0.3);
-  position: absolute;
-  left: 0;
-  top: 0;
   visibility: hidden;
-  width: 100%;
-  height: 100%;
-  z-index: 99;
-}
-#login_frame_div_inner {
-  border-radius: 20px;
-  position: absolute;
-  left: 50%;
-  top: 40%;
-  transform: translate(-50%, -50%);
-  width: 600px;
-  height: 360px;
-  background-color: #fffbff;
 }
 #login_frame {
+  z-index: 999;
   position: absolute;
-  border-radius: 20px;
   visibility: inherit;
   left: 50%;
   top: 50%;
@@ -28,4 +11,5 @@
   width: 600px;
   height: 360px;
   border: none;
+  visibility: hidden;
 }

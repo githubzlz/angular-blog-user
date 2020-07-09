@@ -7,7 +7,10 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   margin-bottom: 10px;
 }
-
+.blogPublish {
+  width: 600px;
+  background-color: black;
+}
 #setSummary {
   position: absolute;
   overflow: hidden;

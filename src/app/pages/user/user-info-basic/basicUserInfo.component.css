@@ -1,25 +1,19 @@
-.block {
-  display: inline-block;
-  cursor: pointer;
-  transition: ease-in;
+.left {
+  float: left;
+  margin-left: -400px;
+  width: 390px;
 }
-.test {
-  display: inline-block;
-  border: 20px solid #3280fc;
-  border-left: 20px solid rgba(0, 0, 0, 0);
-  height: 20px;
-  width: 250px;
-  position: relative;
+.right {
+  float: right;
+  width: 100%;
 }
-.inner {
-  display: inline-block;
-  border: 20px solid rgba(0, 0, 0, 0);
-  border-left: 20px solid #3280fc;
-  width: 20px;
-}
-.innertext {
-  font-size: 26px;
+.button {
   position: absolute;
-  top: -20px;
-  left: 30px;
+  right: 23px;
+  top: 25px;
+}
+.inner_text {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: rgb(173, 153, 153);
 }

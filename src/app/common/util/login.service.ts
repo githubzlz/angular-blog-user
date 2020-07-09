@@ -50,7 +50,7 @@ export class LoginService implements HttpInterceptor {
    * 打开登陆界面
    */
   login() {
-    const div = document.getElementById('login_frame_div');
+    const div = document.getElementById('login_frame');
     div.style.visibility = 'visible';
   }
 

@@ -57,6 +57,12 @@ export class MenuModule {
           icon: 'line-chart',
           url: '/blog/blogstatistic',
         },
+        {
+          level: 2,
+          title: '分类管理',
+          icon: 'cluster',
+          url: '/blog/typemanage',
+        },
       ],
     },
     {

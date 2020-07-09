@@ -1,0 +1,151 @@
+<nz-card>
+  <nz-table
+    [nzData]="blogTypes"
+    nzTableLayout="fixed"
+    [nzTitle]="headerTitle"
+    [nzHideOnSinglePage]="'true'"
+  >
+    <ng-template #headerTitle>
+      <div class="line"></div>
+      <h2 style="display: inline-block; height: 30px; vertical-align: top;">
+        文章分类列表
+      </h2>
+    </ng-template>
+    <thead>
+      <tr>
+        <th></th>
+        <th nzWidth="20%">分类名称</th>
+        <th>状态</th>
+        <th>文章数量</th>
+        <th>分类等级</th>
+        <th>创建时间</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let blogType of blogTypes; let index = index">
+        <tr>
+          <td
+            [nzShowExpand]="blogType.children.length !== 0"
+            [nzExpand]="'false'"
+            (nzExpandChange)="collapse(index, blogType, $event)"
+          ></td>
+          <td [nzIndentSize]="(blogType.data.level - 1) * 20" nzWidth="20%">
+            <span *ngIf="!blogType.write">{{ blogType.data.typeName }}</span>
+            <input
+              nz-input
+              type="text"
+              [(ngModel)]="blogType.data.typeName"
+              *ngIf="blogType.write"
+            />
+          </td>
+          <td>
+            <nz-badge
+              nzStatus="success"
+              nzText="启用"
+              *ngIf="blogType.data.state === 0"
+            ></nz-badge>
+            <nz-badge
+              nzStatus="error"
+              nzText="停用"
+              *ngIf="blogType.data.state === 1"
+            ></nz-badge>
+          </td>
+          <td></td>
+          <td *ngIf="blogType.data.level === 1">一级分类</td>
+          <td *ngIf="blogType.data.level === 2">二级分类</td>
+          <td>
+            {{ blogType.data.createdTime | date: "yyyy-MM-dd HH:mm:ss" }}
+          </td>
+          <td>
+            <a>
+              <span
+                *ngIf="blogType.data.state === 1"
+                (click)="updateState(blogType.id, 0)"
+                >启用</span
+              >
+              <span
+                *ngIf="blogType.data.state === 0"
+                (click)="updateState(blogType.id, 1)"
+                >停用</span
+              >
+            </a>
+            <nz-divider nzType="vertical"></nz-divider>
+            <a (click)="updateTypeName(blogType)">修改</a>
+            <nz-divider nzType="vertical"></nz-divider>
+            <a
+              nz-popconfirm
+              [nzPopconfirmTitle]="getDeleteMessage()"
+              nzPopconfirmPlacement="bottom"
+              (nzOnConfirm)="deleteBlogType(blogType.id)"
+              >删除</a
+            >
+            <nz-divider nzType="vertical"></nz-divider>
+            <a (click)="addType(2, blogType)" *ngIf="blogType.data.level != 1"
+              >新增</a
+            >
+            <a
+              nz-dropdown
+              [nzDropdownMenu]="menu"
+              *ngIf="blogType.data.level == 1"
+            >
+              新增
+              <i nz-icon nzType="down"></i>
+            </a>
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu nzSelectable>
+                <li nz-menu-item (click)="addType(1, blogType)">
+                  新增同级
+                </li>
+                <li nz-menu-item (click)="addType(2, blogType)">
+                  新增下级
+                </li>
+              </ul>
+            </nz-dropdown-menu>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </nz-table>
+</nz-card>
+<nz-modal
+  [(nzVisible)]="insertTypeVisible"
+  nzTitle="新增分类"
+  (nzOnCancel)="this.insertTypeVisible = false"
+  (nzOnOk)="handleOk()"
+  [nzOkLoading]="isOkLoading"
+>
+  <div nz-row>
+    <div nz-col nzSpan="6" nzPush="2">
+      <span style="height: 32px; line-height: 32px;"> 分类名称:</span>
+    </div>
+    <div nz-col nzSpan="15">
+      <input
+        nz-input
+        [(ngModel)]="inputValue"
+        placeholder="请输入分类名称"
+        (keypress)="$event.which === 13 ? handleOk() : 0"
+      />
+    </div>
+  </div>
+</nz-modal>
+<nz-modal
+  [(nzVisible)]="updateTypeNameVisible"
+  nzTitle="修改分类名称"
+  (nzOnCancel)="this.updateTypeNameVisible = false"
+  (nzOnOk)="handleUpdataOk()"
+>
+  <div nz-row>
+    <div nz-col nzSpan="6" nzPush="2">
+      <span style="height: 32px; line-height: 32px;"> 分类名称:</span>
+    </div>
+    <div nz-col nzSpan="15">
+      <input
+        nz-input
+        [(ngModel)]="inputValue"
+        placeholder="请输入分类名称"
+        (keypress)="$event.which === 13 ? handleUpdataOk() : 0"
+      />
+    </div>
+  </div>
+</nz-modal>

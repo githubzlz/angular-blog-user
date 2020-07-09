@@ -17,14 +17,14 @@ export class LayoutComponent implements OnInit {
   public data: any;
   isCollapsed = false;
   // 当前登陆人
-  loginUser: LoginUser = new LoginUser('', null, null, null);
+  loginUser: LoginUser = new LoginUser();
   constructor(
     private router: Router,
     private loginService: LoginService,
     private message: NzMessageService
   ) {}
   ngOnInit() {
-    // this.login();
+    this.login();
   }
 
   /**

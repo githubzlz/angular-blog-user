@@ -21,6 +21,20 @@
         </button>
       </div>
     </div>
+    <div nz-row class="search_row" *ngIf="listSubButton.length !== 0">
+      <div nz-col nzSpan="2"><span class="search_topic">二级分类:</span></div>
+      <div nz-col nzSpan="22">
+        <button
+          *ngFor="let item of listSubButton; let i = index"
+          nz-button
+          [nzType]="item.state"
+          style="margin-right: 10px;"
+          (click)="addSubTerms(i)"
+        >
+          {{ item.name }}
+        </button>
+      </div>
+    </div>
     <div nz-row class="search_row">
       <div nz-col nzSpan="2">
         <span class="search_topic">标签搜索:</span>
@@ -35,7 +49,7 @@
           style="width: 100%;"
         >
           <nz-option
-            *ngFor="let option of listOfType"
+            *ngFor="let option of listOfTag"
             [nzLabel]="option"
             [nzValue]="option"
           ></nz-option>

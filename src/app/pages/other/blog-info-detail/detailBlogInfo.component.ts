@@ -52,6 +52,7 @@ export class DetailBlogInfoComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
   /**
    * 查询文章数据
    * @param id id
@@ -70,6 +71,6 @@ export class DetailBlogInfoComponent implements OnInit, AfterViewInit {
   }
 
   backToList() {
-    this.router.navigate(['/index/blog']);
+    this.router.navigate(['/blog/bloglist']);
   }
 }

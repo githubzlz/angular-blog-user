@@ -16,8 +16,13 @@ export class IndexComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getMoreblogInfo() {
-    this.router.navigate(['/index/blog'], {
+  getMoreBlogInfo() {
+    this.router.navigate(['/blog/bloglist'], {
+      skipLocationChange: false,
+    });
+  }
+  getMoreStatisticInfo() {
+    this.router.navigate(['/blog/blogstatistic'], {
       skipLocationChange: false,
     });
   }

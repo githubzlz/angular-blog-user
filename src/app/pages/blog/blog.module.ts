@@ -5,9 +5,14 @@ import { ShareModule } from 'src/app/core/share/share.module';
 import { BlogListComponent } from './blog-list/blogList.component';
 import { BlogRoutingModule } from './blog-routing.module';
 import { BlogStatisticComponent } from './blog-statistic/blogStatistic.component';
+import { TypeManageComponent } from './typemanage/typemanage.component';
 
 @NgModule({
-  declarations: [BlogListComponent, BlogStatisticComponent],
+  declarations: [
+    BlogListComponent,
+    BlogStatisticComponent,
+    TypeManageComponent,
+  ],
   imports: [CommonModule, ShareModule, FormsModule, BlogRoutingModule],
 })
 export class BlogModule {}

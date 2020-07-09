@@ -1,6 +1,7 @@
 import { BlogPublicInfoModel } from './BlogPublicInfo.model';
 import { BlogContentModel } from './blogContent.model';
 import { PageInfoModel } from '../commonmodel/pageInfo.model';
+import { BlogTagModel } from '../tag/blogTag.model';
 
 export class ArticleModel {
   constructor() {
@@ -44,6 +45,10 @@ export class ArticleModel {
   public type?: any;
 
   /**
+   * 二级分类
+   */
+  public subType?: any;
+  /**
    *  0 未删除 1 删除
    */
   public isDeleted?: any;
@@ -66,7 +71,13 @@ export class ArticleModel {
   /**
    * 标签的集合
    */
-  public tags?: Array<string>;
+  public tags?: Array<BlogTagModel>;
+
+  /**
+   * 标签的集合
+   */
+  public tags2?: Array<BlogTagModel>;
+
   /**
    * 类型的集合
    */

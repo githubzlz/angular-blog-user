@@ -6,6 +6,8 @@ import { NzMessageService } from 'ng-zorro-antd';
 import { ArticleModel } from 'src/app/common/model/article/article.model';
 import { BlogPublicInfoModel } from 'src/app/common/model/article/BlogPublicInfo.model';
 import { Router } from '@angular/router';
+import { TreeMoel } from 'src/app/common/model/commonmodel/tree.model';
+import { BlogTypeService } from 'src/app/common/service/blogType.service';
 
 @Component({
   selector: 'app-blog',
@@ -16,33 +18,22 @@ export class BlogListComponent implements OnInit {
   constructor(
     private router: Router,
     private blogService: BlogService,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private blogTypeService: BlogTypeService
   ) {}
   pageInfo: PageInfoModel = new PageInfoModel();
   resultSet: ResultSetModel = new ResultSetModel();
   articles: Array<ArticleModel> = new Array();
   deletedMap: Map<string, string> = new Map<string, string>();
-  listOfType: any[] = ['JAVA', 'PATHON', 'C', 'C++', 'MYSQL'];
   listButton: Array<any> = new Array();
+  listSubButton: Array<any> = new Array();
+  listOfTag: Array<any> = new Array();
   statusFilters: Array<any> = [
     { text: '正常', value: '0' },
-    { text: '删除', value: '1' },
+    // { text: '删除', value: '1' },
     { text: '审核中', value: '2' },
   ];
-  perviousTagTypes: any[] = [
-    {
-      type: '大数据',
-      tags: ['JAVA', 'PATHON', 'C', 'C++', 'MYSQL'],
-    },
-    {
-      type: '语言',
-      tags: ['JAVA', 'PATHON', 'C', 'C++'],
-    },
-    {
-      type: '数据库',
-      tags: ['PATHON', 'MYSQL'],
-    },
-  ];
+  blogTypes: Array<TreeMoel>;
   // 查询未删除条件
   deletedExclude: any = {
     column: 'isDeleted',
@@ -58,9 +49,11 @@ export class BlogListComponent implements OnInit {
   // 过滤条件
   blog: ArticleModel = new ArticleModel();
 
+  currentSubType: TreeMoel[] = [];
+
   ngOnInit() {
     this.listInit(1, 10);
-    this.buttonOnInit(this.listOfType);
+    this.queryTypeTree();
   }
 
   /**
@@ -78,7 +71,7 @@ export class BlogListComponent implements OnInit {
 
   /**
    * 状态过滤条件添加
-   * @param value
+   * @param value value
    */
   nzFilterChange(value: Array<string>) {
     if (!value) {
@@ -137,11 +130,28 @@ export class BlogListComponent implements OnInit {
    * 过滤按钮初始化
    * @param listOfType listOfType
    */
-  buttonOnInit(listOfType: Array<string>) {
+  buttonOnInit() {
     this.listButton.push({ state: 'primary', name: '全部' });
-    listOfType.forEach((item) => {
-      const str = { state: 'default', name: item };
+    this.blogTypes.forEach((item) => {
+      const str = { state: 'default', name: item.name };
       this.listButton.push(str);
+    });
+    this.blogTypes.splice(0, 0, new TreeMoel());
+  }
+
+  subButtonOnInit(index: number) {
+    this.listSubButton = [];
+    if (this.blogTypes[index]) {
+      if (this.blogTypes[index].children) {
+        this.currentSubType = this.blogTypes[index].children;
+      } else {
+        this.currentSubType = [];
+      }
+    }
+
+    this.currentSubType.forEach((item) => {
+      const str = { state: 'default', name: item.name };
+      this.listSubButton.push(str);
     });
   }
 
@@ -224,6 +234,9 @@ export class BlogListComponent implements OnInit {
    * @param term 类型过滤
    */
   addTerms(index: number) {
+    // 点击时初始化二级标签
+    this.subButtonOnInit(index);
+
     this.listButton.forEach((item) => {
       item.state = 'default';
     });
@@ -235,6 +248,18 @@ export class BlogListComponent implements OnInit {
       return;
     }
     this.blog.type = this.listButton[index].name;
+    this.selectList();
+  }
+
+  /**
+   * 二级分类点击事件
+   */
+  addSubTerms(index: number) {
+    this.listSubButton.forEach((item) => {
+      item.state = 'default';
+    });
+    this.listSubButton[index].state = 'primary';
+    this.blog.subType = this.listSubButton[index].name;
     this.selectList();
   }
 
@@ -256,7 +281,7 @@ export class BlogListComponent implements OnInit {
     });
     this.listButton[0].state = 'primary';
     this.blog.type = null;
-
+    this.listSubButton = [];
     // 刷新列表
     this.selectList();
   }
@@ -268,10 +293,20 @@ export class BlogListComponent implements OnInit {
     const select: ArticleModel = new ArticleModel();
     select.pageInfo.pageNum = this.pageInfo.pageNum;
     select.pageInfo.pageSize = this.pageInfo.pageSize;
-    select.pageInfo.exclude = this.pageInfo.exclude;
+    if (this.pageInfo.exclude && this.pageInfo.exclude.length !== 0) {
+      select.pageInfo.exclude = this.pageInfo.exclude;
+    } else {
+      select.pageInfo.exclude = new Array<any>();
+      select.pageInfo.exclude.push({
+        column: 'isDeleted',
+        value: '0',
+      });
+      console.log(select.pageInfo.exclude);
+    }
     select.tags = this.blog.tags;
     select.type = this.blog.type;
     select.title = this.blog.title;
+    select.subType = this.blog.subType;
     select.blogContent.contentMd = this.blog.blogContent.contentMd;
     this.blogService.selectList(select).subscribe(
       (data) => {
@@ -310,5 +345,16 @@ export class BlogListComponent implements OnInit {
         this.message.error('文章删除失败,请重试', { nzDuration: 4000 });
       }
     );
+  }
+
+  /**
+   * 查询文章分类树
+   */
+  queryTypeTree() {
+    this.blogTypeService.queryTypeTree().subscribe((data) => {
+      const blogData: ResultSetModel = data;
+      this.blogTypes = blogData.entity;
+      this.buttonOnInit();
+    });
   }
 }

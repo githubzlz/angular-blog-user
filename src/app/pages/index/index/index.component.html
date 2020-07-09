@@ -4,21 +4,21 @@
       <div nz-row style="height: 40px; margin-bottom: 10px;">
         <div class="line"></div>
         <h2 style="display: inline-block; height: 30px; vertical-align: top;">
-          基本信息
+          博文信息
         </h2>
         <div
           style="vertical-align: text-bottom; float: right; margin-right: 20px;"
         >
           <a
             style="line-height: 40px; font-size: 16px;"
-            (click)="getMoreblogInfo()"
+            (click)="getMoreBlogInfo()"
             >更多...</a
           >
         </div>
       </div>
       <div nz-row nzType="flex" nzGutter="16">
         <div nz-col nzSpan="6">
-          <nz-card class="count_number_card">
+          <nz-card class="count_number_card" [nzHoverable]="'true'">
             <div nz-row nzAlign="middle" nzType="flex">
               <i
                 nz-icon
@@ -52,6 +52,7 @@
             style="
               background-image: linear-gradient(to right, #9933ff, #cc66cc);
             "
+            [nzHoverable]="'true'"
           >
             <div nz-row nzAlign="middle" nzType="flex">
               <i
@@ -87,6 +88,7 @@
             style="
               background-image: linear-gradient(to right, #29a682, #5bf061);
             "
+            [nzHoverable]="'true'"
           >
             <div nz-row nzAlign="middle" nzType="flex">
               <i
@@ -121,6 +123,7 @@
             style="
               background-image: linear-gradient(to right, #2fd7c7, #679df2);
             "
+            [nzHoverable]="'true'"
           >
             <div nz-row nzAlign="middle" nzType="flex">
               <i
@@ -151,7 +154,10 @@
         </div>
       </div>
       <div nz-row style="height: 145px; margin-top: 16px;">
-        <nz-card style="height: 125px; border-radius: 10px;">
+        <nz-card
+          style="height: 125px; border-radius: 10px;"
+          [nzHoverable]="'true'"
+        >
           <div nz-col nzSpan="10">
             <h3 style="margin-bottom: 15px;">待办事项:</h3>
             <span style="margin-left: 5px;">1.待办事项</span>
@@ -196,17 +202,44 @@
       <h2 style="display: inline-block; height: 30px; vertical-align: top;">
         统计图表
       </h2>
-      <div style="vertical-align: 10px; float: right;">
+
+      <div
+        style="vertical-align: 10px; display: inline-block; margin-left: 20px;"
+      >
         <nz-radio-group>
           <label nz-radio-button nzValue="large"><span>一周</span></label>
           <label nz-radio-button nzValue="default"><span>15日</span></label>
           <label nz-radio-button nzValue="default1"><span>一月</span></label>
         </nz-radio-group>
       </div>
+      <div
+        style="
+          vertical-align: text-bottom;
+          float: right;
+          margin-right: 20px;
+          line-height: 20px;
+        "
+      >
+        <a
+          style="
+            font-size: 16px;
+            bottom: 0px;
+            position: absolute;
+            right: -20px;
+            width: 80px;
+            z-index: 20;
+          "
+          (click)="getMoreStatisticInfo()"
+          >更多...</a
+        >
+      </div>
     </div>
     <div nz-row nzGutter="16">
       <div nz-col nzSpan="12">
-        <nz-card style="border-radius: 10px; margin-top: 20px;">
+        <nz-card
+          style="border-radius: 10px; margin-top: 20px;"
+          [nzHoverable]="'true'"
+        >
           <div
             echarts
             [options]="barStatisticsInfoModel.blogNumber"
@@ -215,7 +248,10 @@
         </nz-card>
       </div>
       <div nz-col nzSpan="12">
-        <nz-card style="border-radius: 10px; margin-top: 20px;">
+        <nz-card
+          style="border-radius: 10px; margin-top: 20px;"
+          [nzHoverable]="'true'"
+        >
           <div
             echarts
             [options]="lineStatisticsInfoModel.option"
@@ -226,7 +262,10 @@
     </div>
     <div nz-row nzGutter="16">
       <div nz-col nzSpan="12">
-        <nz-card style="border-radius: 10px; margin-top: 20px;">
+        <nz-card
+          style="border-radius: 10px; margin-top: 20px;"
+          [nzHoverable]="'true'"
+        >
           <div
             echarts
             [options]="barStatisticsInfoModel.option"
@@ -235,7 +274,10 @@
         </nz-card>
       </div>
       <div nz-col nzSpan="12">
-        <nz-card style="border-radius: 10px; margin-top: 20px;">
+        <nz-card
+          style="border-radius: 10px; margin-top: 20px;"
+          [nzHoverable]="'true'"
+        >
           <div
             echarts
             [options]="pieStatisticsInfoModel.option"

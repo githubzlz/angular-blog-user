@@ -15,10 +15,17 @@ export class LoginComponent implements OnInit {
       this.baseUrl + '/login'
     );
   }
-  ngOnInit() {}
-
-  onClick() {
-    const div = document.getElementById('login_frame_div');
-    div.style.visibility = 'hidden';
+  ngOnInit() {
+    document.getElementById('login_frame').style.width =
+      document.body.clientWidth + 'px';
+    document.getElementById('login_frame').style.height =
+      document.body.clientHeight + 'px';
+    const dom = document.getElementById('login_frame');
+    window.onresize = function a() {
+      document.getElementById('login_frame').style.width =
+        document.body.clientWidth + 'px';
+      document.getElementById('login_frame').style.height =
+        document.body.clientHeight + 'px';
+    };
   }
 }

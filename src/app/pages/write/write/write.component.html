@@ -60,7 +60,6 @@
   >
     <ng-template #modalTitle>
       <div style="width: 400px;">
-        <span style="font-size: 18px; margin: 5px;">标题: </span>
         <a
           style="font-size: 20px; font-weight: bolder; min-width: 200px;"
           *ngIf="!tableTitleVisible"
@@ -107,25 +106,120 @@
           nzAlign="middle"
           nzGutter="6"
           style="margin-bottom: 10px; font-size: 16px;"
+          id="blogTypeDiv"
         >
           <div nz-col nzXs="4" nzSm="4">
             添加分类:
           </div>
-          <div nz-col nzXs="20" nzSm="20">
-            <nz-select
-              [(ngModel)]="typeValue"
-              nzSize="middle"
-              nzMode="tags"
-              nzPlaceHolder="请选择分类,至多可以选择两个分类..."
+          <div nz-col nzXs="18" nzSm="20" id="innerBlogTypeDiv">
+            <nz-tree-select
               style="width: 260px;"
-              nzMaxMultipleCount="2"
+              nzPlaceHolder="Please select"
+              [(ngModel)]="typeValue"
+              [nzMaxTagCount]="'2'"
+              nzPlaceHolder="请选择分类,至多可以选择两个分类..."
+              [nzDefaultExpandAll]="false"
+              [nzAllowClear]="false"
+              [nzMultiple]="true"
+              [nzNodes]="blogTypeNodes"
+              [nzShowSearch]="true"
+              [nzHideUnMatched]="true"
+              (ngModelChange)="onTypeValueChange()"
+              *ngIf="typeValueNodeVisiable"
             >
-              <nz-option
-                *ngFor="let option of listOfType"
-                [nzValue]="option"
-                [nzLabel]="option"
-              ></nz-option>
-            </nz-select>
+            </nz-tree-select>
+            <button
+              nz-button
+              nzType="link"
+              nz-popover
+              nzPopoverTitle="新增分类"
+              [(nzVisible)]="visibleTypeModal"
+              nzPopoverTrigger="click"
+              [nzPopoverContent]="addTypeTemplate"
+              nzPopoverPlacement="bottomRight"
+            >
+              新增分类<i nz-icon nzType="right" nzTheme="outline"></i>
+            </button>
+            <ng-template #addTypeTemplate>
+              <div style="width: 400px;">
+                <nz-divider
+                  nzText="一级分类"
+                  style="font-size: 15px;"
+                ></nz-divider>
+                <div nz-row>
+                  <div nz-col nzSpan="24">
+                    <button
+                      style="margin: 5px;"
+                      nz-button
+                      *ngFor="let item of blogTypes"
+                      nzType="default"
+                      nzSize="small"
+                      (click)="setChildrenList(item)"
+                    >
+                      {{ item.data.typeName }}
+                    </button>
+                    <button
+                      *ngIf="!addTypeInputVisible1"
+                      style="margin: 5px;"
+                      nz-button
+                      nzType="default"
+                      nzSize="small"
+                      (click)="showAddTypeInput(1)"
+                    >
+                      <i nz-icon nzType="plus"></i>分类
+                    </button>
+                    <input
+                      #inputElement
+                      nz-input
+                      nzSize="small"
+                      *ngIf="addTypeInputVisible1"
+                      type="text"
+                      [(ngModel)]="inputValue"
+                      style="width: 78px;"
+                      (blur)="handleTypesConfirm(1)"
+                      (keydown.enter)="handleTypesConfirm(1)"
+                      id="addTypeInput1"
+                    />
+                  </div>
+                </div>
+                <nz-divider
+                  nzText="二级分类"
+                  style="font-size: 15px;"
+                ></nz-divider>
+                <div nz-row>
+                  <div nz-col nzSpan="24">
+                    <nz-tag
+                      *ngFor="let item of blogTypeChildren"
+                      nzMode="checkable"
+                      [nzChecked]="false"
+                      >{{ item.data.typeName }}</nz-tag
+                    >
+                    <button
+                      *ngIf="!addTypeInputVisible2"
+                      style="margin: 5px;"
+                      nz-button
+                      nzType="default"
+                      nzSize="small"
+                      (click)="showAddTypeInput(2)"
+                    >
+                      <i nz-icon nzType="plus"></i>分类
+                    </button>
+                    <input
+                      id="addTypeInput2"
+                      #inputElement
+                      nz-input
+                      nzSize="small"
+                      *ngIf="addTypeInputVisible2"
+                      type="text"
+                      [(ngModel)]="inputValue"
+                      style="width: 78px;"
+                      (blur)="handleTypesConfirm(2)"
+                      (keydown.enter)="handleTypesConfirm(2)"
+                    />
+                  </div>
+                </div>
+              </div>
+            </ng-template>
           </div>
         </div>
         <div
@@ -165,7 +259,7 @@
               [nzMode]="'closeable'"
               (nzOnClose)="handleClose(tag)"
             >
-              {{ sliceTagName(tag) }}
+              {{ sliceTagName(tag.name) }}
             </nz-tag>
             <button
               nz-button
@@ -257,14 +351,14 @@
 
   <!-- 添加标签的table -->
   <ng-template #contentTemplate>
-    <div style="width: 380px; height: 240px; font-size: 14px;">
+    <div style="width: 400px; height: 240px; font-size: 14px;">
       <div style="margin-bottom: 10px;">
         <nz-tag
           *ngFor="let tag of tags"
           [nzMode]="'closeable'"
           (nzOnClose)="handleClose(tag)"
         >
-          {{ sliceTagName(tag) }}
+          {{ sliceTagName(tag.name) }}
         </nz-tag>
         <nz-tag
           *ngIf="tagAddVisible"
@@ -282,8 +376,8 @@
           type="text"
           [(ngModel)]="inputValue"
           style="width: 78px;"
-          (blur)="handleInputConfirm(null)"
-          (keydown.enter)="handleInputConfirm(null)"
+          (blur)="handleInputConfirm()"
+          (keydown.enter)="handleInputConfirm()"
           maxlength="7"
         />
       </div>
@@ -304,10 +398,10 @@
         <hr />
         <nz-tag
           *ngFor="let tag of perviousTag"
-          (click)="handleInputConfirm(tag)"
-          style="margin: 5px 5;"
+          (click)="handleClickConfirm(tag)"
+          style="margin: 5px 5px;"
         >
-          {{ tag }}
+          {{ tag.name }}
         </nz-tag>
       </div>
     </div>
