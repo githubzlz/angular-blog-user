@@ -234,6 +234,7 @@ export class BlogListComponent implements OnInit {
    * @param term 类型过滤
    */
   addTerms(index: number) {
+    this.blog.subType = null;
     // 点击时初始化二级标签
     this.subButtonOnInit(index);
 

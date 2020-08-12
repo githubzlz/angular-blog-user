@@ -31,6 +31,7 @@
     "message",
     function (e) {
       if (e.data.constructor == String) {
+        console.log(e.data);
         const name = "token";
         //过期时间 2小时
         var exp = new Date();

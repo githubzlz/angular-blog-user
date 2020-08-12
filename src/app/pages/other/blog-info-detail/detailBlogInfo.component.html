@@ -1,3 +1,26 @@
+<nz-breadcrumb style="margin-bottom: 5px; margin-left: 10px;">
+  <nz-breadcrumb-item>
+    <a routerLink="/index/index">
+      <i nz-icon nzType="home"></i>
+      <span>首页</span>
+    </a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>
+    <a routerLink="/blog">
+      <i nz-icon nzType="book"></i>
+      <span>博客信息</span>
+    </a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>
+    <a routerLink="/blog/bloglist">
+      <i nz-icon nzType="unordered-list"></i>
+      <span>博客列表</span>
+    </a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>
+    <span>博客详情</span>
+  </nz-breadcrumb-item>
+</nz-breadcrumb>
 <nz-card style="min-height: 100%; padding-left: 400px;">
   <div
     id="md2"
@@ -192,7 +215,10 @@
             返回列表
           </ng-template>
         </div>
-        <nz-divider nzText="MarkDown To HTML"></nz-divider>
+        <nz-divider
+          nzText="MarkDown To HTML"
+          (click)="toEditPage()"
+        ></nz-divider>
         <div id="inner_html"></div>
       </nz-card>
     </nz-spin>

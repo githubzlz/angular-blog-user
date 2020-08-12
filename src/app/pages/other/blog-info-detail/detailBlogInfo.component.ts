@@ -73,4 +73,13 @@ export class DetailBlogInfoComponent implements OnInit, AfterViewInit {
   backToList() {
     this.router.navigate(['/blog/bloglist']);
   }
+
+  toEditPage() {
+    this.router.navigate(['/write/write'], {
+      skipLocationChange: true,
+      queryParams: {
+        id: this.id,
+      },
+    });
+  }
 }

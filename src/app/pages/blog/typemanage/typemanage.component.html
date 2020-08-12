@@ -1,3 +1,20 @@
+<nz-breadcrumb style="margin-bottom: 5px; margin-left: 10px;">
+  <nz-breadcrumb-item>
+    <a routerLink="/index/index">
+      <i nz-icon nzType="home"></i>
+      <span>首页</span>
+    </a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>
+    <a routerLink="/blog/bloglist">
+      <i nz-icon nzType="book"></i>
+      <span>博客信息</span>
+    </a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>
+    <span>分类管理</span>
+  </nz-breadcrumb-item>
+</nz-breadcrumb>
 <nz-card>
   <nz-table
     [nzData]="blogTypes"
