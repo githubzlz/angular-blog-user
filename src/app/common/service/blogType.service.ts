@@ -17,8 +17,13 @@ export class BlogTypeService {
   /**
    * 查询分类树
    */
-  queryTypeTree() {
-    const url = this.baseUrl + '/article/type/queryblogtype/1';
+  queryTypeTree(type: string) {
+    let url;
+    if (type !== undefined) {
+      url = this.baseUrl + `/article/type/queryblogtype/1?type=${type}`;
+    } else {
+       url = this.baseUrl + `/article/type/queryblogtype/1`;
+    }
     return this.http.get(url);
   }
 
@@ -33,8 +38,8 @@ export class BlogTypeService {
   /**
    * 创建分类
    */
-  createType(pId: string, name: string) {
-    const url = this.baseUrl + `/article/type/create/${pId}/${name}`;
+  createType(pId: string, name: string, type: string) {
+    const url = this.baseUrl + `/article/type/create/${pId}/${name}/${type}`;
     return this.http.get(url);
   }
 

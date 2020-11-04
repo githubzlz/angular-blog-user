@@ -53,7 +53,7 @@ export class MenuModule {
         },
         {
           level: 2,
-          title: '博客统计',
+          title: '推荐管理',
           icon: 'line-chart',
           url: '/blog/blogstatistic',
         },

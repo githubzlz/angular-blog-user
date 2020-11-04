@@ -1,27 +1,27 @@
-import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
-import { EditorConfig1 } from "src/app/core/editormd/director/model/editor-config1";
-import { EditorMdDirective } from "src/app/core/editormd/director/editor-md.directive";
-import { MdModel } from "./md.content";
-import { Router, ActivatedRoute } from "@angular/router";
-import { BlogService } from "src/app/common/service/blog.service";
-import { NzMessageService } from "ng-zorro-antd";
-import * as $ from "../../../../assets/editor/jquery.min.js";
-import { ArticleModel } from "src/app/common/model/article/article.model";
-import { BlogContentModel } from "src/app/common/model/article/blogContent.model";
-import { FileService } from "src/app/common/service/file.service";
-import { ResultSetModel } from "src/app/common/model/commonmodel/resultset.model";
-import { BlogTypeService } from "src/app/common/service/blogType.service";
-import { TreeMoel } from "src/app/common/model/commonmodel/tree.model";
-import { BlogTagService } from "src/app/common/service/blogTag.service";
-import { BlogTagType } from "src/app/common/model/tag/blogTagType.model";
-import { BlogTagModel } from "src/app/common/model/tag/blogTag.model";
-import { BlogTypeModel } from "src/app/common/model/article/blogType.model";
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { EditorConfig1 } from 'src/app/core/editormd/director/model/editor-config1';
+import { EditorMdDirective } from 'src/app/core/editormd/director/editor-md.directive';
+import { MdModel } from './md.content';
+import { Router, ActivatedRoute } from '@angular/router';
+import { BlogService } from 'src/app/common/service/blog.service';
+import { NzMessageService } from 'ng-zorro-antd';
+import * as $ from '../../../../assets/editor/jquery.min.js';
+import { ArticleModel } from 'src/app/common/model/article/article.model';
+import { BlogContentModel } from 'src/app/common/model/article/blogContent.model';
+import { FileService } from 'src/app/common/service/file.service';
+import { ResultSetModel } from 'src/app/common/model/commonmodel/resultset.model';
+import { BlogTypeService } from 'src/app/common/service/blogType.service';
+import { TreeMoel } from 'src/app/common/model/commonmodel/tree.model';
+import { BlogTagService } from 'src/app/common/service/blogTag.service';
+import { BlogTagType } from 'src/app/common/model/tag/blogTagType.model';
+import { BlogTagModel } from 'src/app/common/model/tag/blogTag.model';
+import { BlogTypeModel } from 'src/app/common/model/article/blogType.model';
 declare var editormd: any;
 
 @Component({
-  selector: "app-write",
-  templateUrl: "./write.component.html",
-  styleUrls: ["./write.component.css"],
+  selector: 'app-write',
+  templateUrl: './write.component.html',
+  styleUrls: ['./write.component.css'],
 })
 export class WriteComponent implements OnInit {
   constructor(
@@ -38,10 +38,10 @@ export class WriteComponent implements OnInit {
   title: string;
   interval: any;
   tableTitleVisible = false;
-  listOfType: any[] = ["JAVA", "PATHON", "C", "C++", "MYSQL"];
+  listOfType: any[] = ['JAVA', 'PATHON', 'C', 'C++', 'MYSQL'];
   perviousTagTypes: BlogTagType[];
   perviousTag: BlogTagModel[] = [];
-  acticleRadioValue = "0";
+  acticleRadioValue = '0';
   radioValue: any = 0;
   typeValue: string[] = new Array<string>();
   publishVisible = false;
@@ -52,11 +52,11 @@ export class WriteComponent implements OnInit {
   isPublishLoading = false;
   summary: string;
   inputValue: string;
-  visiblePerson = "0";
+  visiblePerson = '0';
   article: ArticleModel = new ArticleModel();
-  @ViewChild("titleInput", { static: true }) titleInput: ElementRef;
-  @ViewChild("tableTitleInput", { static: false }) tableTitleInput: ElementRef;
-  @ViewChild("inputElement", { static: false }) inputElement: ElementRef;
+  @ViewChild('titleInput', { static: true }) titleInput: ElementRef;
+  @ViewChild('tableTitleInput', { static: false }) tableTitleInput: ElementRef;
+  @ViewChild('inputElement', { static: false }) inputElement: ElementRef;
   visibleTypeModal = false;
   addTypeModalOkLoading = false;
   blogTypes: Array<TreeMoel>;
@@ -66,19 +66,16 @@ export class WriteComponent implements OnInit {
   currentBlogTypeNode: TreeMoel;
   addTypeInputVisible1 = false;
   addTypeInputVisible2 = false;
+  acticleTypeValue = '0';
   ngOnInit() {
     this.article.blogContent = new BlogContentModel();
     this.routeDataInit();
-    console.log("111111111111111111111111111");
     // this.dataOnInit();
     this.routeOut();
   }
 
   routeDataInit() {
     this.route.queryParams.subscribe(async (res) => {
-      if (res.id) {
-        console.log(this.getBlogContent(res.id));
-      }
       this.dataOnInit(null);
     });
   }
@@ -91,7 +88,6 @@ export class WriteComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.blogService.getBlogContent(id).subscribe((data: ResultSetModel) => {
         this.dataOnInit(data.entity);
-        console.log(this.conf.markdown);
         resolve(1);
       });
     });
@@ -102,22 +98,21 @@ export class WriteComponent implements OnInit {
    */
   dataOnInit(blog: ArticleModel) {
     if (!blog) {
-      this.title = localStorage.getItem("blog-title");
-      this.summary = localStorage.getItem("blog-summary");
-      this.md = localStorage.getItem("blog-md");
+      this.title = localStorage.getItem('blog-title');
+      this.summary = localStorage.getItem('blog-summary');
+      this.md = localStorage.getItem('blog-md');
     } else {
       this.title = blog.title;
       this.summary = blog.summary;
       this.conf.markdown = blog.blogContent.contentMd;
-      console.log(this.conf.markdown);
     }
-    if (this.title === null || this.title === "") {
+    if (this.title === null || this.title === '') {
       this.titleInput.nativeElement.placeholder =
-        "文章名称-ZLZBLOG(请输入文章名称)";
+        '文章名称-ZLZBLOG(请输入文章名称)';
     } else {
       // document.getElementById('title').setAttribute('value', this.title);
     }
-    if (this.md === null || this.md === "") {
+    if (this.md === null || this.md === '') {
       this.md = new MdModel().md;
     }
     this.conf.markdown = this.md;
@@ -138,7 +133,7 @@ export class WriteComponent implements OnInit {
    * 生成摘要
    */
   generateSummary() {
-    const dom = document.createElement("div");
+    const dom = document.createElement('div');
     dom.innerHTML = EditorMdDirective.edit.getPreviewedHTML();
     this.summary = dom.innerText.slice(0, 180);
   }
@@ -147,9 +142,9 @@ export class WriteComponent implements OnInit {
    * 按钮事件:导出到本地
    */
   exportToLocal() {
-    let filename = "blog.md";
+    let filename = 'blog.md';
     if (this.title) {
-      filename = this.title + ".md";
+      filename = this.title + '.md';
     }
     const md = EditorMdDirective.edit.getMarkdown();
     this.download(filename, md);
@@ -161,16 +156,16 @@ export class WriteComponent implements OnInit {
    */
   openPublishPage() {
     if (this.title === null || this.title.length === 0) {
-      this.message.warning("您没有填写文章标题,请检查您的标题", {
+      this.message.warning('您没有填写文章标题,请检查您的标题', {
         nzDuration: 2000,
       });
-      this.title = "系统默认标题";
+      this.title = '系统默认标题';
     }
     this.publishVisible = true;
-    if (this.summary == null || this.summary === "") {
+    if (this.summary == null || this.summary === '') {
       this.generateSummary();
       setTimeout(() => {
-        this.message.warning("您没有填写摘要，系统已为您自动生成摘要", {
+        this.message.warning('您没有填写摘要，系统已为您自动生成摘要', {
           nzDuration: 2000,
         });
       }, 1000);
@@ -191,19 +186,19 @@ export class WriteComponent implements OnInit {
     const visiblePerson = this.visiblePerson;
     const acticleRadioValue = this.acticleRadioValue;
     if (title === null || title.length === 0) {
-      this.message.error("您的文章没有标题", { nzDuration: 2000 });
+      this.message.error('您的文章没有标题', { nzDuration: 2000 });
     } else if (md === null || md.length === 0) {
-      this.message.error("您的文章没有内容", { nzDuration: 2000 });
+      this.message.error('您的文章没有内容', { nzDuration: 2000 });
     } else if (summary === null || summary.length === 0) {
-      this.message.error("您没有填写摘要", { nzDuration: 2000 });
+      this.message.error('您没有填写摘要', { nzDuration: 2000 });
     } else if (typeValue.length === 0) {
-      this.message.error("您没有选择分类", { nzDuration: 2000 });
+      this.message.error('您没有选择分类', { nzDuration: 2000 });
     } else if (acticleRadioValue == null) {
-      this.message.error("您没有选择出处", { nzDuration: 2000 });
+      this.message.error('您没有选择出处', { nzDuration: 2000 });
     } else if (tags.length === 0) {
-      this.message.error("您没有选择标签", { nzDuration: 2000 });
+      this.message.error('您没有选择标签', { nzDuration: 2000 });
     } else if (visiblePerson == null) {
-      this.message.error("您没有选择文章的可见性", { nzDuration: 2000 });
+      this.message.error('您没有选择文章的可见性', { nzDuration: 2000 });
     } else {
       this.isPublishLoading = true;
       this.article.title = title;
@@ -214,24 +209,23 @@ export class WriteComponent implements OnInit {
       this.article.visibleStrategy = visiblePerson;
       this.article.provenance = acticleRadioValue;
       this.article.blogContent.contentHtml = html;
-      console.log(this.article);
 
       // 提交文章数据
       this.blogService.publicBlog(this.article).subscribe(
         (data: ResultSetModel) => {
           if (data.code === 1) {
-            this.message.success("文章发布成功", { nzDuration: 4000 });
+            this.message.success('文章发布成功', { nzDuration: 4000 });
             this.isPublishLoading = false;
             setTimeout(() => {
               this.publishVisible = false;
             }, 500);
           } else {
-            this.message.error("文章发布失败", { nzDuration: 4000 });
+            this.message.error('文章发布失败', { nzDuration: 4000 });
             this.isPublishLoading = false;
           }
         },
         (error) => {
-          this.message.error("文章发布失败", { nzDuration: 4000 });
+          this.message.error('文章发布失败', { nzDuration: 4000 });
           this.isPublishLoading = false;
         }
       );
@@ -268,7 +262,9 @@ export class WriteComponent implements OnInit {
   /**
    * 按钮事件:取消发布文章
    */
-  publishCancel() {}
+  publishCancel() {
+    this.publishVisible = false;
+  }
 
   /**
    * 发布页主题的点击事件
@@ -338,13 +334,13 @@ export class WriteComponent implements OnInit {
     if (!repeat) {
       const tag = new BlogTagModel();
       tag.name = this.inputValue;
-      tag.typeId = "-1";
+      tag.typeId = '-1';
       this.tags.push(tag);
-      this.inputValue = "";
+      this.inputValue = '';
       this.inputVisible = false;
       this.tagAddVisible = true;
     } else {
-      this.message.info("无法添加重复的标签");
+      this.message.info('无法添加重复的标签');
     }
   }
 
@@ -371,7 +367,7 @@ export class WriteComponent implements OnInit {
       const isLongTag = tag.length > 6;
       return isLongTag ? `${tag.slice(0, 6)}...` : tag;
     }
-    return "";
+    return '';
   }
   /**
    * 检测输入的主题字数
@@ -405,12 +401,12 @@ export class WriteComponent implements OnInit {
    */
   saveLocal() {
     const md = EditorMdDirective.edit.getMarkdown();
-    localStorage.removeItem("blog-title");
-    localStorage.removeItem("blog-md");
-    localStorage.removeItem("blog-summary");
-    localStorage.setItem("blog-title", this.title);
-    localStorage.setItem("blog-md", md);
-    localStorage.setItem("blog-summary", this.summary);
+    localStorage.removeItem('blog-title');
+    localStorage.removeItem('blog-md');
+    localStorage.removeItem('blog-summary');
+    localStorage.setItem('blog-title', this.title);
+    localStorage.setItem('blog-md', md);
+    localStorage.setItem('blog-summary', this.summary);
   }
 
   /**
@@ -436,37 +432,37 @@ export class WriteComponent implements OnInit {
   setMdConf() {
     this.conf.toolbarHandlers = {
       myIcon1() {
-        $("#summary-back").css("visibility", "visible");
-        $("#setSummary").css("visibility", "visible");
-        $("#setSummary").css("width", "400px");
-        $("#setSummary").css("height", "300px");
-        $("#setSummary").css("right", "50%");
+        $('#summary-back').css('visibility', 'visible');
+        $('#setSummary').css('visibility', 'visible');
+        $('#setSummary').css('width', '400px');
+        $('#setSummary').css('height', '300px');
+        $('#setSummary').css('right', '50%');
         // document.getElementById('setSummary').innerText = '123';
       },
       myIcon2() {
-        const title = $("#title").val();
-        const summary = $("#input_summary").val();
+        const title = $('#title').val();
+        const summary = $('#input_summary').val();
         if (title) {
-          localStorage.removeItem("blog-title");
-          localStorage.setItem("blog-title", title);
+          localStorage.removeItem('blog-title');
+          localStorage.setItem('blog-title', title);
         }
         if (summary) {
-          localStorage.removeItem("blog-summary");
-          localStorage.setItem("blog-summary", summary);
+          localStorage.removeItem('blog-summary');
+          localStorage.setItem('blog-summary', summary);
         }
         const md = EditorMdDirective.edit.getMarkdown();
         if (md) {
-          localStorage.removeItem("blog-md");
-          localStorage.setItem("blog-md", md);
+          localStorage.removeItem('blog-md');
+          localStorage.setItem('blog-md', md);
         }
       },
       myIcon3() {
-        $("#file_upload").css("visibility", "visible");
-        $("#file_background").css("visibility", "visible");
-        $("#file_upload").css("top", "320px%");
-        $("#file_upload").css("width", "400px");
-        $("#file_upload").css("height", "200px");
-        $("#file_upload").css("right", "60%");
+        $('#file_upload').css('visibility', 'visible');
+        $('#file_background').css('visibility', 'visible');
+        $('#file_upload').css('top', '320px%');
+        $('#file_upload').css('width', '400px');
+        $('#file_upload').css('height', '200px');
+        $('#file_upload').css('right', '60%');
       },
     };
   }
@@ -476,12 +472,12 @@ export class WriteComponent implements OnInit {
    */
   fileSubmit() {
     const formdata = new FormData();
-    formdata.append("filename", $("#file_upload_image")[0].files[0]);
+    formdata.append('filename', $('#file_upload_image')[0].files[0]);
     $.ajax({
       // 请求方式
-      type: "POST",
+      type: 'POST',
       // 请求地址
-      url: "https://www.zlztsb.com:80/blog-server/file/image/upload",
+      url: 'https://www.zlztsb.com:80/blog-server/file/image/upload',
       // 数据，json字符串
       data: formdata,
       contentType: false,
@@ -489,9 +485,9 @@ export class WriteComponent implements OnInit {
       // 请求成功
       success(result: ResultSetModel) {
         const path = result.entity;
-        EditorMdDirective.edit.insertValue("![](" + path + ")");
-        $("#file_upload").css("visibility", "hidden");
-        $("#file_background").css("visibility", "hidden");
+        EditorMdDirective.edit.insertValue('![](' + path + ')');
+        $('#file_upload').css('visibility', 'hidden');
+        $('#file_background').css('visibility', 'hidden');
       },
       // 请求失败，包含具体的错误信息
       error(e: any) {
@@ -504,25 +500,25 @@ export class WriteComponent implements OnInit {
    * 背景点击
    */
   backclick() {
-    $("#summary-back").css("visibility", "hidden");
-    $("#setSummary").css("visibility", "hidden");
-    $("#setSummary").css("width", "0");
-    $("#setSummary").css("height", "0");
-    $("#setSummary").css("right", "20%");
-    const summary = $("#input_summary").val();
-    localStorage.removeItem("blog-summary");
-    localStorage.setItem("blog-summary", summary);
+    $('#summary-back').css('visibility', 'hidden');
+    $('#setSummary').css('visibility', 'hidden');
+    $('#setSummary').css('width', '0');
+    $('#setSummary').css('height', '0');
+    $('#setSummary').css('right', '20%');
+    const summary = $('#input_summary').val();
+    localStorage.removeItem('blog-summary');
+    localStorage.setItem('blog-summary', summary);
   }
 
   /**
    * 背景点击
    */
   fileBackgroundClick() {
-    $("#file_background").css("visibility", "hidden");
-    $("#file_upload").css("visibility", "hidden");
-    $("#file_upload").css("width", "0");
-    $("#file_upload").css("height", "0");
-    $("#file_upload").css("right", "20%");
+    $('#file_background').css('visibility', 'hidden');
+    $('#file_upload').css('visibility', 'hidden');
+    $('#file_upload').css('width', '0');
+    $('#file_upload').css('height', '0');
+    $('#file_upload').css('right', '20%');
   }
 
   /**
@@ -531,13 +527,13 @@ export class WriteComponent implements OnInit {
    * @param text text
    */
   download(filename: string, text: string) {
-    const element = document.createElement("a");
+    const element = document.createElement('a');
     element.setAttribute(
-      "href",
-      "data:text/plain;charset=utf-8," + encodeURIComponent(text)
+      'href',
+      'data:text/plain;charset=utf-8,' + encodeURIComponent(text)
     );
-    element.setAttribute("download", filename);
-    element.style.visibility = "hidden";
+    element.setAttribute('download', filename);
+    element.style.visibility = 'hidden';
     document.body.appendChild(element);
 
     element.click();
@@ -549,12 +545,14 @@ export class WriteComponent implements OnInit {
    * 查询文章分类树
    */
   queryTypeTree() {
-    this.blogTypeService.queryTypeTree().subscribe((data) => {
-      const blogData: ResultSetModel = data;
-      this.blogTypes = blogData.entity;
-      this.getNodeModel();
-      this.blogTypeChildren = this.blogTypes[0].children;
-    });
+    this.blogTypeService
+      .queryTypeTree(this.acticleTypeValue)
+      .subscribe((data) => {
+        const blogData: ResultSetModel = data;
+        this.blogTypes = blogData.entity;
+        this.getNodeModel();
+        this.blogTypeChildren = this.blogTypes[0].children;
+      });
   }
 
   /**
@@ -593,7 +591,7 @@ export class WriteComponent implements OnInit {
       setTimeout(() => {
         this.typeValueNodeVisiable = true;
       }, 10);
-      this.message.warning("最多可以添加两个分类");
+      this.message.warning('最多可以添加两个分类');
     }
   }
   /**
@@ -612,7 +610,7 @@ export class WriteComponent implements OnInit {
       this.addTypeInputVisible2 = true;
     }
     setTimeout(() => {
-      document.getElementById("addTypeInput" + type).focus();
+      document.getElementById('addTypeInput' + type).focus();
     }, 100);
   }
 
@@ -639,7 +637,7 @@ export class WriteComponent implements OnInit {
     let pId: string;
     let name: string;
     if (level === 1) {
-      pId = "-1";
+      pId = '-1';
     } else {
       pId = this.currentBlogTypeNode.id;
     }
@@ -652,38 +650,40 @@ export class WriteComponent implements OnInit {
       if (children) {
         children.forEach((child: any) => {
           if (child.title === this.inputValue) {
-            this.message.warning("重复的文章分类");
+            this.message.warning('重复的文章分类');
             flag = true;
           }
         });
       }
       if (node.title === this.inputValue) {
-        this.message.warning("重复的文章分类");
+        this.message.warning('重复的文章分类');
         flag = true;
       }
     });
     if (!flag) {
-      this.blogTypeService.createType(pId, name).subscribe(
-        (data: ResultSetModel) => {
-          if (data.code === 1) {
-            this.queryTypeTree();
-            this.message.success("新增文章分类成功");
-          } else {
-            this.message.error("新增文章分类失败,请重试一次吧", {
+      this.blogTypeService
+        .createType(pId, name, this.acticleTypeValue)
+        .subscribe(
+          (data: ResultSetModel) => {
+            if (data.code === 1) {
+              this.queryTypeTree();
+              this.message.success('新增文章分类成功');
+            } else {
+              this.message.error('新增文章分类失败,请重试一次吧', {
+                nzDuration: 4000,
+              });
+            }
+          },
+          (error) => {
+            this.message.error('新增文章分类失败,请重试一次吧', {
               nzDuration: 4000,
             });
+            this.isPublishLoading = false;
           }
-        },
-        (error) => {
-          this.message.error("新增文章分类失败,请重试一次吧", {
-            nzDuration: 4000,
-          });
-          this.isPublishLoading = false;
-        }
-      );
+        );
     }
 
-    this.inputValue = "";
+    this.inputValue = '';
   }
 
   /**

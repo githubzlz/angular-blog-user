@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginService } from 'src/app/common/util/login.service';
 import { LoginUser } from 'src/app/common/model/userinfo/loginuser.model';
 
 @Component({
@@ -15,7 +14,7 @@ export class BasicUserInfoComponent implements OnInit {
     state: true,
     name: '编辑',
   };
-  constructor(private loginService: LoginService) {}
+  constructor() {}
 
   ngOnInit() {
     this.testDate();
@@ -25,12 +24,6 @@ export class BasicUserInfoComponent implements OnInit {
     this.loginUser.name = '朱林忠';
     this.loginUser.phone = '17805459767';
     this.loginUser.email = 'sdbz_zlz@163.com';
-  }
-
-  getLoginUserInfo() {
-    this.loginService.getLoginUser().subscribe((data) => {
-      console.log(data);
-    });
   }
 
   editInfo() {

@@ -43,6 +43,14 @@ export class BlogService {
   }
 
   /**
+   * 恢复删除
+   * @param id id
+   */
+  revokeDeleted(id: string){
+    const url = this.baseUrl + `/blog/article/remove/revoke/${id}`;
+    return this.http.get(url);
+  }
+  /**
    * 修改文章标题和摘要
    * @param blog blog
    */
@@ -57,6 +65,15 @@ export class BlogService {
    */
   getBlogContent(id: string) {
     const url = this.baseUrl + '/blog/article/queryarticle/' + id;
+    return this.http.get(url);
+  }
+
+  /**
+   * 查询所有文章
+   * @param param param
+   */
+  getAllBlog(param: string) {
+    const url = this.baseUrl + `/blog/article/search/all?param=${param}`;
     return this.http.get(url);
   }
 }

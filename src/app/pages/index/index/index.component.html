@@ -278,7 +278,6 @@
           <div
             echarts
             [options]="barStatisticsInfoModel.option"
-            class="demo-chart"
           ></div>
         </nz-card>
       </div>
@@ -287,13 +286,16 @@
           style="border-radius: 10px; margin-top: 20px;"
           [nzHoverable]="'true'"
         >
-          <div
-            echarts
-            [options]="pieStatisticsInfoModel.option"
-            class="demo-chart"
-          ></div>
+
         </nz-card>
+
       </div>
     </div>
   </div>
+  <div style="width: 600px;height: 400px" echarts>
+
+  </div>
 </nz-card>
+<div id="chart" style="min-width: 1500px;min-height:800px;">
+
+</div>

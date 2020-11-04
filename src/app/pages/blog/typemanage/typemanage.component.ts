@@ -18,6 +18,9 @@ export class TypeManageComponent implements OnInit {
   isOkLoading = false;
   addLevel = 0;
   currentBlogType: TreeMoel;
+
+  type: string;
+
   constructor(
     private blogTypeService: BlogTypeService,
     private message: NzMessageService
@@ -87,7 +90,7 @@ export class TypeManageComponent implements OnInit {
   /**
    * 删除
    */
-  deleteBlogType(id: number) {
+  deleteBlogType(id: string) {
     console.log(id);
     this.blogTypeService
       .deleteBlogType(`${id}`)
@@ -134,13 +137,17 @@ export class TypeManageComponent implements OnInit {
    * 新增分类的确定操作
    */
   handleOk() {
+    if (this.type !== '0' && this.type !== '1') {
+      this.message.warning('请选择创建分类的类型');
+      return;
+    }
     if (this.addLevel === 1) {
-      this.createType('-1');
+      this.createType('-1', this.type);
     } else if (this.addLevel === 2) {
       if (this.currentBlogType.data.pid === '-1') {
-        this.createType(this.currentBlogType.data.id);
+        this.createType(this.currentBlogType.data.id, this.type);
       } else {
-        this.createType(this.currentBlogType.data.pid);
+        this.createType(this.currentBlogType.data.pid, this.type);
       }
     }
   }
@@ -159,7 +166,7 @@ export class TypeManageComponent implements OnInit {
    * 创建文章分类
    * @param level level
    */
-  createType(pId: string) {
+  createType(pId: string, type: string) {
     const name = this.inputValue;
     // 重复检查
     let flag = false;
@@ -182,7 +189,7 @@ export class TypeManageComponent implements OnInit {
     });
     if (!flag) {
       this.isOkLoading = true;
-      this.blogTypeService.createType(pId, name).subscribe(
+      this.blogTypeService.createType(pId, name, type).subscribe(
         (data: ResultSetModel) => {
           if (data.code === 1) {
             this.message.success('新增文章分类成功');

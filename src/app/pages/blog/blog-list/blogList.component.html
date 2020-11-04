@@ -123,8 +123,9 @@
         <th nzWidth="30px" nzAlign="center">
           <div class="inner_table" style="width: 30px;">序号</div>
         </th>
+        <th nzWidth="80px" nzAlign="center">推荐</th>
         <th
-          nzWidth="120px"
+          nzWidth="100px"
           nzAlign="center"
           [nzFilters]="statusFilters"
           nzShowFilter
@@ -134,22 +135,26 @@
           状态
         </th>
         <th nzWidth="240px" style="width: 240px;">标题</th>
-        <th nzWidth="320px" nzAlign="left">
+        <th nzWidth="300px" nzAlign="left">
           摘要
         </th>
-        <th nzWidth="120px" nzAlign="center">点赞量</th>
-        <th nzWidth="120px" nzAlign="center">阅读量</th>
-        <th nzWidth="120px" nzAlign="center">评论量</th>
-        <th nzWidth="220px" nzAlign="center">发布时间</th>
-        <th nzWidth="180px" nzAlign="center">操作</th>
+        <th nzWidth="100px" nzAlign="center">点赞量</th>
+        <th nzWidth="100px" nzAlign="center">阅读量</th>
+        <th nzWidth="100px" nzAlign="center">评论量</th>
+        <th nzWidth="200px" nzAlign="center">发布时间</th>
+        <th nzWidth="200px" nzAlign="center">操作</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let article of basicTable.data; index as index">
+      <tr *ngFor="let article of articles; index as index">
         <td nzWidth="30px" nzAlign="center">
           <div class="inner_table" style="width: 30px;">{{ index + 1 }}</div>
         </td>
-        <td nzWidth="120px" nzAlign="center">
+        <td nzAlign="center">
+          <nz-badge nzStatus="success" nzText="是" *ngIf="article.blogRecommend.id"></nz-badge>
+          <nz-badge nzStatus="error" nzText="否" *ngIf="!article.blogRecommend.id"></nz-badge>
+        </td>
+        <td nzWidth="100px" nzAlign="center">
           <div *ngIf="article.isDeleted !== 1 && article.isShow === 1">
             正常
           </div>
@@ -157,6 +162,12 @@
           <div *ngIf="article.isShow === 0 && article.isDeleted !== 1">
             审核中
           </div>
+<!--          <div *ngIf="article.blogType === 0">-->
+<!--            技术-->
+<!--          </div>-->
+<!--          <div *ngIf="article.blogType === 1">-->
+<!--            情感-->
+<!--          </div>-->
         </td>
         <td nzWidth="240px">
           <ng-container
@@ -192,7 +203,7 @@
             />
           </ng-template>
         </td>
-        <td nzWidth="320px" nzAlign="left">
+        <td nzWidth="300px" nzAlign="left">
           <ng-container
             *ngIf="!editCache[article.id].edit; else nameInputTplSum"
           >
@@ -217,24 +228,30 @@
             />
           </ng-template>
         </td>
-        <td nzWidth="120px" nzAlign="center">
+        <td nzWidth="100px" nzAlign="center">
           {{ article.blogPublicInfos.goods }}
         </td>
-        <td nzWidth="120px" nzAlign="center">
+        <td nzWidth="100px" nzAlign="center">
           {{ article.blogPublicInfos.readings }}
         </td>
-        <td nzWidth="120px" nzAlign="center">
+        <td nzWidth="100px" nzAlign="center">
           {{ article.blogPublicInfos.comments }}
         </td>
-        <td nzWidth="220px" nzAlign="center">
+        <td nzWidth="200px" nzAlign="center">
           {{ article.createdTime | date: "yyyy-MM-dd HH:mm:ss" }}
         </td>
-        <td nzWidth="180px" nzAlign="center">
+        <td nzWidth="170px" nzAlign="center">
+          <a
+            (click)="revokeDeletedArtcle(article.id)"
+            *ngIf="!editCache[article.id].edit && article.isDeleted === 1"
+          >
+            取消删除
+          </a>
           <a
             nz-popconfirm
             nzTitle="确定删除?"
             (nzOnConfirm)="deletedArtcle(article.id)"
-            *ngIf="!editCache[article.id].edit"
+            *ngIf="!editCache[article.id].edit && article.isDeleted !== 1"
           >
             删除
           </a>
@@ -248,12 +265,13 @@
           <nz-divider
             nzType="vertical"
             *ngIf="!editCache[article.id].edit"
-          ></nz-divider>
+          >
+          </nz-divider>
           <a
             *ngIf="!editCache[article.id].edit"
             (click)="moreInfomation(article.id)"
           >
-            更多
+            详情
           </a>
           <ng-template #saveTpl>
             <a (click)="saveEdit(index, article.id)">保存</a>

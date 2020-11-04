@@ -8,6 +8,7 @@ import { BlogPublicInfoModel } from 'src/app/common/model/article/BlogPublicInfo
 import { Router } from '@angular/router';
 import { TreeMoel } from 'src/app/common/model/commonmodel/tree.model';
 import { BlogTypeService } from 'src/app/common/service/blogType.service';
+import { RecommendService } from '../../../common/service/Recommend.service';
 
 @Component({
   selector: 'app-blog',
@@ -19,7 +20,8 @@ export class BlogListComponent implements OnInit {
     private router: Router,
     private blogService: BlogService,
     private message: NzMessageService,
-    private blogTypeService: BlogTypeService
+    private blogTypeService: BlogTypeService,
+    private recommendService: RecommendService
   ) {}
   pageInfo: PageInfoModel = new PageInfoModel();
   resultSet: ResultSetModel = new ResultSetModel();
@@ -30,7 +32,7 @@ export class BlogListComponent implements OnInit {
   listOfTag: Array<any> = new Array();
   statusFilters: Array<any> = [
     { text: '正常', value: '0' },
-    // { text: '删除', value: '1' },
+    { text: '删除', value: '1' },
     { text: '审核中', value: '2' },
   ];
   blogTypes: Array<TreeMoel>;
@@ -50,6 +52,12 @@ export class BlogListComponent implements OnInit {
   blog: ArticleModel = new ArticleModel();
 
   currentSubType: TreeMoel[] = [];
+
+  recommendVisible = false;
+
+  recommendType = '1';
+
+  recommendLevel = 50;
 
   ngOnInit() {
     this.listInit(1, 10);
@@ -329,7 +337,6 @@ export class BlogListComponent implements OnInit {
    * @param id id
    */
   deletedArtcle(id: string) {
-    console.log(id);
     this.blogService.deletedArtcle(id).subscribe(
       (data) => {
         this.resultSet = data;
@@ -339,7 +346,7 @@ export class BlogListComponent implements OnInit {
             nzDuration: 4000,
           });
         } else {
-          this.message.error('文章删除失败,请重试', { nzDuration: 4000 });
+          this.message.error(this.resultSet.message, { nzDuration: 4000 });
         }
       },
       (error) => {
@@ -349,13 +356,63 @@ export class BlogListComponent implements OnInit {
   }
 
   /**
+   * 撤销删除
+   */
+  revokeDeletedArtcle(id: string) {
+    this.blogService.revokeDeleted(id).subscribe(
+      (data) => {
+        this.resultSet = data;
+        if (this.resultSet.code === 1) {
+          this.listInit(this.pageInfo.pageNum, this.pageInfo.pageSize);
+          this.message.success('恢复成功', {
+            nzDuration: 4000,
+          });
+        } else {
+          this.message.error('文章恢复失败,请重试', { nzDuration: 4000 });
+        }
+      },
+      (error) => {
+        this.message.error('文章恢复失败,请重试', { nzDuration: 4000 });
+      }
+    );
+  }
+
+  /**
    * 查询文章分类树
    */
   queryTypeTree() {
-    this.blogTypeService.queryTypeTree().subscribe((data) => {
+    this.blogTypeService.queryTypeTree(undefined).subscribe((data) => {
       const blogData: ResultSetModel = data;
       this.blogTypes = blogData.entity;
       this.buttonOnInit();
+    });
+  }
+
+  recommendBlog() {
+    this.recommendVisible = true;
+  }
+  handleRecommendCancel() {
+    this.recommendVisible = false;
+  }
+  handleRecommendOk(id: string) {
+    const param = {
+      blogId: id,
+      recommendType: this.recommendType,
+    };
+    this.recommendService.recommendBlog(param).subscribe((data) => {
+      const blogData: ResultSetModel = data;
+      if (blogData.code === 1) {
+        this.recommendVisible = false;
+        this.selectList();
+      }
+    });
+  }
+  consoleRecommendBlog(id: string) {
+    this.recommendService.cancel(id).subscribe((data) => {
+      const blogData: ResultSetModel = data;
+      if (blogData.code === 1) {
+        this.selectList();
+      }
     });
   }
 }

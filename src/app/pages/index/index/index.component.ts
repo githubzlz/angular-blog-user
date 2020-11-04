@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import { BarStatisticsInfoModel } from 'src/app/common/model/index-statistics/bar.model';
 import { PieStatisticsInfoModel } from 'src/app/common/model/index-statistics/pie.model';
 import { LineStatisticsInfoModel } from 'src/app/common/model/index-statistics/line.model';
 import { Router } from '@angular/router';
+import echarts0 from 'echarts';
+
 @Component({
   selector: 'app-index',
   templateUrl: './index.component.html',
@@ -13,8 +15,19 @@ export class IndexComponent implements OnInit {
   pieStatisticsInfoModel: PieStatisticsInfoModel = new PieStatisticsInfoModel();
   lineStatisticsInfoModel: LineStatisticsInfoModel = new LineStatisticsInfoModel();
   constructor(private router: Router) {}
+  echarts: any;
+  myChart: any;
+  myChart2: any;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.echarts = echarts0;
+    this.myChart = this.echarts.init(document.getElementById('chart') as HTMLDivElement);
+    this.myChart.setOption(this.barStatisticsInfoModel.blogNumber);
+
+    this.myChart2 = this.echarts.init(document.getElementById('chart2') as HTMLDivElement);
+    this.myChart2.clear();
+    this.myChart2.setOption(this.pieStatisticsInfoModel.option);
+  }
 
   getMoreBlogInfo() {
     this.router.navigate(['/blog/bloglist'], {
@@ -26,4 +39,6 @@ export class IndexComponent implements OnInit {
       skipLocationChange: false,
     });
   }
+  onValueChange(data) {};
+  onPanelChange(data) {};
 }

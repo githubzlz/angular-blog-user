@@ -32,8 +32,9 @@
       <tr>
         <th></th>
         <th nzWidth="20%">分类名称</th>
-        <th>状态</th>
+        <th>类型</th>
         <th>文章数量</th>
+        <th>状态</th>
         <th>分类等级</th>
         <th>创建时间</th>
         <th>操作</th>
@@ -57,6 +58,15 @@
             />
           </td>
           <td>
+            <span *ngIf="blogType.data.type === 0">
+              技术
+            </span>
+            <span *ngIf="blogType.data.type === 1">
+              情感
+            </span>
+          </td>
+          <td></td>
+          <td>
             <nz-badge
               nzStatus="success"
               nzText="启用"
@@ -68,7 +78,6 @@
               *ngIf="blogType.data.state === 1"
             ></nz-badge>
           </td>
-          <td></td>
           <td *ngIf="blogType.data.level === 1">一级分类</td>
           <td *ngIf="blogType.data.level === 2">二级分类</td>
           <td>
@@ -92,7 +101,7 @@
             <nz-divider nzType="vertical"></nz-divider>
             <a
               nz-popconfirm
-              [nzPopconfirmTitle]="getDeleteMessage()"
+              [nzPopconfirmTitle]="getDeleteMessage(blogType.data.level)"
               nzPopconfirmPlacement="bottom"
               (nzOnConfirm)="deleteBlogType(blogType.id)"
               >删除</a
@@ -132,6 +141,17 @@
   (nzOnOk)="handleOk()"
   [nzOkLoading]="isOkLoading"
 >
+  <div nz-row style="margin-bottom: 20px">
+    <div nz-col nzSpan="6" nzPush="2">
+      <span style="height: 32px; line-height: 32px;"> 分类类型:</span>
+    </div>
+    <div nz-col nzSpan="15">
+      <nz-button-group>
+        <button nz-button nzType="default" (click)="type = '0'">技术</button>
+        <button nz-button nzType="default" (click)="type = '1'">情感</button>
+      </nz-button-group>
+    </div>
+  </div>
   <div nz-row>
     <div nz-col nzSpan="6" nzPush="2">
       <span style="height: 32px; line-height: 32px;"> 分类名称:</span>

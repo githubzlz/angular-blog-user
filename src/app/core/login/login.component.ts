@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginService } from 'src/app/common/util/login.service';
+//import { LoginService } from 'src/app/common/util/login.service';
 import { environment } from 'src/environments/environment';
 import { DomSanitizer } from '@angular/platform-browser';
 @Component({
@@ -10,7 +10,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class LoginComponent implements OnInit {
   baseUrl: string = environment.BASE_DATA_SERVER_URL;
   safeUrl: any;
-  constructor(private login: LoginService, private sanitizer: DomSanitizer) {
+  constructor(private sanitizer: DomSanitizer) {
     this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
       this.baseUrl + '/login'
     );

@@ -8,6 +8,15 @@ export class ArticleModel {
     this.blogPublicInfos = new BlogPublicInfoModel();
     this.blogContent = new BlogContentModel();
     this.pageInfo = new PageInfoModel();
+    this.blogRecommend = {
+      id: null,
+      recommendType: null,
+      imageUrl: null,
+      createdTime: null
+    };
+    this.checked = false;
+    this.expand = false;
+    this.fileList = new Array<any>();
   }
   /**
    * id
@@ -98,4 +107,16 @@ export class ArticleModel {
   public pageInfo?: PageInfoModel;
 
   public creator?: string;
+
+  public blogType?: string;
+
+  public blogRecommend?: {
+    id: string,
+    recommendType: number,
+    imageUrl: string,
+    createdTime: string,
+  };
+  public checked?: boolean;
+  public expand?: boolean;
+  public fileList?: any[];
 }

@@ -11,7 +11,6 @@ import { ShareModule } from './core/share/share.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './core/login/login.component';
-import { LoginService } from './common/util/login.service';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 registerLocaleData(zh);
 
@@ -27,7 +26,7 @@ registerLocaleData(zh);
   ],
   providers: [
     { provide: NZ_I18N, useValue: zh_CN },
-    { provide: HTTP_INTERCEPTORS, useClass: LoginService, multi: true },
+    // { provide: HTTP_INTERCEPTORS, useClass: LoginService, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy },
   ],
   bootstrap: [AppComponent],
