@@ -1,4 +1,4 @@
-export class BlogPublicInfoModel {
+export class BlogStatisticsModel {
   /**
    * id
    */

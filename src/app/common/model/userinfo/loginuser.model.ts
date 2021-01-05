@@ -1,11 +1,11 @@
 export class LoginUser {
-  public name?: string;
-  public authorities?: Array<string>;
-  public clients?: Array<string>;
+  public username?: string;
   public id?: string;
   public email?: string;
   public phone?: string;
+  public password?: string;
+  public checkCode?: string;
   constructor() {
-    this.name = '';
+    this.username = '';
   }
 }

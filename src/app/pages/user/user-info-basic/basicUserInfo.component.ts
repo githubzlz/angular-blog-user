@@ -17,13 +17,14 @@ export class BasicUserInfoComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.testDate();
+    this.initLoginUserDate();
   }
 
-  testDate() {
-    this.loginUser.name = '朱林忠';
-    this.loginUser.phone = '17805459767';
-    this.loginUser.email = 'sdbz_zlz@163.com';
+  initLoginUserDate() {
+    const loginUser: LoginUser = JSON.parse(window.sessionStorage.getItem('loginUser'));
+    this.loginUser.username = loginUser.username;
+    this.loginUser.phone = loginUser.phone;
+    this.loginUser.email = loginUser.email;
   }
 
   editInfo() {

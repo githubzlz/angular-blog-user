@@ -36,7 +36,8 @@
             "scripts": [
               "src/assets/editor/jquery.min.js",
               "src/assets/editor/editormd.min.js",
-              "node_modules/echarts/dist/echarts.min.js"
+              "node_modules/echarts/dist/echarts.min.js",
+              "src/assets/login/js/ban.js"
             ]
           },
           "configurations": {

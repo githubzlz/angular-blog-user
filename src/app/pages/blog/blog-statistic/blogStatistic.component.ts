@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { RecommendService } from '../../../common/service/Recommend.service';
 import { ResultSetModel } from '../../../common/model/commonmodel/resultset.model';
-import { ArticleModel } from '../../../common/model/article/article.model';
 import { NzMessageService } from 'ng-zorro-antd';
 import { BlogService } from '../../../common/service/blog.service';
+import {BlogModel} from '../../../common/model/article/blog.model';
 
 @Component({
   selector: 'app-blog-statistic',
@@ -11,12 +11,12 @@ import { BlogService } from '../../../common/service/blog.service';
   styleUrls: ['./blogStatistic.component.css'],
 })
 export class BlogStatisticComponent implements OnInit {
-  hotList: Array<ArticleModel>;
-  homepageList: Array<ArticleModel>;
+  hotList: Array<BlogModel>;
+  homepageList: Array<BlogModel>;
   isVisibleAdd = false;
-  listOfData: Array<ArticleModel> = new Array<ArticleModel>();
+  listOfData: Array<BlogModel> = new Array<BlogModel>();
   index = 0;
-  checkList: Array<ArticleModel> = new Array<ArticleModel>();
+  checkList: Array<BlogModel> = new Array<BlogModel>();
   recommendLevel: any;
   searchInput = '';
   step = [
@@ -84,16 +84,15 @@ export class BlogStatisticComponent implements OnInit {
       type = '0';
     }
     this.blogService.getAllBlog(type).subscribe((data) => {
-      this.listOfData = new Array<ArticleModel>();
+      this.listOfData = new Array<BlogModel>();
       const blogData: ResultSetModel = data;
       if (blogData.code === 1) {
         blogData.entity.forEach((data2) => {
-          const article: ArticleModel = data2;
-          const blog = new ArticleModel();
-          blog.id = article.id;
-          blog.title = article.title;
-          blog.type = article.type;
-          blog.tag = article.tag;
+          const blog1: BlogModel = data2;
+          const blog = new BlogModel();
+          blog.id = blog1.id;
+          blog.title = blog1.title;
+          blog.tag = blog1.tag;
           blog.blogRecommend.recommendType = 0;
           this.listOfData.push(blog);
         });
@@ -116,7 +115,7 @@ export class BlogStatisticComponent implements OnInit {
   }
   handleCancelAdd() {
     this.isVisibleAdd = false;
-    this.checkList = new Array<ArticleModel>();
+    this.checkList = new Array<BlogModel>();
     this.searchInput = '';
     this.revertStep();
   }
@@ -152,7 +151,7 @@ export class BlogStatisticComponent implements OnInit {
       this.recommendService.recommendList(this.checkList).subscribe((data) => {
         const blogData: ResultSetModel = data;
         if (blogData.code === 1) {
-          this.checkList = new Array<ArticleModel>();
+          this.checkList = new Array<BlogModel>();
           this.searchInput = '';
           this.getList();
           this.revertStep();
@@ -199,11 +198,11 @@ export class BlogStatisticComponent implements OnInit {
     }
   }
 
-  onExpandChange(blog: ArticleModel, expand) {
+  onExpandChange(blog: BlogModel, expand) {
     blog.expand = !blog.expand;
   }
 
-  handleChange(info: any, data: ArticleModel): void {
+  handleChange(info: any, data: BlogModel): void {
     if (info !== undefined && info.type === 'success') {
       this.message.success('图片上传成功', { nzDuration: 2000 });
       const url = info.file.response.entity;

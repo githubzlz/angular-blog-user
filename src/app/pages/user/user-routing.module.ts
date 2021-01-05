@@ -13,7 +13,7 @@ const routes: Routes = [
     component: BasicUserInfoComponent,
   },
   {
-    path: 'safetyuserinfo',
+    path: 'safetyinfo',
     component: UserInfoSafetyComponent,
   },
 ];

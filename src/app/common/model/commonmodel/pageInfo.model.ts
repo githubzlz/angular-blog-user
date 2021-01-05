@@ -37,5 +37,7 @@ export class PageInfoModel {
   list?: Array<any>;
   constructor() {
     this.exclude = new Array();
+    this.pageNum = 1;
+    this.pageSize = 10;
   }
 }

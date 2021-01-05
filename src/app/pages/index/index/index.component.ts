@@ -21,10 +21,18 @@ export class IndexComponent implements OnInit {
 
   ngOnInit(): void {
     this.echarts = echarts0;
-    this.myChart = this.echarts.init(document.getElementById('chart') as HTMLDivElement);
+    this.myChart = this.echarts.init(document.getElementById('chart1') as HTMLDivElement);
     this.myChart.setOption(this.barStatisticsInfoModel.blogNumber);
 
     this.myChart2 = this.echarts.init(document.getElementById('chart2') as HTMLDivElement);
+    this.myChart2.clear();
+    this.myChart2.setOption(this.lineStatisticsInfoModel.option);
+
+    this.myChart2 = this.echarts.init(document.getElementById('chart3') as HTMLDivElement);
+    this.myChart2.clear();
+    this.myChart2.setOption(this.barStatisticsInfoModel.option);
+
+    this.myChart2 = this.echarts.init(document.getElementById('chart4') as HTMLDivElement);
     this.myChart2.clear();
     this.myChart2.setOption(this.pieStatisticsInfoModel.option);
   }

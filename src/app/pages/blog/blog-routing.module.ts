@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { BlogListComponent } from './blog-list/blogList.component';
 import { BlogStatisticComponent } from './blog-statistic/blogStatistic.component';
-import { TypeManageComponent } from './typemanage/typemanage.component';
+import { ModuleComponent } from './modulemanage/module.component';
 
 const routes: Routes = [
   {
@@ -19,7 +19,7 @@ const routes: Routes = [
   },
   {
     path: 'typemanage',
-    component: TypeManageComponent,
+    component: ModuleComponent,
   },
 ];
 

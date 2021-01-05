@@ -28,7 +28,7 @@
           ></nz-avatar>
         </div>
         <div nz-row nzType="flex" nzJustify="center" style="margin: 10px 0;">
-          <h2>朱林忠</h2>
+          <h2>{{loginUser.username}}</h2>
         </div>
         <div nz-row nzType="flex" nzJustify="center" style="margin: 10px 0;">
           <h4>精通全沾Java的CRUD资深程序员</h4>
@@ -38,7 +38,7 @@
             <i nz-icon nzType="user" nzTheme="outline"></i>
           </div>
           <div nz-col nzSpan="20" nzPush="1">
-            <span class="inner_text">zhulinzhong</span>
+            <span class="inner_text">{{loginUser.username}}</span>
           </div>
         </div>
         <div nz-row style="margin: 5px 0;">
@@ -105,12 +105,12 @@
     </div>
     <nz-descriptions nzTitle="个人信息" nzBordered nzLayout="vertical">
       <nz-descriptions-item nzTitle="用户名">
-        <span *ngIf="editInfomation.state">{{ loginUser.name }}</span>
+        <span *ngIf="editInfomation.state">{{ loginUser.username }}</span>
         <input
           nz-input
           *ngIf="!editInfomation.state"
           nzAutosize="true"
-          [(ngModel)]="loginUser.name"
+          [(ngModel)]="loginUser.username"
         />
       </nz-descriptions-item>
       <nz-descriptions-item nzTitle="邮箱">

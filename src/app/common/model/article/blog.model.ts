@@ -1,11 +1,11 @@
-import { BlogPublicInfoModel } from './BlogPublicInfo.model';
 import { BlogContentModel } from './blogContent.model';
 import { PageInfoModel } from '../commonmodel/pageInfo.model';
 import { BlogTagModel } from '../tag/blogTag.model';
+import {BlogStatisticsModel} from './blogStatistics.model';
 
-export class ArticleModel {
+export class BlogModel {
   constructor() {
-    this.blogPublicInfos = new BlogPublicInfoModel();
+    this.blogStatistics = new BlogStatisticsModel();
     this.blogContent = new BlogContentModel();
     this.pageInfo = new PageInfoModel();
     this.blogRecommend = {
@@ -17,6 +17,8 @@ export class ArticleModel {
     this.checked = false;
     this.expand = false;
     this.fileList = new Array<any>();
+    this.moduleIds = [];
+    this.menusIds = [];
   }
   /**
    * id
@@ -49,15 +51,6 @@ export class ArticleModel {
   public tag?: any;
 
   /**
-   * 类型（字符串"，"分割）
-   */
-  public type?: any;
-
-  /**
-   * 二级分类
-   */
-  public subType?: any;
-  /**
    *  0 未删除 1 删除
    */
   public isDeleted?: any;
@@ -88,14 +81,9 @@ export class ArticleModel {
   public tags2?: Array<BlogTagModel>;
 
   /**
-   * 类型的集合
-   */
-  public types?: Array<string>;
-
-  /**
    * 文章浏览信息
    */
-  public blogPublicInfos?: BlogPublicInfoModel;
+  public blogStatistics?: BlogStatisticsModel;
 
   /**
    * 文章内容
@@ -119,4 +107,14 @@ export class ArticleModel {
   public checked?: boolean;
   public expand?: boolean;
   public fileList?: any[];
+
+  /**
+   * 模块
+   */
+  public moduleIds: string[];
+
+  /**
+   * 菜单
+   */
+  public menusIds: string[];
 }

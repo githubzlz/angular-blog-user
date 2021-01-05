@@ -126,29 +126,21 @@
           id="blogTypeDiv"
         >
           <div nz-col nzXs="4" nzSm="4" style="margin-bottom: 10px">
-            添加分类:
+            选择模块:
           </div>
           <div nz-col nzXs="20" nzSm="20" style="margin-bottom: 10px">
-            <nz-radio-group
-              [(ngModel)]="acticleTypeValue"
-              [nzButtonStyle]="'solid'"
-            >
-              <label nz-radio-button nzValue="0" (click)="queryTypeTree()"
-                >技术</label
-              >
-              <label nz-radio-button nzValue="1" (click)="queryTypeTree()"
-                >情感</label
-              >
-            </nz-radio-group>
+
           </div>
-          <div nz-col nzXs="4" nzSm="4">添加分类:</div>
+          <div nz-col nzXs="4" nzSm="4">
+            添加分类:
+          </div>
           <div nz-col nzXs="18" nzSm="20" id="innerBlogTypeDiv">
             <nz-tree-select
               style="width: 260px"
               nzPlaceHolder="Please select"
               [(ngModel)]="typeValue"
-              [nzMaxTagCount]="'2'"
-              nzPlaceHolder="请选择分类,至多可以选择两个分类..."
+              [nzMaxTagCount]="'1'"
+              nzPlaceHolder="请选择所属目录。。。"
               [nzDefaultExpandAll]="false"
               [nzAllowClear]="false"
               [nzMultiple]="true"
@@ -163,7 +155,7 @@
               nz-button
               nzType="link"
               nz-popover
-              nzPopoverTitle="新增分类"
+              nzPopoverTitle="新增目录"
               [(nzVisible)]="visibleTypeModal"
               nzPopoverTrigger="click"
               [nzPopoverContent]="addTypeTemplate"

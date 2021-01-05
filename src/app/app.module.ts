@@ -12,6 +12,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './core/login/login.component';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {LoginService} from './common/util/login.service';
 registerLocaleData(zh);
 
 @NgModule({
@@ -23,10 +25,11 @@ registerLocaleData(zh);
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    FormsModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: zh_CN },
-    // { provide: HTTP_INTERCEPTORS, useClass: LoginService, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: LoginService, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy },
   ],
   bootstrap: [AppComponent],

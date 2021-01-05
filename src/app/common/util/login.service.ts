@@ -1,93 +1,89 @@
-// import { Injectable } from '@angular/core';
-// import { environment } from 'src/environments/environment';
-// import { HttpClient, HttpHeaders, HttpInterceptor } from '@angular/common/http';
-// import { HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
-//
-// /**
-//  * 请求拦截器，添加请求头(在appmodule注册了)
-//  */
-// @Injectable({
-//   providedIn: 'root',
-// })
-// export class LoginService implements HttpInterceptor {
-//   /**
-//    * 后台服务地址
-//    */
-//   baseUrl = environment.BASE_DATA_SERVER_URL;
-//
-//   /**
-//    * oauth请求头
-//    */
-//   authorization: string;
-//
-//   /**
-//    * cookie
-//    */
-//   token: string;
-//
-//   constructor(private http: HttpClient) {}
-//
-//   intercept(
-//     req: HttpRequest<any>,
-//     next: HttpHandler
-//   ): import('rxjs').Observable<HttpEvent<any>> {
-//     // 检查本地cookie
-//     const str = document.cookie;
-//     // 获取不到就去登陆
-//     const name = str.split('=')[0];
-//     if (str === undefined || name !== 'token') {
-//       this.login();
-//     } else {
-//       this.token = str.split('=')[1];
-//     }
-//     const jwtReq = req.clone({
-//       headers: req.headers.set('Authorization', 'Bearer ' + this.token),
-//     });
-//     return next.handle(jwtReq);
-//   }
-//
-//   /**
-//    * 打开登陆界面
-//    */
-//   login() {
-//     const div = document.getElementById('login_frame');
-//     div.style.visibility = 'visible';
-//   }
-//
-//   /**
-//    * 获取登陆人
-//    */
-//   getLoginUser() {
-//     const url = this.baseUrl + '/check/login_state';
-//     return this.http.post(url, null);
-//   }
-//
-//   /**
-//    * 退出登陆
-//    */
-//   logout() {
-//     const url = 'localhost:8080/token/logout';
-//     this.http.get(url).subscribe((data) => {
-//       const da = data;
-//       console.log(da);
-//     });
-//     // let str = document.cookie;
-//     // console.log(str);
-//     // const name = str.split('=')[0];
-//     // if (str !== undefined && name === 'JSESSIONID') {
-//     //   const thisToken = str.split('=')[1];
-//     //   const date = new Date();
-//     //   date.setTime(date.getTime() - 10000);
-//     //   document.cookie = 'JSESSIONID=; expires=' + date.toUTCString() + 'path=/';
-//     // }
-//     // str = document.cookie;
-//     // console.log(str);
-//     // if (str !== undefined && name === 'token') {
-//     //   const thisToken = str.split('=')[1];
-//     //   const date = new Date();
-//     //   date.setTime(date.getTime() - 10000);
-//     //   document.cookie =
-//     //     'token=' + thisToken + '; expires=' + date.toUTCString() + 'path=/';
-//     // }
-//   }
-// }
+import {environment} from 'src/environments/environment';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpResponse} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {LoginUser} from '../model/userinfo/loginuser.model';
+import {
+  HttpEvent, HttpInterceptor, HttpHandler, HttpRequest
+} from '@angular/common/http';
+import {finalize, tap} from "rxjs/operators";
+import {ok} from "assert";
+import {HttpService} from "./http.service";
+import {MessageShowEnum} from "../constant/message.enum";
+
+@Injectable({
+  providedIn: 'root',
+})
+export class LoginService implements HttpInterceptor{
+
+  /**
+   * 是否登录
+   */
+  isLoggedIn = false;
+
+  /**
+   * 后台服务地址
+   */
+  baseUrl = environment.BASE_DATA_SERVER_URL;
+
+  constructor(private http: HttpService) {}
+
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    const authReq = req.clone({
+      withCredentials: true
+    });
+    // return next.handle(authReq).pipe(
+    //   tap(event => {
+    //     if (event instanceof HttpResponse) {
+    //       // 成功
+    //       console.log('success');
+    //     }
+    //   }, error => {
+    //     // 失败
+    //     console.log(error);
+    //   }),
+    //   finalize(() => {
+    //     // 请求完成
+    //     console.log('complete');
+    //   })
+    // );
+    return next.handle(authReq);
+  }
+
+
+  /**
+   * 检查是否登录
+   * @return boolean
+   */
+  checkLogin(): boolean {
+    const loginUser = window.sessionStorage.getItem('loginUser');
+    return !!loginUser;
+  }
+
+  /**
+   * 登录
+   * @param loginUser
+   */
+  login(loginUser: LoginUser) {
+    const url = `${this.baseUrl}/login`;
+    return this.http.post(url, loginUser);
+  }
+
+  /**
+   * 退出登录
+   */
+  logOut() {
+    window.sessionStorage.clear();
+    const url = `${this.baseUrl}/logout`;
+    return this.http.get(url);
+  }
+
+  /**
+   * 验证验证码
+   */
+  checkCheckCode(code: string) {
+    const url = `${this.baseUrl}/checkCode/check/${code}`;
+    return this.http.get(url, MessageShowEnum.NOR_ERROR);
+  }
+
+}

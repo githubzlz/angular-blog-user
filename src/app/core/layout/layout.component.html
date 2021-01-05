@@ -73,7 +73,7 @@
           </i>
         </span>
         <div style="display: inline-block; float: right; margin-right: 30px;">
-          朱林忠
+          {{loginUser.username}}
           <nz-avatar
             nzIcon="user"
             nzSize="large"
@@ -86,9 +86,11 @@
           </nz-avatar>
           <nz-dropdown-menu #menu="nzDropdownMenu">
             <ul nz-menu>
-              <li nz-menu-item><i nz-icon [nzType]="'home'"></i>个人中心</li>
-              <li nz-menu-item>
-                <i nz-icon nzType="logout" nzTheme="outline"></i>退出登陆
+              <li nz-menu-item (click)="toBaseUserInfo()">
+                <i nz-icon [nzType]="'home'" ></i>个人中心
+              </li>
+              <li nz-menu-item (click)="logOut()">
+                <i nz-icon nzType="logout" nzTheme="outline" ></i>退出登陆
               </li>
             </ul>
           </nz-dropdown-menu>

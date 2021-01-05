@@ -1,0 +1,173 @@
+<nz-breadcrumb style="margin-bottom: 5px; margin-left: 10px;">
+  <nz-breadcrumb-item>
+    <a routerLink="/index/index">
+      <i nz-icon nzType="home"></i>
+      <span>首页</span>
+    </a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>
+    <a routerLink="/blog/bloglist">
+      <i nz-icon nzType="book"></i>
+      <span>博客信息</span>
+    </a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>
+    <span>分类管理</span>
+  </nz-breadcrumb-item>
+</nz-breadcrumb>
+<nz-card>
+  <nz-table
+    [nzData]="modules"
+    [nzTitle]="headerTitle"
+    [nzTotal]="module.pageInfo.totalSize"
+    [(nzPageSize)]="module.pageInfo.pageSize"
+    [(nzPageIndex)]="module.pageInfo.pageNum"
+    (nzPageIndexChange)="queryTypeTree()"
+    (nzPageSizeChange)="queryTypeTree()"
+    nzFrontPagination="false"
+    nzShowQuickJumper="true"
+    nzShowSizeChanger="true"
+    style="height: 790px"
+  >
+    <ng-template #headerTitle>
+      <div class="line"></div>
+      <h2 style="display: inline-block; height: 30px; vertical-align: top;">
+        文章分类列表
+      </h2>
+      <i nz-icon nzType="sync" nzTheme="outline" (click)="queryTypeTree()"></i>
+    </ng-template>
+    <thead>
+      <tr>
+        <th></th>
+        <th nzWidth="20%">模块名称</th>
+        <th nzWidth="20%">模块描述</th>
+        <th>创建时间</th>
+        <th>状态</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let data of modules; let index1 = index">
+        <tr>
+          <td
+            [nzShowExpand]="data.menus.length !== 0"
+            [nzExpand]="showMenu"
+            (nzExpandChange)="changeMenuState(index1)"
+          ></td>
+          <td>
+            <input nz-input *ngIf="data.showInput" [(ngModel)]="moduleUpdateCache.title">
+            <span *ngIf="!data.showInput">{{ data.title }}</span>
+          </td>
+          <td>
+            <input nz-input *ngIf="data.showInput" [(ngModel)]="moduleUpdateCache.introduction">
+            <span *ngIf="!data.showInput">{{data.introduction}}</span>
+          </td>
+          <td>
+            {{ data.createdTime | date: "yyyy-MM-dd HH:mm:ss" }}
+          </td>
+          <td>
+            <nz-badge nzStatus="success" nzText="启用" *ngIf="!data.isPublish"></nz-badge>
+            <nz-badge nzStatus="error" nzText="停用" *ngIf="data.isPublish"></nz-badge>
+          </td>
+          <td>
+            <div *ngIf="!data.showInput">
+              <a>
+              <span
+                *ngIf="data.isPublish === 1"
+                (click)="updateState(data.id, 0)"
+              >启用</span
+              >
+                <span
+                  *ngIf="data.isPublish === 0"
+                  (click)="updateState(data.id, 1)"
+                >停用</span
+                >
+              </a>
+              <nz-divider nzType="vertical"></nz-divider>
+              <a (click)="updateModuleInfo(data,index1, 1)" >修改</a>
+              <nz-divider nzType="vertical"></nz-divider>
+              <a
+                nz-popconfirm
+                nzPopconfirmTitle="确定删除此模块吗？它将永远消失！"
+                nzPopconfirmPlacement="bottom"
+                (nzOnConfirm)="deleteBlogType(data.id)"
+              >删除</a
+              >
+              <nz-divider nzType="vertical"></nz-divider>
+              <a
+                nz-dropdown
+                [nzDropdownMenu]="menu">
+                新增
+                <i nz-icon nzType="down"></i>
+              </a>
+              <nz-dropdown-menu #menu="nzDropdownMenu">
+                <ul nz-menu nzSelectable>
+                  <li nz-menu-item >
+                    新增模块
+                  </li>
+                  <li nz-menu-item>
+                    新增菜单
+                  </li>
+                </ul>
+              </nz-dropdown-menu>
+            </div>
+            <div *ngIf="data.showInput">
+              <a (click)="updateModuleInfo(data,index1, 0)">取消</a>
+              <nz-divider nzType="vertical"></nz-divider>
+              <a (click)="updateModuleInfo(data,index1, 2)">确认</a>
+            </div>
+          </td>
+        </tr>
+
+      </ng-container>
+    </tbody>
+  </nz-table>
+</nz-card>
+<nz-drawer
+  [nzClosable]="false"
+  [nzVisible]="showMenu"
+  nzPlacement="right"
+  [nzTitle]="currentModule.title"
+  (nzOnClose)="closeMenu()"
+  nzWidth="500px"
+>
+  <nz-table style="width: 500px;" [nzData]="currentModule.menus" [nzShowPagination]="false">
+    <thead>
+      <tr style="font-size: 16px">
+        <th style="padding: 5px">菜单名</th>
+        <th style="padding: 5px">文章数量</th>
+        <th style="padding: 5px">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let menu of currentModule.menus;let index2=index">
+        <tr style="height: 30px">
+          <td class="tableTd">
+            <input nz-input *ngIf="menu.showInput" [(ngModel)]="this.menuUpdateCache.name">
+            <span *ngIf="!menu.showInput">{{menu.name}}</span>
+          </td>
+          <td class="tableTd">{{menu.blogList.length}}</td>
+          <td class="tableTd">
+            <div *ngIf="!menu.showInput">
+              <a
+                nz-popconfirm
+                nzPopconfirmTitle="确定删除此菜单吗？它将永远消失！"
+                nzPopconfirmPlacement="bottom"
+                (nzOnConfirm)="deleteBlogType(menu.id)"
+              >删除</a>
+              <nz-divider nzType="vertical"></nz-divider>
+              <a>
+                <span (click)="updateMenuInfo(menu, index2, 1)">修改</span>
+              </a>
+            </div>
+            <a *ngIf="menu.showInput">
+              <span (click)="updateMenuInfo(menu, index2, 0)">取消</span>
+              <nz-divider nzType="vertical"></nz-divider>
+              <span (click)="updateMenuInfo(menu, index2, 2)">确认</span>
+            </a>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </nz-table>
+</nz-drawer>

@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { MenuModule } from './menu.conf';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd';
+import {LoginUser} from "../../common/model/userinfo/loginuser.model";
+import {LoginService} from "../../common/util/login.service";
+import {ResultSetModel} from "../../common/model/commonmodel/resultset.model";
 
 @Component({
   selector: 'app-layout',
@@ -12,31 +15,39 @@ export class LayoutComponent implements OnInit {
   public menus: MenuModule[] = MenuModule.catalog;
   public data: any;
   isCollapsed = false;
+  // 当前用户
+  loginUser: LoginUser = new LoginUser();
   constructor(
     private router: Router,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private loginService: LoginService
   ) {}
+
   ngOnInit() {
+    this.initLoginUserDate();
   }
 
+  initLoginUserDate() {
+    const loginUser: LoginUser = JSON.parse(window.sessionStorage.getItem('loginUser'));
+    this.loginUser.username = loginUser.username;
+    this.loginUser.phone = loginUser.phone;
+    this.loginUser.email = loginUser.email;
+  }
 
-  // /**
-  //  * 点击进行路由跳转，并将data数据传出
-  //  */
-  // routerOut(url: string) {
-  //   this.routeOutLet(url, this.data);
-  //   console.log(url);
-  // }
+  /**
+   * 个人中心
+   */
+  toBaseUserInfo() {
+    this.router.navigate(['/user/basicuserinfo']);
+  }
 
-  // /**
-  //  * 路由跳转并且传值
-  //  */
-  // routeOutLet(url: string, data: any) {
-  //   this.router.navigate([url], {
-  //     skipLocationChange: true,
-  //     queryParams: {
-  //       data: JSON.stringify(data),
-  //     },
-  //   });
-  // }
+  /**
+   * 退出登录
+   */
+  logOut() {
+    this.loginService.logOut().subscribe((data: ResultSetModel) => {
+      this.message.success(data.message);
+      location.reload();
+    });
+  }
 }

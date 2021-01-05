@@ -25,31 +25,27 @@
     "
   >
     <div nz-row class="search_row">
-      <div nz-col nzSpan="2"><span class="search_topic">分类搜索:</span></div>
-      <div nz-col nzSpan="22">
-        <button
-          *ngFor="let item of listButton; let i = index"
-          nz-button
-          [nzType]="item.state"
-          style="margin-right: 10px;"
-          (click)="addTerms(i)"
-        >
-          {{ item.name }}
-        </button>
+      <div nz-col nzSpan="2"><span class="search_topic">模块搜索:</span></div>
+      <div nz-col nzSpan="13">
+        <nz-select nzAllowClear nzMode="multiple"
+                   nzPlaceHolder="选择模块"
+                   [nzCustomTemplate]="defaultTemplate" style="width: 100%"
+                   [(ngModel)]="moduleSelectedIndexes" (ngModelChange)="refreshMenu()">
+          <nz-option [nzLabel]="item.title" [nzValue]="i" *ngFor="let item of modules; let i = index"></nz-option>
+        </nz-select>
+        <ng-template #defaultTemplate let-selected> {{ selected.nzLabel }} </ng-template>
       </div>
     </div>
-    <div nz-row class="search_row" *ngIf="listSubButton.length !== 0">
-      <div nz-col nzSpan="2"><span class="search_topic">二级分类:</span></div>
-      <div nz-col nzSpan="22">
-        <button
-          *ngFor="let item of listSubButton; let i = index"
-          nz-button
-          [nzType]="item.state"
-          style="margin-right: 10px;"
-          (click)="addSubTerms(i)"
-        >
-          {{ item.name }}
-        </button>
+    <div nz-row class="search_row" *ngIf="showMenuSelect">
+      <div nz-col nzSpan="2"><span class="search_topic">目录:</span></div>
+      <div nz-col nzSpan="13">
+        <nz-select nzAllowClear nzMode="multiple"
+                   nzPlaceHolder="选择菜单"
+                   [nzCustomTemplate]="defaultTemplate" style="width: 100%"
+                   [(ngModel)]="menuSelectedIds">
+          <nz-option [nzLabel]="item.name" [nzValue]="item.id" *ngFor="let item of menus; let i = index"></nz-option>
+        </nz-select>
+        <ng-template #defaultTemplate let-selected>{{ selected.nzLabel }} </ng-template>
       </div>
     </div>
     <div nz-row class="search_row">
@@ -112,7 +108,7 @@
   <nz-table
     style="min-width: 1450px;"
     #basicTable
-    [nzData]="articles"
+    [nzData]="blogs"
     [nzFrontPagination]="false"
     [nzBordered]="false"
     [nzLoadingDelay]="1000"
@@ -146,32 +142,35 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let article of articles; index as index">
+      <tr *ngFor="let blog of blogs; index as index">
         <td nzWidth="30px" nzAlign="center">
           <div class="inner_table" style="width: 30px;">{{ index + 1 }}</div>
         </td>
         <td nzAlign="center">
-          <nz-badge nzStatus="success" nzText="是" *ngIf="article.blogRecommend.id"></nz-badge>
-          <nz-badge nzStatus="error" nzText="否" *ngIf="!article.blogRecommend.id"></nz-badge>
+          <nz-badge nzStatus="error" nzText="否"></nz-badge>
         </td>
+<!--        <td nzAlign="center">-->
+<!--          <nz-badge nzStatus="success" nzText="是" *ngIf="blog.blogRecommend.id"></nz-badge>-->
+<!--          <nz-badge nzStatus="error" nzText="否" *ngIf="!blog.blogRecommend.id"></nz-badge>-->
+<!--        </td>-->
         <td nzWidth="100px" nzAlign="center">
-          <div *ngIf="article.isDeleted !== 1 && article.isShow === 1">
+          <div *ngIf="blog.isDeleted !== 1 && blog.isShow === 1">
             正常
           </div>
-          <div *ngIf="article.isDeleted === 1">删除</div>
-          <div *ngIf="article.isShow === 0 && article.isDeleted !== 1">
+          <div *ngIf="blog.isDeleted === 1">删除</div>
+          <div *ngIf="blog.isShow === 0 && blog.isDeleted !== 1">
             审核中
           </div>
-<!--          <div *ngIf="article.blogType === 0">-->
+<!--          <div *ngIf="blog.blogType === 0">-->
 <!--            技术-->
 <!--          </div>-->
-<!--          <div *ngIf="article.blogType === 1">-->
+<!--          <div *ngIf="blog.blogType === 1">-->
 <!--            情感-->
 <!--          </div>-->
         </td>
         <td nzWidth="240px">
           <ng-container
-            *ngIf="!editCache[article.id].edit; else nameInputTplTitle"
+            *ngIf="!editCache[blog.id].edit; else nameInputTplTitle"
           >
             <div
               class="inner_table"
@@ -180,32 +179,32 @@
               [nzPopoverContent]="contentTemplate"
               nzPopoverPlacement="top"
             >
-              <nz-tag [nzColor]="'green'" *ngIf="article.provenance === 0">
+              <nz-tag [nzColor]="'green'" *ngIf="blog.provenance === 0">
                 原
               </nz-tag>
-              <nz-tag [nzColor]="'red'" *ngIf="article.provenance === 1">
+              <nz-tag [nzColor]="'red'" *ngIf="blog.provenance === 1">
                 转
               </nz-tag>
-              <nz-tag [nzColor]="'orange'" *ngIf="article.provenance === 2">
+              <nz-tag [nzColor]="'orange'" *ngIf="blog.provenance === 2">
                 译
               </nz-tag>
-              {{ article.title }}
+              {{ blog.title }}
             </div>
           </ng-container>
           <ng-template #contentTemplate>
-            <div>{{ article.title }}</div>
+            <div>{{ blog.title }}</div>
           </ng-template>
           <ng-template #nameInputTplTitle>
             <input
               type="text"
               nz-input
-              [(ngModel)]="editCache[article.id].data.title"
+              [(ngModel)]="editCache[blog.id].data.title"
             />
           </ng-template>
         </td>
         <td nzWidth="300px" nzAlign="left">
           <ng-container
-            *ngIf="!editCache[article.id].edit; else nameInputTplSum"
+            *ngIf="!editCache[blog.id].edit; else nameInputTplSum"
           >
             <div
               class="inner_table"
@@ -214,72 +213,72 @@
               [nzPopoverContent]="contentTemplate2"
               nzPopoverPlacement="bottomLeft"
             >
-              {{ article.summary }}
+              {{ blog.summary }}
             </div>
           </ng-container>
           <ng-template #contentTemplate2>
-            <div style="max-width: 300px;">{{ article.summary }}</div>
+            <div style="max-width: 300px;">{{ blog.summary }}</div>
           </ng-template>
           <ng-template #nameInputTplSum>
             <input
               type="text"
               nz-input
-              [(ngModel)]="editCache[article.id].data.summary"
+              [(ngModel)]="editCache[blog.id].data.summary"
             />
           </ng-template>
         </td>
         <td nzWidth="100px" nzAlign="center">
-          {{ article.blogPublicInfos.goods }}
+          {{ blog.blogStatistics.goods }}
         </td>
         <td nzWidth="100px" nzAlign="center">
-          {{ article.blogPublicInfos.readings }}
+          {{ blog.blogStatistics.readings }}
         </td>
         <td nzWidth="100px" nzAlign="center">
-          {{ article.blogPublicInfos.comments }}
+          {{ blog.blogStatistics.comments }}
         </td>
         <td nzWidth="200px" nzAlign="center">
-          {{ article.createdTime | date: "yyyy-MM-dd HH:mm:ss" }}
+          {{ blog.createdTime | date: "yyyy-MM-dd HH:mm:ss" }}
         </td>
         <td nzWidth="170px" nzAlign="center">
           <a
-            (click)="revokeDeletedArtcle(article.id)"
-            *ngIf="!editCache[article.id].edit && article.isDeleted === 1"
+            (click)="revokeDeletedArtcle(blog.id)"
+            *ngIf="!editCache[blog.id].edit && blog.isDeleted === 1"
           >
             取消删除
           </a>
           <a
             nz-popconfirm
             nzTitle="确定删除?"
-            (nzOnConfirm)="deletedArtcle(article.id)"
-            *ngIf="!editCache[article.id].edit && article.isDeleted !== 1"
+            (nzOnConfirm)="deletedArtcle(blog.id)"
+            *ngIf="!editCache[blog.id].edit && blog.isDeleted !== 1"
           >
             删除
           </a>
           <nz-divider
             nzType="vertical"
-            *ngIf="!editCache[article.id].edit"
+            *ngIf="!editCache[blog.id].edit"
           ></nz-divider>
-          <ng-container *ngIf="!editCache[article.id].edit; else saveTpl">
-            <a (click)="editArtcle(index, article.id)">编辑</a>
+          <ng-container *ngIf="!editCache[blog.id].edit; else saveTpl">
+            <a (click)="editArtcle(index, blog.id)">编辑</a>
           </ng-container>
           <nz-divider
             nzType="vertical"
-            *ngIf="!editCache[article.id].edit"
+            *ngIf="!editCache[blog.id].edit"
           >
           </nz-divider>
           <a
-            *ngIf="!editCache[article.id].edit"
-            (click)="moreInfomation(article.id)"
+            *ngIf="!editCache[blog.id].edit"
+            (click)="moreInfomation(blog.id)"
           >
             详情
           </a>
           <ng-template #saveTpl>
-            <a (click)="saveEdit(index, article.id)">保存</a>
+            <a (click)="saveEdit(index, blog.id)">保存</a>
             <nz-divider nzType="vertical"></nz-divider>
             <a
               nz-popconfirm
               nzTitle="撤销修改?"
-              (nzOnConfirm)="cancelEdit(index, article.id)"
+              (nzOnConfirm)="cancelEdit(index, blog.id)"
             >
               取消
             </a>

@@ -34,9 +34,9 @@ export class MenuModule {
         },
         {
           level: 2,
-          title: '安全信息',
+          title: '权限信息',
           icon: 'safety',
-          url: '/user/safetyuserinfo',
+          url: '/user/safetyinfo',
         },
       ],
     },

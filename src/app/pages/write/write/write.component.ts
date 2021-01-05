@@ -6,7 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { BlogService } from 'src/app/common/service/blog.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import * as $ from '../../../../assets/editor/jquery.min.js';
-import { ArticleModel } from 'src/app/common/model/article/article.model';
+import { BlogModel } from 'src/app/common/model/article/blog.model';
 import { BlogContentModel } from 'src/app/common/model/article/blogContent.model';
 import { FileService } from 'src/app/common/service/file.service';
 import { ResultSetModel } from 'src/app/common/model/commonmodel/resultset.model';
@@ -53,7 +53,7 @@ export class WriteComponent implements OnInit {
   summary: string;
   inputValue: string;
   visiblePerson = '0';
-  article: ArticleModel = new ArticleModel();
+  article: BlogModel = new BlogModel();
   @ViewChild('titleInput', { static: true }) titleInput: ElementRef;
   @ViewChild('tableTitleInput', { static: false }) tableTitleInput: ElementRef;
   @ViewChild('inputElement', { static: false }) inputElement: ElementRef;
@@ -96,7 +96,7 @@ export class WriteComponent implements OnInit {
   /**
    * 数据初始化
    */
-  dataOnInit(blog: ArticleModel) {
+  dataOnInit(blog: BlogModel) {
     if (!blog) {
       this.title = localStorage.getItem('blog-title');
       this.summary = localStorage.getItem('blog-summary');
@@ -204,7 +204,6 @@ export class WriteComponent implements OnInit {
       this.article.title = title;
       this.article.blogContent.contentMd = md;
       this.article.summary = summary;
-      this.article.types = this.getTypeValue();
       this.article.tags2 = tags;
       this.article.visibleStrategy = visiblePerson;
       this.article.provenance = acticleRadioValue;
@@ -334,7 +333,6 @@ export class WriteComponent implements OnInit {
     if (!repeat) {
       const tag = new BlogTagModel();
       tag.name = this.inputValue;
-      tag.typeId = '-1';
       this.tags.push(tag);
       this.inputValue = '';
       this.inputVisible = false;

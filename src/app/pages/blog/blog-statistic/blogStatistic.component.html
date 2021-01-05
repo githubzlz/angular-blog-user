@@ -39,7 +39,7 @@
                 [nzColor]="'cyan'"
                 >侧边栏</nz-tag
               >
-              {{ data.id }}
+              {{ data.blogRecommend.id }}
             </td>
             <td>
               <nz-badge
@@ -118,7 +118,7 @@
               {{ data.blogRecommend.createdTime | date: "yyyy-MM-dd HH:mm:ss" }}
             </td>
             <td>
-              <a (click)="cancel(data.id)">取消推荐</a>
+              <a (click)="cancel(data.blogRecommend.id)">取消推荐</a>
             </td>
           </tr>
         </tbody>

@@ -4,7 +4,7 @@ import { BlogService } from 'src/app/common/service/blog.service';
 import { BlogContentModel } from 'src/app/common/model/article/blogContent.model';
 import { ResultSetModel } from 'src/app/common/model/commonmodel/resultset.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ArticleModel } from 'src/app/common/model/article/article.model';
+import { BlogModel } from 'src/app/common/model/article/blog.model';
 declare var editormd: any;
 @Component({
   selector: 'app-more',
@@ -16,7 +16,7 @@ export class DetailBlogInfoComponent implements OnInit, AfterViewInit {
   edit: any;
   id: string;
   loading = true;
-  blog: ArticleModel = new ArticleModel();
+  blog: BlogModel = new BlogModel();
   listOfTypes: any[];
   listOfType: any[] = ['JAVA', 'PATHON', 'C', 'C++', 'MYSQL'];
   perviousTagTypes: any[] = [

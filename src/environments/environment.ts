@@ -5,13 +5,13 @@
 export const environment = {
   SERVER_URL: ``,
   BASE_DATA_SERVER_URL: `http://localhost:10800`,
+  // BASE_DATA_SERVER_URL: `https://www.zlztsb.com/blog/manage`,
   MOCK_SERVER_URL: '',
   // environmentType: EnvironmentEnumModel.DEVELOPMENT,
   production: false,
   useHash: true,
   hmr: false,
 };
-
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

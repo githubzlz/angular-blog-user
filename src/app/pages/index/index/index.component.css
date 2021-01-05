@@ -1,5 +1,9 @@
 .index {
   min-width: 1450px;
+  padding: 20px;
+  border: 1px solid white;
+  background-color: white;
+  border-radius: 10px;
 }
 .count_number_card {
   border-radius: 10px;
@@ -67,4 +71,16 @@
   min-width: 280px;
   height: 320px;
   margin: 0px;
+}
+.picture_static {
+  transition: all 300ms;
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: 20px;
+  margin: 10px;
+  padding: 10px;
+  width: 770px;
+  height: 500px;
+}
+.picture_static:hover {
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
 }

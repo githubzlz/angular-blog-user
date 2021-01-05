@@ -7,7 +7,7 @@
   </nz-breadcrumb-item>
   <nz-breadcrumb-item> </nz-breadcrumb-item>
 </nz-breadcrumb>
-<nz-card class="index">
+<div class="index">
   <div nz-row nzGutter="16">
     <div nz-col nzSpan="19">
       <div nz-row style="height: 40px; margin-bottom: 10px;">
@@ -27,7 +27,7 @@
       </div>
       <div nz-row nzType="flex" nzGutter="16">
         <div nz-col nzSpan="6">
-          <nz-card class="count_number_card" [nzHoverable]="'true'">
+          <nz-card class="count_number_card">
             <div nz-row nzAlign="middle" nzType="flex">
               <i
                 nz-icon
@@ -38,7 +38,7 @@
               ></i>
               <div style="margin-left: 20px;">
                 <span class="number">1029</span>
-                <h2 style="font-size: 15px; color: white;">文章数量</h2>
+                <h2 style="font-size: 15px; color: white;">访问数量</h2>
               </div>
             </div>
             <div class="top_right">
@@ -109,7 +109,7 @@
               ></i>
               <div style="margin-left: 20px;">
                 <span class="number">584</span>
-                <h2 style="font-size: 15px; color: white;">粉丝数量</h2>
+                <h2 style="font-size: 15px; color: white;">用户数量</h2>
               </div>
             </div>
             <div class="top_right">
@@ -144,7 +144,7 @@
               ></i>
               <div style="margin-left: 20px;">
                 <span class="number">3560</span>
-                <h2 style="font-size: 15px; color: white;">星星数量</h2>
+                <h2 style="font-size: 15px; color: white;">文章数量</h2>
               </div>
             </div>
             <div class="top_right">
@@ -245,57 +245,27 @@
     </div>
     <div nz-row nzGutter="16">
       <div nz-col nzSpan="12">
-        <nz-card
-          style="border-radius: 10px; margin-top: 20px;"
-          [nzHoverable]="'true'"
-        >
-          <div
-            echarts
-            [options]="barStatisticsInfoModel.blogNumber"
-            class="demo-chart"
-          ></div>
-        </nz-card>
+          <div class="picture_static">
+            <div id="chart1" style=" height: 100%"></div>
+          </div>
       </div>
       <div nz-col nzSpan="12">
-        <nz-card
-          style="border-radius: 10px; margin-top: 20px;"
-          [nzHoverable]="'true'"
-        >
-          <div
-            echarts
-            [options]="lineStatisticsInfoModel.option"
-            class="demo-chart"
-          ></div>
-        </nz-card>
+        <div class="picture_static">
+          <div id="chart2" style=" height: 100%"></div>
+        </div>
       </div>
     </div>
     <div nz-row nzGutter="16">
       <div nz-col nzSpan="12">
-        <nz-card
-          style="border-radius: 10px; margin-top: 20px;"
-          [nzHoverable]="'true'"
-        >
-          <div
-            echarts
-            [options]="barStatisticsInfoModel.option"
-          ></div>
-        </nz-card>
+        <div class="picture_static">
+          <div id="chart3" style=" height: 100%"></div>
+        </div>
       </div>
       <div nz-col nzSpan="12">
-        <nz-card
-          style="border-radius: 10px; margin-top: 20px;"
-          [nzHoverable]="'true'"
-        >
-
-        </nz-card>
-
+        <div class="picture_static">
+          <div id="chart4" style=" height: 100%"></div>
+        </div>
       </div>
     </div>
   </div>
-  <div style="width: 600px;height: 400px" echarts>
-
-  </div>
-</nz-card>
-<div id="chart" style="min-width: 1500px;min-height:800px;">
-
 </div>
