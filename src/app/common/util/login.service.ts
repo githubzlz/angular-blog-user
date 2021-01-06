@@ -6,15 +6,15 @@ import {LoginUser} from '../model/userinfo/loginuser.model';
 import {
   HttpEvent, HttpInterceptor, HttpHandler, HttpRequest
 } from '@angular/common/http';
-import {finalize, tap} from "rxjs/operators";
-import {ok} from "assert";
-import {HttpService} from "./http.service";
-import {MessageShowEnum} from "../constant/message.enum";
+import {finalize, tap} from 'rxjs/operators';
+import {ok} from 'assert';
+import {HttpService} from './http.service';
+import {MessageShowEnum} from '../constant/message.enum';
 
 @Injectable({
   providedIn: 'root',
 })
-export class LoginService implements HttpInterceptor{
+export class LoginService implements HttpInterceptor {
 
   /**
    * 是否登录
@@ -66,7 +66,7 @@ export class LoginService implements HttpInterceptor{
    */
   login(loginUser: LoginUser) {
     const url = `${this.baseUrl}/login`;
-    return this.http.post(url, loginUser);
+    return this.http.post(url, loginUser, MessageShowEnum.NONE);
   }
 
   /**
@@ -83,7 +83,7 @@ export class LoginService implements HttpInterceptor{
    */
   checkCheckCode(code: string) {
     const url = `${this.baseUrl}/checkCode/check/${code}`;
-    return this.http.get(url, MessageShowEnum.NOR_ERROR);
+    return this.http.get(url, MessageShowEnum.NONE);
   }
 
 }

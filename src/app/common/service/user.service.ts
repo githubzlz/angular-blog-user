@@ -1,13 +1,14 @@
+import {environment} from 'src/environments/environment';
 import {Injectable} from '@angular/core';
-import {environment} from '../../../environments/environment';
 import {HttpService} from '../util/http.service';
-import {MessageShowEnum} from '../constant/message.enum';
 import {LoginUser} from '../model/userinfo/loginuser.model';
+import {MessageShowEnum} from '../constant/message.enum';
 
 @Injectable({
   providedIn: 'root',
 })
-export class EmailService {
+export class UserService {
+
 
   /**
    * 后台服务地址
@@ -17,11 +18,12 @@ export class EmailService {
   constructor(private http: HttpService) {}
 
   /**
-   * 发送邮箱验证码
+   * 查询用户列表
+   * @param user
    */
-  sendEmailCheckCode(loginUser: LoginUser) {
-    const url = `${this.baseUrl}/sendemail`;
-    return this.http.post(url, loginUser, MessageShowEnum.NOR_ERROR);
+  userList(user: LoginUser) {
+    const url = `${this.baseUrl}/user/list`;
+    return this.http.post(url, user, MessageShowEnum.UNAUTHORIZED_ERROR);
   }
 
 }

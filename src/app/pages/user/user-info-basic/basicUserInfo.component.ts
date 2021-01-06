@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoginUser } from 'src/app/common/model/userinfo/loginuser.model';
 
 @Component({
-  selector: 'app-user',
+  selector: 'app-base-user',
   templateUrl: './basicUserInfo.component.html',
   styleUrls: ['./basicUserInfo.component.css'],
 })

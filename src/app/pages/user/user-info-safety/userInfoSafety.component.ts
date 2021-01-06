@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {UserService} from '../../../common/service/user.service';
 
 @Component({
   selector: 'app-user-info-safety',
@@ -6,7 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./userInfoSafety.component.css'],
 })
 export class UserInfoSafetyComponent implements OnInit {
-  constructor() {}
+
+  page = 0;
+
+  constructor(private userService: UserService) {}
 
   ngOnInit() {}
+
 }

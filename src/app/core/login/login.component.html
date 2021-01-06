@@ -19,7 +19,7 @@
       <div class="input" *ngIf="loginMethod === 'up'">
         <nz-input-group [nzPrefix]="prefixTemplateUser" [nzSuffix]="inputClearTpl" >
           <input type="text" nz-input placeholder="请输入用户名" style="height: 40px"
-                 [(ngModel)]="loginUser.username"
+                 [(ngModel)]="loginUser.username" (ngModelChange)="moduleChange()"
                  />
         </nz-input-group>
         <ng-template #prefixTemplateUser><i nz-icon nzType="user"></i></ng-template>
@@ -33,7 +33,7 @@
       <div class="input" *ngIf="loginMethod === 'up'">
         <nz-input-group [nzPrefix]="prefixTemplatePass" [nzSuffix]="suffixTemplate">
           <input [type]="passwordVisible ? 'text' : 'password'" style="height: 40px"
-                 nz-input placeholder="请输入密码"
+                 nz-input placeholder="请输入密码" (ngModelChange)="moduleChange()"
                  [(ngModel)]="loginUser.password"
                  />
         </nz-input-group>
@@ -50,22 +50,22 @@
       <div class="input" *ngIf="loginMethod === 'um'">
         <nz-input-group [nzPrefix]="prefixTemplateUser" [nzSuffix]="inputClearTpl" >
           <input type="text" nz-input placeholder="请输入邮箱或手机号" style="height: 40px"
-                 [(ngModel)]="loginUser.email"
+                 [(ngModel)]="loginUser.email" (ngModelChange)="moduleChange()"
           />
         </nz-input-group>
         <ng-template #prefixTemplateUser><i nz-icon nzType="user"></i></ng-template>
         <ng-template #inputClearTpl>
           <i nz-icon class="ant-input-clear-icon" nzTheme="fill"
              nzType="close-circle"
-             *ngIf="loginUser.username"
-             (click)="loginUser.username = null"></i>
+             *ngIf="loginUser.email"
+             (click)="loginUser.email = null"></i>
         </ng-template>
       </div>
       <div class="input" style="text-align: left">
         <div style="display: inline-block; width: 40%">
           <nz-input-group [nzPrefix]="prefixTemplateCheck">
             <input type="text" style="height: 40px;"
-                   nz-input placeholder="验证码"
+                   nz-input placeholder="验证码" (ngModelChange)="moduleChange()"
                    [(ngModel)]="checkCode"
             />
           </nz-input-group>
@@ -82,7 +82,8 @@
       </div>
       <div class="input" *ngIf="loginMethod === 'um'">
         <nz-input-group [nzPrefix]="prefixTemplateUser" [nzSuffix]="inputClearTpl">
-          <input type="text" nz-input placeholder="请输入验证码" style="height: 40px" [(ngModel)]="loginUser.checkCode"/>
+          <input type="text" nz-input placeholder="请输入验证码" style="height: 40px"
+                 [(ngModel)]="loginUser.checkCode" (ngModelChange)="moduleChange()"/>
         </nz-input-group>
         <ng-template #prefixTemplateUser><i nz-icon nzType="message" nzTheme="outline"></i></ng-template>
         <ng-template #inputClearTpl>
@@ -93,6 +94,9 @@
         </ng-template>
       </div>
       <button nz-button nzType="primary" style="width: 50%; height: 35px; margin-top: 20px" (click)="login()">登录</button>
+    </div>
+    <div class="error" *ngIf="errorMessage.show">
+      {{errorMessage.message}}
     </div>
   </div>
 </div>

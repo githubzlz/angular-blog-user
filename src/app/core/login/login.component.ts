@@ -25,6 +25,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
   showTimeCountDown = false;
   countDownTime;
   checkCode = '';
+  errorMessage = {
+    show: false,
+    message: '用户名或密码错误'
+  };
 
   constructor(private loginService: LoginService,
               private emailService: EmailService,
@@ -43,7 +47,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
    * 去注册界面/登录界面
    */
   switchLoginMethod(type: string) {
+    // 改变类型
     this.loginMethod = type;
+    // 刷新表单数据
+    this.checkCode = '';
+    this.loginUser = new LoginUser();
     const uPLogin = document.getElementById('uPLogin');
     const uMLogin = document.getElementById('uMLogin');
     if (this.loginMethod === 'up') {
@@ -67,23 +75,31 @@ export class LoginComponent implements OnInit, AfterViewInit {
    * 登录
    */
   login() {
+    if (!this.loginCheck()) {
+      return;
+    }
     if (!this.checkCode) {
-      this.message.warning('请输入验证码');
+      this.errorMessage.show = true;
+      this.errorMessage.message = '请输入验证码';
       return;
     }
     this.loginService.checkCheckCode(this.checkCode).subscribe(data => {
       const check: ResultSetModel = data;
-      if (check && check.code === 1 && this.loginCheck()) {
+      if (check && check.code === 1) {
         this.loginService.login(this.loginUser).subscribe(data1 => {
           const resultSet: ResultSetModel = data1;
           if (ResultSetModel.isSuccess(resultSet)) {
             window.sessionStorage.setItem('loginUser', JSON.stringify(resultSet.entity));
             this.router.navigate(['/index']);
           } else {
+            this.errorMessage.show = true;
+            this.errorMessage.message = resultSet.message;
             this.refreshCheckCode();
           }
         });
       } else {
+        this.errorMessage.show = true;
+        this.errorMessage.message = check.message;
         this.refreshCheckCode();
       }
     });
@@ -97,12 +113,16 @@ export class LoginComponent implements OnInit, AfterViewInit {
       if (!this.loginUser.username || this.loginUser.username === ''
         || !this.loginUser.password
         || this.loginUser.password === '') {
+        this.errorMessage.show = true;
+        this.errorMessage.message = '用户名或密码不能为空';
         return false;
       }
     } else if (this.loginMethod === 'um') {
-      if (!this.loginUser.email || this.loginUser.username === ''
+      if (!this.loginUser.email || this.loginUser.email === ''
         || !this.loginUser.checkCode
         || this.loginUser.checkCode === '') {
+        this.errorMessage.show = true;
+        this.errorMessage.message = '邮箱或验证码不能为空';
         return false;
       }
     }
@@ -114,7 +134,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
    * @param type type
    */
   focus(type: number) {
-    console.log(11111);
     if (type === 1) {
       this.showInputSuffix.username = true;
     }
@@ -128,7 +147,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
    * @param type type
    */
   blur(type: number) {
-    console.log(11111);
     if (type === 1) {
       this.showInputSuffix.username = false;
     }
@@ -149,7 +167,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
    */
   sendCheckCode() {
     if (!this.checkCode) {
-      this.message.warning('请输入验证码');
+      this.errorMessage.show = true;
+      this.errorMessage.message = '请输入验证码';
       return;
     }
     // 验证验证码
@@ -157,17 +176,27 @@ export class LoginComponent implements OnInit, AfterViewInit {
       const check: ResultSetModel = data;
       if (ResultSetModel.isSuccess(check)) {
         // 验证码正确则申请发送邮件
-        this.emailService.sendEmailCheckCode(this.loginUser.email).subscribe(data => {
-          const result: ResultSetModel = data;
+        if (!this.loginUser.email || this.loginUser.email === '') {
+          return;
+        }
+        this.emailService.sendEmailCheckCode(this.loginUser).subscribe(data1 => {
+          const result: ResultSetModel = data1;
           if (ResultSetModel.isSuccess(result)) {
             this.showTimeCountDown = true;
             this.countDownTime = '验证码发送成功';
             setTimeout(() => {
-              this.countDownTime = 118;
+              this.countDownTime = 115;
               this.countDown();
-            }, 2000);
+            }, 5000);
+          } else {
+            this.errorMessage.show = true;
+            this.errorMessage.message = result.message;
           }
         });
+      } else {
+        this.errorMessage.show = true;
+        this.errorMessage.message = check.message;
+        this.refreshCheckCode();
       }
     });
   }
@@ -194,5 +223,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
     const random = Math.random() * 10000;
     document.getElementById('img').innerHTML =
       `<img src="http://localhost:10800/getCheckCode/${random}" width="90" height="42" style="margin-left: 20px">`;
+  }
+
+  /**
+   * 表单改变事件
+   */
+  moduleChange() {
+    this.errorMessage.show = false;
+    this.errorMessage.message = '';
   }
 }

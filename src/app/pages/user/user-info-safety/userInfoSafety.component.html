@@ -16,7 +16,24 @@
   </nz-breadcrumb-item>
 </nz-breadcrumb>
 <nz-card>
-  <div class="block">
-    <div class="in"> </div>
-  </div>
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="page = 0 ">
+      <i nz-icon nzType="mail"></i>
+      用户列表
+    </li>
+    <li nz-menu-item (click)="page = 1 ">
+      <i nz-icon nzType="appstore"></i>
+      角色列表
+    </li>
+    <li nz-menu-item (click)="page = 2 ">
+      <i nz-icon nzType="appstore"></i>
+      权限列表
+    </li>
+    <li nz-menu-item (click)="page = 3 ">
+      接口权限
+    </li>
+  </ul>
+  <app-user *ngIf="page == 0"></app-user>
+  <app-role *ngIf="page == 1"></app-role>
+  <app-permission *ngIf="page == 2"></app-permission>
 </nz-card>
