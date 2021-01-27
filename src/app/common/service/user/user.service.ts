@@ -1,8 +1,8 @@
 import {environment} from 'src/environments/environment';
 import {Injectable} from '@angular/core';
-import {HttpService} from '../util/http.service';
-import {LoginUser} from '../model/userinfo/loginuser.model';
-import {MessageShowEnum} from '../constant/message.enum';
+import {HttpService} from '../../util/http.service';
+import {LoginUser} from '../../model/userinfo/loginuser.model';
+import {MessageShowEnum} from '../../constant/message.enum';
 
 @Injectable({
   providedIn: 'root',
