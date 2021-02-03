@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { MenuModule } from './menu.conf';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd';
-import {LoginUser} from "../../common/model/userinfo/loginuser.model";
-import {LoginService} from "../../common/util/login.service";
-import {ResultSetModel} from "../../common/model/commonmodel/resultset.model";
+import {LoginUser} from '../../common/model/userinfo/loginuser.model';
+import {LoginService} from '../../common/util/login.service';
+import {ResultSetModel} from '../../common/model/commonmodel/resultset.model';
 
 @Component({
   selector: 'app-layout',
@@ -28,7 +28,7 @@ export class LayoutComponent implements OnInit {
   }
 
   initLoginUserDate() {
-    const loginUser: LoginUser = JSON.parse(window.sessionStorage.getItem('loginUser'));
+    const loginUser: LoginUser = JSON.parse(window.sessionStorage.getItem('user_info'));
     this.loginUser.username = loginUser.username;
     this.loginUser.phone = loginUser.phone;
     this.loginUser.email = loginUser.email;
@@ -45,9 +45,13 @@ export class LayoutComponent implements OnInit {
    * 退出登录
    */
   logOut() {
-    this.loginService.logOut().subscribe((data: ResultSetModel) => {
-      this.message.success(data.message);
-      location.reload();
+    this.loginService.logOut().subscribe(date => {
+      window.sessionStorage.clear();
+      if(ResultSetModel.isSuccess(date)){
+        window.location.href = date.message;
+      } else {
+        window.location.href = 'localhost:4200';
+      }
     });
   }
 }

@@ -43,6 +43,23 @@ export class ModuleModel {
    */
   public showInput = false;
 
+  /**
+   * 父级id
+   */
+  public parentId: string;
+
+  /**
+   * 层级
+   */
+  public level: number;
+
+  /**
+   * 子级数量
+   */
+  public isLastLevel: number;
+
+  public blogAmount: number;
+
   public creator: string;
 
   public createdTime: string;
@@ -54,6 +71,10 @@ export class ModuleModel {
   public pageInfo: PageInfoModel;
 
   public isExpand: boolean;
+
+  public children: ModuleModel[];
+
+  public blogs: string[];
 
   constructor() {
     this.isExpand = false;

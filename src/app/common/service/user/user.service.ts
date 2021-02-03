@@ -18,6 +18,22 @@ export class UserService {
   constructor(private http: HttpService) {}
 
   /**
+   * 获取token
+   */
+  getToken(code) {
+    const url = 'https://localhost:8080/login/token?code=' + code;
+    return this.http.get(url, MessageShowEnum.NONE);
+  }
+
+  /**
+   * 获取登录用户信息
+   */
+  loginUserInfo() {
+    const url = `${this.baseUrl}/authentication/get/authenticationinfo`;
+    return this.http.get(url, MessageShowEnum.ALL);
+  }
+
+  /**
    * 查询用户列表
    * @param user
    */

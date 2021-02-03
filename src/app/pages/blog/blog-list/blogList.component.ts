@@ -103,7 +103,7 @@ export class BlogListComponent implements OnInit {
     pageInfo.pageSize = 10000;
     pageInfo.pageNum = 1;
     module.pageInfo = pageInfo;
-    this.moduleService.queryModuleList(module).subscribe((data) => {
+    this.moduleService.queryCategoryList(module).subscribe((data) => {
       const dataE: ResultSetModel = data;
       this.modules = dataE.entity.list;
     });

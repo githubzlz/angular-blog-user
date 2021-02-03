@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginUser } from 'src/app/common/model/userinfo/loginuser.model';
+import {UserService} from "../../../common/service/user/user.service";
+import {ResultSetModel} from "../../../common/model/commonmodel/resultset.model";
 
 @Component({
   selector: 'app-base-user',
@@ -14,17 +16,22 @@ export class BasicUserInfoComponent implements OnInit {
     state: true,
     name: '编辑',
   };
-  constructor() {}
+  constructor(private userservice: UserService) {}
 
   ngOnInit() {
     this.initLoginUserDate();
   }
 
   initLoginUserDate() {
-    const loginUser: LoginUser = JSON.parse(window.sessionStorage.getItem('loginUser'));
-    this.loginUser.username = loginUser.username;
-    this.loginUser.phone = loginUser.phone;
-    this.loginUser.email = loginUser.email;
+    this.userservice.loginUserInfo().subscribe((date: ResultSetModel) => {
+      if (ResultSetModel.isSuccess(date)) {
+        const userInfo = JSON.stringify(date.entity);
+        window.sessionStorage.setItem('user_info', userInfo);
+        this.loginUser.username = date.entity.username;
+        this.loginUser.phone = date.entity.phone;
+        this.loginUser.email = date.entity.email;
+      }
+    });
   }
 
   editInfo() {
