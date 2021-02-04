@@ -60,6 +60,10 @@ export class ModuleModel {
 
   public blogAmount: number;
 
+  public blogAmountTotal: number;
+
+  public childCategoryAmountTotal: number;
+
   public creator: string;
 
   public createdTime: string;

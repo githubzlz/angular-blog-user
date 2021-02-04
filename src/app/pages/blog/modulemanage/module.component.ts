@@ -237,9 +237,12 @@ export class ModuleComponent implements OnInit {
     if (type === 1) {
       this.insertCategory.parentId = this.modules[index].parentId;
       this.insertCategory.level = this.modules[index].level;
-    } else {
+    } else if (type === 2){
       this.insertCategory.parentId = this.modules[index].id;
       this.insertCategory.level = this.modules[index].level + 1;
+    } else if (type === 3) {
+      this.insertCategory.parentId = '0';
+      this.insertCategory.level = 1;
     }
   }
 
@@ -352,6 +355,8 @@ export class ModuleComponent implements OnInit {
         blogs.push(blog);
       }
     });
+    this.bindingCache.bindingSources = new Array<TransferItem>();
+    this.isLoadingBindingInfo = true;
     const category = new ModuleModel();
     category.id = this.bindingCache.bindingCategory.id;
     category.blogs = blogs;

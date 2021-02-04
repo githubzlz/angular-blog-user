@@ -29,6 +29,7 @@
     nzShowQuickJumper="true"
     nzShowSizeChanger="true"
     style="height: 790px"
+    [nzNoResult]="nzNoResult"
   >
     <ng-template #headerTitle>
       <div class="line"></div>
@@ -40,102 +41,135 @@
         刷新
       </button>
     </ng-template>
+    <ng-template #nzNoResult>
+      <a (click)="addType(3, null)">添加新分类</a>
+    </ng-template>
     <thead>
       <tr>
-        <th nzWidth="20%">分类名称</th>
+        <th nzWidth="15%">分类名称</th>
         <th nzWidth="20%">分类描述</th>
-        <th>分类等级</th>
-        <th>文章数量/篇</th>
-        <th>创建时间</th>
         <th>状态</th>
+        <th>分类等级</th>
+        <th>创建时间</th>
+        <th [nzAlign]="'center'">
+          子分类数量
+          <br>
+          (本级)
+        </th>
+        <th [nzAlign]="'center'">
+          子分类数量
+          <br>
+          (总量)
+        </th>
+        <th [nzAlign]="'center'">
+          文章数量
+          <br>
+          (本级)
+        </th>
+        <th [nzAlign]="'center'">
+          文章数量
+          <br>
+          (总量)
+        </th>
+
         <th>操作</th>
       </tr>
     </thead>
     <tbody>
       <ng-container *ngFor="let data of modules; let index1 = index">
-        <tr>
-          <td [nzIndentSize]="data.level! * 20"
-              [nzShowExpand]="data.isLastLevel !== 0"
-              [nzExpand]="showMenu"
-              (nzExpandChange)="changeMenuState(data, index1)">
+          <tr>
+            <td [nzIndentSize]="data.level! * 20"
+                [nzShowExpand]="data.isLastLevel !== 0"
+                [nzExpand]="showMenu"
+                (nzExpandChange)="changeMenuState(data, index1)">
             <span style="margin-left: 5px">
-              <input nz-input *ngIf="data.showInput" [(ngModel)]="moduleUpdateCache.title" style="width: 80%">
+              <input nz-input *ngIf="data.showInput" [(ngModel)]="moduleUpdateCache.title" style="width: 60%">
               <span *ngIf="!data.showInput">{{ data.title }}</span>
             </span>
-          </td>
-          <td>
-            <input nz-input *ngIf="data.showInput" [(ngModel)]="moduleUpdateCache.introduction">
-            <span *ngIf="!data.showInput">{{data.introduction}}</span>
-          </td>
-          <td>
-            <span style="color:#34a353;" *ngIf="data.level == 0">一级分类</span>
-            <span style="color:orange;" *ngIf="data.level == 1">二级分类</span>
-            <span style="color:red;" *ngIf="data.level == 2">三级分类</span>
-            <span style="color:gray;" *ngIf="data.level > 2">{{data.level+1 + '级分类'}}</span>
-          </td>
-          <td>
-            {{ data.blogAmount}}
-          </td>
-          <td>
-            {{ data.createdTime | date: "yyyy-MM-dd HH:mm:ss" }}
-          </td>
-          <td>
-            <nz-badge nzStatus="success" nzText="启用" *ngIf="!data.isPublish"></nz-badge>
-            <nz-badge nzStatus="error" nzText="停用" *ngIf="data.isPublish"></nz-badge>
-          </td>
-          <td>
-            <div *ngIf="!data.showInput">
-              <a>
+            </td>
+            <td>
+              <input nz-input *ngIf="data.showInput" [(ngModel)]="moduleUpdateCache.introduction">
+              <span *ngIf="!data.showInput">{{data.introduction}}</span>
+            </td>
+            <td [nzAlign]="'center'">
+              <nz-badge nzStatus="success" nzText="启用" *ngIf="!data.isPublish"></nz-badge>
+              <nz-badge nzStatus="error" nzText="停用" *ngIf="data.isPublish"></nz-badge>
+            </td>
+            <td [nzAlign]="'center'">
+              <span style="color:#34a353;" *ngIf="data.level == 1">一级分类</span>
+              <span style="color:orange;" *ngIf="data.level == 2">二级分类</span>
+              <span style="color:red;" *ngIf="data.level == 3">三级分类</span>
+              <span style="color:gray;" *ngIf="data.level >= 4">{{data.level + '级分类'}}</span>
+            </td>
+            <td [nzAlign]="'center'">
+              {{ data.createdTime | date: "yyyy-MM-dd HH:mm:ss" }}
+            </td>
+            <td [nzAlign]="'center'">
+              {{ data.isLastLevel}}
+            </td>
+            <td [nzAlign]="'center'">
+              {{ data.childCategoryAmountTotal}}
+            </td>
+            <td [nzAlign]="'center'">
+              {{ data.blogAmount}}
+            </td>
+            <td [nzAlign]="'center'">
+              {{ data.blogAmountTotal}}
+            </td>
+
+            <td>
+              <div *ngIf="!data.showInput">
+                <a>
               <span
                 *ngIf="data.isPublish === 1"
                 (click)="updateState(data,index1, 0)"
               >启用</span
               >
-                <span
-                  *ngIf="data.isPublish === 0"
-                  (click)="updateState(data,index1, 1)"
-                >停用</span
+                  <span
+                    *ngIf="data.isPublish === 0"
+                    (click)="updateState(data,index1, 1)"
+                  >停用</span
+                  >
+                </a>
+                <nz-divider nzType="vertical"></nz-divider>
+                <a (click)="updateModuleInfo(data,index1, 1)" >修改</a>
+                <nz-divider nzType="vertical"></nz-divider>
+                <a
+                  nz-popconfirm
+                  nzPopconfirmTitle="是否确认删除该分类信息？"
+                  nzPopconfirmPlacement="bottom"
+                  (nzOnConfirm)="deleteBlogType(data.id)"
+                >删除</a
                 >
-              </a>
-              <nz-divider nzType="vertical"></nz-divider>
-              <a (click)="updateModuleInfo(data,index1, 1)" >修改</a>
-              <nz-divider nzType="vertical"></nz-divider>
-              <a
-                nz-popconfirm
-                nzPopconfirmTitle="是否确认删除该分类信息？"
-                nzPopconfirmPlacement="bottom"
-                (nzOnConfirm)="deleteBlogType(data.id)"
-              >删除</a
-              >
-              <nz-divider nzType="vertical"></nz-divider>
-              <a
-                nz-dropdown
-                [nzDropdownMenu]="menu">
-                更多
-                <i nz-icon nzType="down"></i>
-              </a>
-              <nz-dropdown-menu #menu="nzDropdownMenu">
-                <ul nz-menu nzSelectable>
-                  <li nz-menu-item (click)="addType(1, index1)">
-                    新增同级
-                  </li>
-                  <li nz-menu-item (click)="addType(2, index1)">
-                    新增下级
-                  </li>
-                  <li nz-menu-item (click)="bindingBlog(index1)">
-                    绑定文章
-                  </li>
-                </ul>
-              </nz-dropdown-menu>
-            </div>
-            <div *ngIf="data.showInput">
-              <a (click)="updateModuleInfo(data,index1, 0)">取消</a>
-              <nz-divider nzType="vertical"></nz-divider>
-              <a (click)="updateModuleInfo(data,index1, 2)">确认</a>
-            </div>
-          </td>
-        </tr>
-      </ng-container>
+                <nz-divider nzType="vertical"></nz-divider>
+                <a
+                  nz-dropdown
+                  [nzDropdownMenu]="menu">
+                  更多
+                  <i nz-icon nzType="down"></i>
+                </a>
+                <nz-dropdown-menu #menu="nzDropdownMenu">
+                  <ul nz-menu nzSelectable>
+                    <li nz-menu-item (click)="addType(1, index1)">
+                      新增同级
+                    </li>
+                    <li nz-menu-item (click)="addType(2, index1)">
+                      新增下级
+                    </li>
+                    <li nz-menu-item (click)="bindingBlog(index1)">
+                      绑定文章
+                    </li>
+                  </ul>
+                </nz-dropdown-menu>
+              </div>
+              <div *ngIf="data.showInput">
+                <a (click)="updateModuleInfo(data,index1, 0)">取消</a>
+                <nz-divider nzType="vertical"></nz-divider>
+                <a (click)="updateModuleInfo(data,index1, 2)">确认</a>
+              </div>
+            </td>
+          </tr>
+</ng-container>
     </tbody>
   </nz-table>
 </nz-card>

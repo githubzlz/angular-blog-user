@@ -28,7 +28,7 @@
       <div nz-col nzSpan="2"><span class="search_topic">模块搜索:</span></div>
       <div nz-col nzSpan="13">
         <nz-select nzAllowClear nzMode="multiple"
-                   nzPlaceHolder="选择模块"
+                   nzPlaceHolder="一级分类"
                    [nzCustomTemplate]="defaultTemplate" style="width: 100%"
                    [(ngModel)]="moduleSelectedIndexes" (ngModelChange)="refreshMenu()">
           <nz-option [nzLabel]="item.title" [nzValue]="i" *ngFor="let item of modules; let i = index"></nz-option>
@@ -40,7 +40,7 @@
       <div nz-col nzSpan="2"><span class="search_topic">目录:</span></div>
       <div nz-col nzSpan="13">
         <nz-select nzAllowClear nzMode="multiple"
-                   nzPlaceHolder="选择菜单"
+                   nzPlaceHolder="二级分类"
                    [nzCustomTemplate]="defaultTemplate" style="width: 100%"
                    [(ngModel)]="menuSelectedIds">
           <nz-option [nzLabel]="item.name" [nzValue]="item.id" *ngFor="let item of menus; let i = index"></nz-option>
