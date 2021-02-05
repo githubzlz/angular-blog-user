@@ -12,6 +12,7 @@ export class LoginCanActivate implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): boolean {
+
     const isLogin = this.loginService.checkLogin();
     if (!isLogin) {
       this.router.navigate(['/login']);

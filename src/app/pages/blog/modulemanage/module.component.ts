@@ -79,7 +79,7 @@ export class ModuleComponent implements OnInit {
    */
   queryTypeTree() {
     this.modulesLoading = true;
-    this.moduleService.queryCategoryList(this.module, MessageShowEnum.NONE).subscribe((data) => {
+    this.moduleService.queryCategoryPageList(this.module, MessageShowEnum.NONE).subscribe((data) => {
       const blogData: ResultSetModel = data;
       this.module.pageInfo = blogData.entity;
       this.modules = this.module.pageInfo.list;
@@ -180,7 +180,7 @@ export class ModuleComponent implements OnInit {
     module.pageInfo = pageInfo;
     module.level = data.level + 1;
     module.parentId = data.id;
-    this.moduleService.queryCategoryList(module, MessageShowEnum.NONE).subscribe((result: ResultSetModel) => {
+    this.moduleService.queryCategoryPageList(module, MessageShowEnum.NONE).subscribe((result: ResultSetModel) => {
       this.addChild(result.entity.list, index);
     });
   }

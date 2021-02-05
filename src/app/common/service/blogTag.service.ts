@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
+import {HttpService} from '../util/http.service';
+import {BlogTagModel} from "../model/tag/blogTag.model";
+import {MessageShowEnum} from "../constant/message.enum";
 
 @Injectable({
   providedIn: 'root',
@@ -11,14 +13,14 @@ export class BlogTagService {
    */
   baseUrl = environment.BASE_DATA_SERVER_URL;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpService) {}
 
   /**
-   * 查询标签分类
+   * 查询标签列表
    */
-  queryTagType() {
-    const url = this.baseUrl + '/article/tags/querytagtypelist';
-    return this.http.get(url);
+  queryTagList(tag: BlogTagModel, show?: MessageShowEnum) {
+    const url = this.baseUrl + '/tag/me/query/list';
+    return this.http.post(url, tag, show);
   }
 
   /**

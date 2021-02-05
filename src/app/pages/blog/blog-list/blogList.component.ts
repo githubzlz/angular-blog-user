@@ -8,8 +8,8 @@ import { BlogTypeService } from 'src/app/common/service/blogType.service';
 import { RecommendService } from '../../../common/service/Recommend.service';
 import {ModuleService} from '../../../common/service/module.service';
 import {ModuleModel} from '../../../common/model/module/module.model';
-import {MenuModel} from '../../../common/model/module/menu.model';
 import {BlogModel} from '../../../common/model/article/blog.model';
+import {MessageShowEnum} from '../../../common/constant/message.enum';
 
 @Component({
   selector: 'app-blog',
@@ -34,9 +34,9 @@ export class BlogListComponent implements OnInit {
   // 是否显示菜单的选择
   showMenuSelect = false;
   // 选中模块包含的菜单
-  menus: Array<MenuModel>;
+  secondCategory: Array<ModuleModel>;
   // 选中的菜单
-  menuSelectedIds = [];
+  secondCategorySelectedIds = [];
 
   // 标签列表
   listOfTag: Array<any>;
@@ -85,7 +85,7 @@ export class BlogListComponent implements OnInit {
    * @param id id
    */
   moreInfomation(id: string) {
-    this.router.navigate(['/other/blogdetailinfo'], {
+    this.router.navigate(['/write/write'], {
       skipLocationChange: true,
       queryParams: {
         bid: id,
@@ -103,7 +103,7 @@ export class BlogListComponent implements OnInit {
     pageInfo.pageSize = 10000;
     pageInfo.pageNum = 1;
     module.pageInfo = pageInfo;
-    this.moduleService.queryCategoryList(module).subscribe((data) => {
+    this.moduleService.queryCategoryPageList(module, MessageShowEnum.NONE).subscribe((data) => {
       const dataE: ResultSetModel = data;
       this.modules = dataE.entity.list;
     });
@@ -112,12 +112,27 @@ export class BlogListComponent implements OnInit {
   /**
    * 根据选中的模块刷新菜单选项
    */
-  refreshMenu() {
+  refreshSecondCategory() {
     const length = this.moduleSelectedIndexes.length;
     // @ts-ignore
     this.showMenuSelect = length === 1;
     if (this.showMenuSelect) {
-      this.menus = this.modules[this.moduleSelectedIndexes[0]].menus;
+      // 查询二级分类信息
+      const category = new ModuleModel();
+      category.parentId = this.modules[this.moduleSelectedIndexes[0]].id;
+      category.level = 2;
+      category.pageInfo = {
+        pageSize: 100,
+        pageNum: 1
+      };
+      this.secondCategorySelectedIds = [];
+      if (this.moduleSelectedIndexes.length === 1) {
+        this.moduleService.queryCategoryPageList(category, MessageShowEnum.NONE).subscribe((res: ResultSetModel) => {
+          if (ResultSetModel.isSuccess(res)) {
+            this.secondCategory = res.entity.list;
+          }
+        });
+      }
     }
   }
 
@@ -144,12 +159,15 @@ export class BlogListComponent implements OnInit {
       });
     }
 
-    // 根据模块过滤
-    this.moduleSelectedIndexes.forEach(data => {
-      select.moduleIds.push(this.modules[data].id);
-    });
-    // 根据模块的菜单过滤
-    select.menusIds = this.menuSelectedIds;
+    // 根据种类过滤
+    if (this.secondCategorySelectedIds.length !== 0) {
+      select.categoryIds = this.secondCategorySelectedIds;
+    } else {
+      select.categoryIds = [];
+      this.moduleSelectedIndexes.forEach(data => {
+        select.categoryIds.push(this.modules[data].id);
+      });
+    }
     // 根据标签过滤
     select.tags = this.blog.tags;
     // 根据文章标题过滤
@@ -308,7 +326,7 @@ export class BlogListComponent implements OnInit {
   reSetTerms() {
     // 过滤条件重置
     this.moduleSelectedIndexes = [];
-    this.menuSelectedIds = [];
+    this.secondCategorySelectedIds = [];
     this.blog = new BlogModel();
     // 分页查询条件重置
     this.pageInfo.list = null;

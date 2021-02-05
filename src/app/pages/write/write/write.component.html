@@ -31,29 +31,54 @@
         font-size: 20px;
       "
     />
-    <button
-      nz-button
-      nzType="link"
-      nzType="primary"
-      (click)="openPublishPage()"
-      style="width: 80px; float: right; height: 45px; font-size: 16px"
-    >
-      发布
-    </button>
-    <button
-      nz-button
-      nzType="primary"
-      (click)="exportToLocal()"
-      style="
+    <ng-container *ngIf="schema === 'new'">
+      <button
+        nz-button
+        nzType="link"
+        nzType="primary"
+        (click)="openPublishPage()"
+        style="width: 80px; float: right; height: 45px; font-size: 16px"
+      >
+        发布
+      </button>
+      <button
+        nz-button
+        nzType="primary"
+        (click)="exportToLocal()"
+        style="
         margin-right: 5px;
         width: 110px;
         float: right;
         height: 45px;
-        font-size: 16px;
-      "
-    >
-      导出到本地
-    </button>
+        font-size: 16px;"
+      >
+        导出到本地
+      </button>
+    </ng-container>
+    <ng-container *ngIf="schema === 'update'">
+      <button
+        nz-button
+        nzType="link"
+        nzType="primary"
+        (click)="openPublishPage()"
+        style="width: 100px; float: right; height: 45px; font-size: 16px"
+      >
+        重新发布
+      </button>
+      <button
+        nz-button
+        nzType="primary"
+        (click)="backToList()"
+        style="
+        margin-right: 5px;
+        width: 100px;
+        float: right;
+        height: 45px;
+        font-size: 16px;"
+      >
+        返回列表
+      </button>
+    </ng-container>
     <div
       style="
         font-size: 20px;
@@ -126,123 +151,12 @@
           id="blogTypeDiv"
         >
           <div nz-col nzXs="4" nzSm="4" style="margin-bottom: 10px">
-            选择模块:
+            选择分类:
           </div>
           <div nz-col nzXs="20" nzSm="20" style="margin-bottom: 10px">
-
-          </div>
-          <div nz-col nzXs="4" nzSm="4">
-            添加分类:
-          </div>
-          <div nz-col nzXs="18" nzSm="20" id="innerBlogTypeDiv">
-            <nz-tree-select
-              style="width: 260px"
-              nzPlaceHolder="Please select"
-              [(ngModel)]="typeValue"
-              [nzMaxTagCount]="'1'"
-              nzPlaceHolder="请选择所属目录。。。"
-              [nzDefaultExpandAll]="false"
-              [nzAllowClear]="false"
-              [nzMultiple]="true"
-              [nzNodes]="blogTypeNodes"
-              [nzShowSearch]="true"
-              [nzHideUnMatched]="true"
-              (ngModelChange)="onTypeValueChange()"
-              *ngIf="typeValueNodeVisiable"
-            >
-            </nz-tree-select>
-            <button
-              nz-button
-              nzType="link"
-              nz-popover
-              nzPopoverTitle="新增目录"
-              [(nzVisible)]="visibleTypeModal"
-              nzPopoverTrigger="click"
-              [nzPopoverContent]="addTypeTemplate"
-              nzPopoverPlacement="bottomRight"
-            >
-              新增分类<i nz-icon nzType="right" nzTheme="outline"></i>
-            </button>
-            <ng-template #addTypeTemplate>
-              <div style="width: 400px">
-                <nz-divider
-                  nzText="一级分类"
-                  style="font-size: 15px"
-                ></nz-divider>
-                <div nz-row>
-                  <div nz-col nzSpan="24">
-                    <button
-                      style="margin: 5px"
-                      nz-button
-                      *ngFor="let item of blogTypes"
-                      nzType="default"
-                      nzSize="small"
-                      (click)="setChildrenList(item)"
-                    >
-                      {{ item.data.typeName }}
-                    </button>
-                    <button
-                      *ngIf="!addTypeInputVisible1"
-                      style="margin: 5px"
-                      nz-button
-                      nzType="default"
-                      nzSize="small"
-                      (click)="showAddTypeInput(1)"
-                    >
-                      <i nz-icon nzType="plus"></i>分类
-                    </button>
-                    <input
-                      #inputElement
-                      nz-input
-                      nzSize="small"
-                      *ngIf="addTypeInputVisible1"
-                      type="text"
-                      [(ngModel)]="inputValue"
-                      style="width: 78px"
-                      (blur)="handleTypesConfirm(1)"
-                      (keydown.enter)="handleTypesConfirm(1)"
-                      id="addTypeInput1"
-                    />
-                  </div>
-                </div>
-                <nz-divider
-                  nzText="二级分类"
-                  style="font-size: 15px"
-                ></nz-divider>
-                <div nz-row>
-                  <div nz-col nzSpan="24">
-                    <nz-tag
-                      *ngFor="let item of blogTypeChildren"
-                      nzMode="checkable"
-                      [nzChecked]="false"
-                      >{{ item.data.typeName }}</nz-tag
-                    >
-                    <button
-                      *ngIf="!addTypeInputVisible2"
-                      style="margin: 5px"
-                      nz-button
-                      nzType="default"
-                      nzSize="small"
-                      (click)="showAddTypeInput(2)"
-                    >
-                      <i nz-icon nzType="plus"></i>分类
-                    </button>
-                    <input
-                      id="addTypeInput2"
-                      #inputElement
-                      nz-input
-                      nzSize="small"
-                      *ngIf="addTypeInputVisible2"
-                      type="text"
-                      [(ngModel)]="inputValue"
-                      style="width: 78px"
-                      (blur)="handleTypesConfirm(2)"
-                      (keydown.enter)="handleTypesConfirm(2)"
-                    />
-                  </div>
-                </div>
-              </div>
-            </ng-template>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="选择一个分类" [(ngModel)]="selectedCategoryValue" style="width: 70%">
+              <nz-option [nzLabel]="data.title" [nzValue]="data.id" *ngFor="let data of categoryList"></nz-option>
+            </nz-select>
           </div>
         </div>
         <div
@@ -400,16 +314,6 @@
         还可以添加 "{{ canAddTagNumber() }}" 个标签
       </div>
       <div>
-        <nz-radio-group [(ngModel)]="radioValue">
-          <label
-            nz-radio-button
-            [nzValue]="index"
-            *ngFor="let type of perviousTagTypes; let index = index"
-            (click)="perviousTagsClick(type, index)"
-          >
-            {{ type.type }}
-          </label>
-        </nz-radio-group>
         <hr />
         <nz-tag
           *ngFor="let tag of perviousTag"

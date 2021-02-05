@@ -17,11 +17,21 @@ export class ModuleService {
   constructor(private http: HttpService) {}
 
   /**
-   * 查询模块
+   * 查询模块列表，分页
    * @param module 模块
    */
-  queryCategoryList(category: ModuleModel , show?: MessageShowEnum) {
+  queryCategoryPageList(category: ModuleModel , show?: MessageShowEnum) {
     const url = `${this.baseUrl}/me/query/pagelist`;
+    return this.http.post(url, category, show);
+  }
+
+  /**
+   * 查询模块列表
+   * @param category
+   * @param show
+   */
+  queryCategoryList(category: ModuleModel , show?: MessageShowEnum) {
+    const url = `${this.baseUrl}/me/query/list`;
     return this.http.post(url, category, show);
   }
 

@@ -17,8 +17,7 @@ export class BlogModel {
     this.checked = false;
     this.expand = false;
     this.fileList = new Array<any>();
-    this.moduleIds = [];
-    this.menusIds = [];
+    this.categoryIds = [];
   }
   /**
    * id
@@ -73,7 +72,7 @@ export class BlogModel {
   /**
    * 标签的集合
    */
-  public tags?: Array<BlogTagModel>;
+  public tags?: Array<any>;
 
   /**
    * 标签的集合
@@ -111,10 +110,5 @@ export class BlogModel {
   /**
    * 模块
    */
-  public moduleIds: string[];
-
-  /**
-   * 菜单
-   */
-  public menusIds: string[];
+  public categoryIds: string[];
 }

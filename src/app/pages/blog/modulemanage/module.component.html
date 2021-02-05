@@ -225,7 +225,9 @@
         let-onItemSelectAll="onItemSelectAll"
         let-onItemSelect="onItemSelect"
       >
-        <nz-table #t [nzData]="items" nzSize="small" nzShowPagination="false" [nzScroll]="{'y': '300px'}">
+        <nz-table #t [nzData]="items" nzSize="small"
+                  nzShowPagination="false"
+                  [nzScroll]="{'y': '300px'}" [nzPageSize]="300">
           <thead>
           <tr>
             <th

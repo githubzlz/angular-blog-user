@@ -59,7 +59,7 @@ export class DetailBlogInfoComponent implements OnInit, AfterViewInit {
    */
   getBlogContent(id: string) {
     setTimeout(() => {
-      this.blogService.getBlogContent(id).subscribe((data: ResultSetModel) => {
+      this.blogService.getBlogInfoById(id).subscribe((data: ResultSetModel) => {
         const blogContent: BlogContentModel = data.entity.blogContent;
         this.blog = data.entity;
         console.log(this.blog);

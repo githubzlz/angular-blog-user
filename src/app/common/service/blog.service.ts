@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {environment} from 'src/environments/environment';
 import {BlogModel} from '../model/article/blog.model';
 import {HttpService} from '../util/http.service';
+import {MessageShowEnum} from '../constant/message.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -18,9 +19,19 @@ export class BlogService {
   /**
    * 发布文章
    */
-  publicBlog(article: any) {
-    const url = this.baseUrl + '/blog/article/create';
-    return this.http.post(url, article);
+  publicBlog(article: any, show?: MessageShowEnum) {
+    const url = this.baseUrl + '/blog/me/create';
+    return this.http.post(url, article, show);
+  }
+
+  /**
+   * 修改文章内容
+   * @param article
+   * @param show
+   */
+  updateBlog(article: any, show?: MessageShowEnum) {
+    const url = this.baseUrl + '/blog/me/update';
+    return this.http.post(url, article, show);
   }
 
   /**
@@ -28,7 +39,7 @@ export class BlogService {
    * @param pageInfo pageInfo
    */
   selectList(pageInfo: BlogModel) {
-    const url = this.baseUrl + '/blog/list';
+    const url = this.baseUrl + '/blog/me/query/pagelist';
     return this.http.post(url, pageInfo);
   }
 
@@ -37,7 +48,7 @@ export class BlogService {
    * @param id id
    */
   deletedArtcle(id: string) {
-    const url = this.baseUrl + '/blog/article/remove/' + id;
+    const url = this.baseUrl + '/blog/me/remove/' + id;
     return this.http.get(url);
   }
 
@@ -46,7 +57,7 @@ export class BlogService {
    * @param id id
    */
   revokeDeleted(id: string) {
-    const url = this.baseUrl + `/blog/article/remove/revoke/${id}`;
+    const url = this.baseUrl + `/blog/me/revoke/${id}`;
     return this.http.get(url);
   }
 
@@ -55,7 +66,7 @@ export class BlogService {
    * @param blog blog
    */
   updateTitleOrSummary(blog: BlogModel) {
-    const url = this.baseUrl + '/blog/article/titleorsummary';
+    const url = this.baseUrl + '/blog/me/update/titleorsummary';
     return this.http.post(url, blog);
   }
 
@@ -63,8 +74,8 @@ export class BlogService {
    * 查询文章正文
    * @param id id
    */
-  getBlogContent(id: string) {
-    const url = this.baseUrl + '/blog/article/queryarticle/' + id;
+  getBlogInfoById(id: string) {
+    const url = `${this.baseUrl}/blog/me/query/${id}`;
     return this.http.get(url);
   }
 
