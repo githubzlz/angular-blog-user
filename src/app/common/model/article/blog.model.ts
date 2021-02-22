@@ -89,6 +89,8 @@ export class BlogModel {
    */
   public blogContent?: BlogContentModel;
 
+  public blogPublicInfos: any;
+
   public createdTime?: Date;
 
   public pageInfo?: PageInfoModel;

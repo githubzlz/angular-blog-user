@@ -21,7 +21,7 @@ export class UserService {
    * 获取token
    */
   getToken(code) {
-    const url = 'https://localhost:8080/login/token?code=' + code;
+    const url = 'https://www.zlztsb.com:18080/login/token?code=' + code;
     return this.http.get(url, MessageShowEnum.NONE);
   }
 

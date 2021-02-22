@@ -4,7 +4,7 @@
 
 export const environment = {
   SERVER_URL: ``,
-  BASE_DATA_SERVER_URL: `https://localhost:8080/blog-manage`,
+  BASE_DATA_SERVER_URL: `https://www.zlztsb.com:18080/blog-manage`,
   // BASE_DATA_SERVER_URL: `https://www.zlztsb.com/blog/manage`,
   MOCK_SERVER_URL: '',
   // environmentType: EnvironmentEnumModel.DEVELOPMENT,

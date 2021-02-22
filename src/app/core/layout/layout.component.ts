@@ -50,7 +50,7 @@ export class LayoutComponent implements OnInit {
       if(ResultSetModel.isSuccess(date)){
         window.location.href = date.message;
       } else {
-        window.location.href = 'localhost:4200';
+        window.location.href = 'https://www.zlztsb.com:4443';
       }
     });
   }

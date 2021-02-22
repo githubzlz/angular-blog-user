@@ -84,12 +84,26 @@
                 (nzExpandChange)="changeMenuState(data, index1)">
             <span style="margin-left: 5px">
               <input nz-input *ngIf="data.showInput" [(ngModel)]="moduleUpdateCache.title" style="width: 60%">
-              <span *ngIf="!data.showInput">{{ data.title }}</span>
+              <span *ngIf="!data.showInput"
+                    nz-popover
+                    [nzPopoverContent]="contentTemplate12"
+                    nzPopoverPlacement="bottomLeft">
+                {{ data.title }}</span>
+              <ng-template #contentTemplate12>
+                <div style="max-width: 300px;">{{ data.title }}</div>
+              </ng-template>
             </span>
             </td>
             <td>
               <input nz-input *ngIf="data.showInput" [(ngModel)]="moduleUpdateCache.introduction">
-              <span *ngIf="!data.showInput">{{data.introduction}}</span>
+              <span *ngIf="!data.showInput"
+                    nz-popover
+                    [nzPopoverContent]="contentTemplate11"
+                    nzPopoverPlacement="bottomLeft"
+              >{{data.introduction}}</span>
+              <ng-template #contentTemplate11>
+                <div style="max-width: 300px;">{{ data.introduction }}</div>
+              </ng-template>
             </td>
             <td [nzAlign]="'center'">
               <nz-badge nzStatus="success" nzText="启用" *ngIf="!data.isPublish"></nz-badge>
@@ -227,7 +241,9 @@
       >
         <nz-table #t [nzData]="items" nzSize="small"
                   nzShowPagination="false"
-                  [nzScroll]="{'y': '300px'}" [nzPageSize]="300">
+                  [nzScroll]="{'y': '300px'}"
+                  [nzPageSize]="300"
+                  style="width: 430px">
           <thead>
           <tr>
             <th
@@ -236,8 +252,8 @@
               [nzIndeterminate]="stat.checkHalf"
               (nzCheckedChange)="onItemSelectAll($event)"
             ></th>
-            <th>Name</th>
-            <th>Description</th>
+            <th nzWidth="40%">标题</th>
+            <th nzWidth="55%">简介</th>
           </tr>
           </thead>
           <tbody>
@@ -247,8 +263,28 @@
                 [nzDisabled]="disabled || data.disabled"
                 (nzCheckedChange)="onItemSelect(data)">
             </td>
-            <td>{{ data.title }}</td>
-            <td>{{ data.description }}</td>
+            <td>
+              <div nz-popover
+                   [nzPopoverContent]="contentTemplate1"
+                   nzPopoverPlacement="bottomLeft"
+                   style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap; width: 100px">
+                {{ data.title }}
+              </div>
+              <ng-template #contentTemplate1>
+                <div style="max-width: 300px;">{{ data.title }}</div>
+              </ng-template>
+            </td>
+            <td>
+              <div nz-popover
+                   [nzPopoverContent]="contentTemplate2"
+                   nzPopoverPlacement="bottomLeft"
+                style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap; width: 200px">
+                {{ data.description }}
+              </div>
+              <ng-template #contentTemplate2>
+                <div style="max-width: 300px;">{{ data.description }}</div>
+              </ng-template>
+            </td>
           </tr>
           </tbody>
         </nz-table>

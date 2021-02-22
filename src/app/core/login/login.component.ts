@@ -21,14 +21,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
     window.sessionStorage.clear();
     this.activatedRouter.queryParams.subscribe(param => {
       if (!param.code) {
-        window.location.href = 'https://localhost:8080/login';
+        window.location.href = 'https://www.zlztsb.com:18080/login';
       } else {
         // 获取token
         this.userservice.getToken(param.code).subscribe((date: ResultSetModel) => {
-
           // 获取成功就 设置到session中，然后去获取用户信息
           if (date.code !== 1) {
-            window.location.href = 'https://localhost:8080/login';
+            window.location.href = 'https://www.zlztsb.com:18080/login';
             return;
           } else {
             window.sessionStorage.setItem('access_token', date.entity.token);

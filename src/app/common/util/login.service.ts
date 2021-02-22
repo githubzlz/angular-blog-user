@@ -70,7 +70,7 @@ export class LoginService implements HttpInterceptor {
    * 退出登录
    */
   logOut() {
-    const url = `https://localhost:8080/login/token/logout`;
+    const url = `https://www.zlztsb.com:18080/login/token/logout`;
     const token = window.sessionStorage.getItem('access_token');
     return this.http.get(url);
   }
