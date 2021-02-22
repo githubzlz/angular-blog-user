@@ -110,7 +110,7 @@ export class BlogStatisticComponent implements OnInit {
   //       this.message.error('取消推荐失败', { nzDuration: 1000 });
   //     }
   //   });
-  // }
+  // 111}
   handleCancelAdd() {
     this.isVisibleAdd = false;
     this.checkList = new Array<BlogModel>();
