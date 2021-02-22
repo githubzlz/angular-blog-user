@@ -5,7 +5,6 @@ import { ResultSetModel } from 'src/app/common/model/commonmodel/resultset.model
 import { NzMessageService } from 'ng-zorro-antd';
 import { Router } from '@angular/router';
 import { BlogTypeService } from 'src/app/common/service/blogType.service';
-import { RecommendService } from 'src/app/common/service/Recommend.service';
 import {ModuleService} from '../../../common/service/module.service';
 import {ModuleModel} from '../../../common/model/module/module.model';
 import {BlogModel} from '../../../common/model/article/blog.model';
@@ -22,7 +21,6 @@ export class BlogListComponent implements OnInit {
     private blogService: BlogService,
     private message: NzMessageService,
     private blogTypeService: BlogTypeService,
-    private recommendService: RecommendService,
     private moduleService: ModuleService
   ) {}
 

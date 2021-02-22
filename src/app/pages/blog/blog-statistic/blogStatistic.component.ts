@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { RecommendService } from 'src/app/common/service/Recommend.service';
 import { ResultSetModel } from '../../../common/model/commonmodel/resultset.model';
 import { NzMessageService } from 'ng-zorro-antd';
 import { BlogService } from '../../../common/service/blog.service';
@@ -33,50 +32,49 @@ export class BlogStatisticComponent implements OnInit {
   ];
   recommendName = '首页';
   constructor(
-    private recommendService: RecommendService,
     private blogService: BlogService,
     private message: NzMessageService
   ) {}
 
   ngOnInit() {
-    this.getHotList();
-    this.getList();
+    // this.getHotList();
+    // this.getList();
   }
 
-  getHotList() {
-    this.recommendService.getHotBlogs(10).subscribe((data) => {
-      const blogData: ResultSetModel = data;
-      if (blogData.code === 1) {
-        this.hotList = blogData.entity;
-      }
-    });
-  }
+  // getHotList() {
+  //   this.recommendService.getHotBlogs(10).subscribe((data) => {
+  //     const blogData: ResultSetModel = data;
+  //     if (blogData.code === 1) {
+  //       this.hotList = blogData.entity;
+  //     }
+  //   });
+  // }
 
-  getList() {
-    if (this.recommendName === '侧栏') {
-      this.recommendService.getSideBlogs().subscribe((data) => {
-        const blogData: ResultSetModel = data;
-        if (blogData.code === 1) {
-          if (blogData.entity) {
-            this.homepageList = blogData.entity;
-          } else {
-            this.homepageList = [];
-          }
-        }
-      });
-    } else {
-      this.recommendService.getHomepageBlogs().subscribe((data) => {
-        const blogData: ResultSetModel = data;
-        if (blogData.code === 1) {
-          if (blogData.entity) {
-            this.homepageList = blogData.entity;
-          } else {
-            this.homepageList = [];
-          }
-        }
-      });
-    }
-  }
+  // getList() {
+  //   if (this.recommendName === '侧栏') {
+  //     this.recommendService.getSideBlogs().subscribe((data) => {
+  //       const blogData: ResultSetModel = data;
+  //       if (blogData.code === 1) {
+  //         if (blogData.entity) {
+  //           this.homepageList = blogData.entity;
+  //         } else {
+  //           this.homepageList = [];
+  //         }
+  //       }
+  //     });
+  //   } else {
+  //     this.recommendService.getHomepageBlogs().subscribe((data) => {
+  //       const blogData: ResultSetModel = data;
+  //       if (blogData.code === 1) {
+  //         if (blogData.entity) {
+  //           this.homepageList = blogData.entity;
+  //         } else {
+  //           this.homepageList = [];
+  //         }
+  //       }
+  //     });
+  //   }
+  // }
 
   recommendClick() {
     let type = '1';
@@ -101,18 +99,18 @@ export class BlogStatisticComponent implements OnInit {
     });
   }
 
-  cancel(id: string) {
-    this.recommendService.cancel(id).subscribe((data) => {
-      const blogData: ResultSetModel = data;
-      if (blogData.code === 1) {
-        this.getHotList();
-        this.getList();
-        this.message.success('取消推荐成功', { nzDuration: 1000 });
-      } else {
-        this.message.error('取消推荐失败', { nzDuration: 1000 });
-      }
-    });
-  }
+  // cancel(id: string) {
+  //   this.recommendService.cancel(id).subscribe((data) => {
+  //     const blogData: ResultSetModel = data;
+  //     if (blogData.code === 1) {
+  //       this.getHotList();
+  //       this.getList();
+  //       this.message.success('取消推荐成功', { nzDuration: 1000 });
+  //     } else {
+  //       this.message.error('取消推荐失败', { nzDuration: 1000 });
+  //     }
+  //   });
+  // }
   handleCancelAdd() {
     this.isVisibleAdd = false;
     this.checkList = new Array<BlogModel>();
@@ -148,16 +146,16 @@ export class BlogStatisticComponent implements OnInit {
           item.blogRecommend.recommendType = 1;
         });
       }
-      this.recommendService.recommendList(this.checkList).subscribe((data) => {
-        const blogData: ResultSetModel = data;
-        if (blogData.code === 1) {
-          this.checkList = new Array<BlogModel>();
-          this.searchInput = '';
-          this.getList();
-          this.revertStep();
-          this.isVisibleAdd = false;
-        }
-      });
+      // this.recommendService.recommendList(this.checkList).subscribe((data) => {
+      //   const blogData: ResultSetModel = data;
+      //   if (blogData.code === 1) {
+      //     this.checkList = new Array<BlogModel>();
+      //     this.searchInput = '';
+      //     this.getList();
+      //     this.revertStep();
+      //     this.isVisibleAdd = false;
+      //   }
+      // });
     }
   }
 
