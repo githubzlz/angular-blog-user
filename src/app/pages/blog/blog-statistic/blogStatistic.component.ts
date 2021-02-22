@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RecommendService } from '../../../common/service/Recommend.service';
+import { RecommendService } from 'src/app/common/service/Recommend.service';
 import { ResultSetModel } from '../../../common/model/commonmodel/resultset.model';
 import { NzMessageService } from 'ng-zorro-antd';
 import { BlogService } from '../../../common/service/blog.service';
